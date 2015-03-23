@@ -12,17 +12,20 @@ $term = "fall";
 $year = "2015";
 $sem = substr($term, 0, 2) . substr($year, 2, 2);
 
+echo "Starting retrieval (".date("Y-m-d H:i:s").")\n\n";
+
 //Get a list of all the departments
 $catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/catalog/".$year."/".$term.".xml");
 $catalog_parsed = new SimpleXMLElement($catalog_data);
 foreach ($catalog_parsed->subjects->subject as $s) {
     $subject = $s["id"];
 
-    echo $subject."\n";
+    echo "Getting schedule for ".$subject."...";
 
     //Get the schedule data
     $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term."/".$subject.".xml?mode=cascade");
     $parsed = new SimpleXMLElement($data);
+    echo "done\n";
 
     //Parse the XML data
     foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
@@ -51,12 +54,13 @@ foreach ($catalog_parsed->subjects->subject as $s) {
             $section_num = $s->sectionNumber;
             $course_name = $c->label;
             // echo $crn." ".$sem." ".$subject." ".$course_num." ".$section_num." ".$course_name."\n";
+            echo "Updating records for ".$crn."... "
 
             // Insert the data into MySQL
             $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
                 "values (".$crn.", \"".$sem."\", ".$avail_num.")");
             if (!$retval) {
-                die("Could not enter data: ".mysql_error());
+                echo "could not enter availability data: ".mysql_error();
             }
 
             $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name) ".
@@ -65,12 +69,15 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                 "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
                 "subjectcode=values(subjectcode), name=values(name)");
             if (!$retval) {
-                die("Could not enter data: ".mysql_error());
+                echo "could not enter section data: ".mysql_error();
             }
+
+            echo "done\n";
         }
     }
+    echo "\n";
 }
 
-echo "Success\n";
+echo "Finished\n";
 mysql_close($link);
 ?>
