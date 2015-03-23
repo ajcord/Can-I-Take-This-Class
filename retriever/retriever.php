@@ -54,7 +54,7 @@ foreach ($catalog_parsed->subjects->subject as $s) {
             $section_num = $s->sectionNumber;
             $course_name = $c->label;
             // echo $crn." ".$sem." ".$subject." ".$course_num." ".$section_num." ".$course_name."\n";
-            echo "Updating records for ".$crn."... "
+            echo "Updating records for ".$crn."... ";
 
             // Insert the data into MySQL
             $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
