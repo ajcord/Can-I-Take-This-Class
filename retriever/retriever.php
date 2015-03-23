@@ -40,7 +40,7 @@ foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
         }
 
         //Insert the data into MySQL
-        $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) values (".$crn.", \"".$sem.", ".$avail_num.")");
+        $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) values (".$crn.", \"".$sem."\", ".$avail_num.")");
         if (!$retval) {
             die("Could not enter data: ".mysql_error());
         }
