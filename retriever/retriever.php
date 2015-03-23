@@ -53,14 +53,17 @@ foreach ($catalog_parsed->subjects->subject as $s) {
             // echo $crn." ".$sem." ".$subject." ".$course_num." ".$section_num." ".$course_name."\n";
 
             // Insert the data into MySQL
-            $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus)".
+            $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
                 "values (".$crn.", \"".$sem."\", ".$avail_num.")");
             if (!$retval) {
                 die("Could not enter data: ".mysql_error());
             }
 
-            $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name)".
-                "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\")");
+            $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name) ".
+                "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\")".
+                "on duplicate key update ".
+                "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
+                "subjectcode=values(subjectcode), name=values(name)");
             if (!$retval) {
                 die("Could not enter data: ".mysql_error());
             }
