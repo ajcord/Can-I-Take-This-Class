@@ -31,11 +31,12 @@ $("#dept-dropdown a").click(function(e) {
                         closedSections += parseInt(avail[i].num);
                     }
                 }
-                var percentOpen = 0;
                 if (totalSections) {
-                    percentOpen = (totalSections - closedSections) / totalSections;
+                    var percentOpen = (totalSections - closedSections) / totalSections;
+                    $(openCell).text(percentOpen * 100 + "%");
+                } else {
+                    $(openCell).text("Schedule not available");
                 }
-                $(openCell).text(percentOpen * 100 + "%");
                 $(row).append([numCell, nameCell, openCell]);
                 table.append(row);
             }
