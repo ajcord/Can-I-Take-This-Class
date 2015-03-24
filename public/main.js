@@ -24,10 +24,14 @@ $("#dept-dropdown a").click(function(e) {
                 var avail = parsed[i].availability;
                 console.log(avail);
                 var totalSections = 0;
+                var closedSections = 0;
                 for (var i = 0; i < avail.length; i++) {
                     totalSections += parseInt(avail[i].num);
+                    if (avail[i].status == "0") {
+                        closedSections += parseInt(avail[i].num);
+                    }
                 }
-                $(openCell).text(totalSections);
+                $(openCell).text(closedSections + " " + totalSections);
                 $(row).append([numCell, nameCell, openCell]);
                 table.append(row);
             }
