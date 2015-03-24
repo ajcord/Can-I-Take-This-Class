@@ -24,6 +24,7 @@ foreach ($parsed->subjects->subject as $s) {
         <tr>
             <td>#</td>
             <td>Name</td>
+            <td>% Open</td>
         </tr>
     </thead>
     <tbody id="courses-table">

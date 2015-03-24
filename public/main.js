@@ -18,9 +18,13 @@ $("#dept-dropdown a").click(function(e) {
                 var row = document.createElement("tr");
                 var numCell = document.createElement("td");
                 var nameCell = document.createElement("td");
+                var openCell = document.createElement("td");
                 $(numCell).text(i);
-                $(nameCell).text(parsed[i]);
-                $(row).append([numCell, nameCell]);
+                $(nameCell).text(parsed[i].name);
+                var avail = parsed[i].availability;
+                console.log(avail);
+                $(openCell).text(avail);
+                $(row).append([numCell, nameCell, openCell]);
                 table.append(row);
             }
         }
