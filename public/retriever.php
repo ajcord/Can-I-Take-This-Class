@@ -27,16 +27,19 @@ foreach ($parsed->courses->course as $c) {
     //                     "(select crn from sections where subjectcode=\"".$dept."\" and coursenumber=".$c["id"].") ".
     //                 "as sections using(crn) group by availability.crn order by max(timestamp) desc) ".
     //             "as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
-    $sql = "select availability.enrollmentstatus, count(availability.enrollmentstatus) from (select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from availability inner join (select crn from sections where subjectcode=\"CS\" and coursenumber=125) as sections using(crn) group by availability.crn order by max(timestamp) desc) as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
+    $sql = "select availability.enrollmentstatus as status, count(availability.enrollmentstatus) as num from (select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from availability inner join (select crn from sections where subjectcode=\"CS\" and coursenumber=125) as sections using(crn) group by availability.crn order by max(timestamp) desc) as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
     $retval = mysql_query($sql);
     if (!$retval) {
         die("Could not get availability data: ".mysql_error());
     }
-    // var_dump($retval);
+    
     echo $c." ".$c["id"].":\n";
+    $enrollment_data = array();
     while($row = mysql_fetch_assoc($retval)) {
-        var_dump($row);
+        // var_dump($row);
+        array_push($enrollment_data, $row);
     }
+    var_dump($enrollment_data);
 }
 
 mysql_close($link);
