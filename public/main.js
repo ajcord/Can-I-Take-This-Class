@@ -19,17 +19,17 @@ $("#subj-dropdown a").click(function(e) {
                 var numCell = document.createElement("td");
                 var nameCell = document.createElement("td");
                 var openCell = document.createElement("td");
-                $(numCell).text(i);
+                $(numCell).text(parsed[i].num);
                 $(nameCell).text(parsed[i].name);
 
                 //Calculate the number of open sections vs. total
-                var avail = parsed[i].availability;
+                var avail = parsed[i].status;
                 var totalSections = 0;
                 var openSections = 0;
-                for (var i = 0; i < avail.length; i++) {
-                    totalSections += parseInt(avail[i].num);
-                    if (parseInt(avail[i].status) > 0) {
-                        openSections += parseInt(avail[i].num);
+                for (var i in avail) {
+                    totalSections += parseInt(avail[i]);
+                    if (parseInt(i) > 0) {
+                        openSections += parseInt(avail[i]);
                     }
                 }
                 if (totalSections) {

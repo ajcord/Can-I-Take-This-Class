@@ -46,23 +46,14 @@ while($row = mysql_fetch_assoc($retval)) {
 
 mysql_close($link);
 
-// $return_data = array(
-//     "names" => $course_data,
-//     "sections" => $enrollment_data,
-// );
-
-// var_dump($course_data);
-// var_dump($enrollment_data);
-
+// Build the return data
 $return_data = array();
-
 $status_arr = array();
 foreach ($enrollment_data as $e) {
     $num = $e["num"];
     $status = $e["status"];
     $status_arr[$num][$status]++;
 }
-// var_dump($status_arr);
 
 foreach ($course_data as $c) {
     $this_course_data = array(
