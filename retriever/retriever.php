@@ -3,7 +3,7 @@
 //Connect to MySQL
 $link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
 if (!$link) {
-    die("Could not connect to MySQL: " . mysql_error());
+    // die("Could not connect to MySQL: " . mysql_error());
 }
 mysql_select_db("classmat_411");
 
@@ -20,7 +20,7 @@ $catalog_parsed = new SimpleXMLElement($catalog_data);
 foreach ($catalog_parsed->subjects->subject as $s) {
     $subject = $s["id"];
 
-    echo "Getting schedule for ".$subject."...";
+    echo $subject."...";
 
     //Get the schedule data
     try {
@@ -56,7 +56,7 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                 $section_num = $s->sectionNumber;
                 $course_name = $c->label;
                 // echo $crn." ".$sem." ".$subject." ".$course_num." ".$section_num." ".$course_name."\n";
-                echo "Updating records for ".$crn."... ";
+                // echo "Updating records for ".$crn."... ";
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
@@ -80,9 +80,8 @@ foreach ($catalog_parsed->subjects->subject as $s) {
     } catch (Exception $e) {
         echo "error:".$e->getMessage()."\n";
     }
-    echo "\n";
 }
 
 mysql_close($link);
-echo "\nFinished retrieval at ".date("Y-m-d H:i:s")."\n";
+echo "\nFinished retrieval at ".date("Y-m-d H:i:s")."\n\n\n";
 ?>
