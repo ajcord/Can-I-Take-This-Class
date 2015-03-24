@@ -46,11 +46,29 @@ while($row = mysql_fetch_assoc($retval)) {
 
 mysql_close($link);
 
-$return_data = array(
-    "names" => $course_data,
-    "sections" => $enrollment_data,
-);
-echo json_encode($return_data);
+// $return_data = array(
+//     "names" => $course_data,
+//     "sections" => $enrollment_data,
+// );
+var_dump($course_data);
+var_dump($enrollment_data);
+// $return_data = array();
+
+// $status_arr = array();
+// foreach ($enrollment_data as $e) {
+    
+// }
+
+// foreach ($course_data as $c) {
+//     $this_course_data = array(
+//         "num" => $c->num,
+//         "name" => $c->name,
+//         "status" => $this_status_arr,
+//     );
+//     array_push($return_data, $this_course_data);
+// }
+
+// echo json_encode($return_data);
 
 
 
