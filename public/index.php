@@ -1,6 +1,6 @@
 <?php include "../templates/header.php"; ?>
 
-Enter a subject you would like to know about:
+Subject:
 
 <div class="btn-group">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
