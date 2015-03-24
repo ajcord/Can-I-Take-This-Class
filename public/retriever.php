@@ -13,7 +13,7 @@ $subj = $_GET["subject"];
 $sem = substr($term, 0, 2) . substr($year, 2, 2);
 
 // Get course data
-$sql = "select coursenumber, name from sections where subjectcode=\"".$subj."\" and semester=\"".$sem."\" group by coursenumber";
+$sql = "select coursenumber as num, name from sections where subjectcode=\"".$subj."\" and semester=\"".$sem."\" group by num";
 
 $retval = mysql_query($sql);
 if (!$retval) {
@@ -26,13 +26,13 @@ while($row = mysql_fetch_assoc($retval)) {
 }
 
 // Get enrollment data
-$sql = "select coursenumber, enrollmentstatus from ".
+$sql = "select coursenumber as num, enrollmentstatus as status from ".
             "(select * from ".
                 "(select * from availability order by timestamp desc) ".
             "as sorted group by crn, semester) as latest ".
         "inner join (select crn, semester, coursenumber, name from sections ".
             "where subjectcode=\"".$subj."\" and semester=\"".$sem."\") as sections ".
-        "using(crn, semester) order by coursenumber";
+        "using(crn, semester) order by num";
 
 $retval = mysql_query($sql);
 if (!$retval) {
