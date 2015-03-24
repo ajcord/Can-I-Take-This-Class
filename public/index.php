@@ -19,17 +19,20 @@ foreach ($parsed->subjects->subject as $s) {
     </ul>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <td>#</td>
-            <td>Name</td>
-            <td>% Open</td>
-        </tr>
-    </thead>
-    <tbody id="courses-table">
+<div class="container-fluid" id="table-container">
+    <div class="alert alert-info" role="alert" id="loading-alert">Loading...</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>Name</td>
+                <td>% Open</td>
+            </tr>
+        </thead>
+        <tbody id="courses-table">
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 <?php include "../templates/footer.php"; ?>

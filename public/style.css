@@ -5,3 +5,15 @@ body {
 thead {
     font-weight: bold;
 }
+
+#table-container {
+    position: relative;
+}
+
+#loading-alert {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    right: 5px;
+    display: none;
+}

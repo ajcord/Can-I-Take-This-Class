@@ -14,6 +14,8 @@ function createProgressBar(pctOpen, pctRestricted, pctClosed) {
 $("#subj-dropdown a").click(function(e) {
     var subj = e.target.innerHTML;
     $("#subj-name").text(subj);
+    $("#courses-table").empty();
+    $("#loading-alert").show();
     $.ajax({
         type: "GET",
         url: "retriever.php",
@@ -23,10 +25,9 @@ $("#subj-dropdown a").click(function(e) {
             "subject": subj,
         },
         success: function(data) {
+            $("loading-alert").hide();
             var parsed = $.parseJSON(data);
             console.log(parsed);
-            var table = $("#courses-table");
-            table.empty();
             for (var i in parsed) {
                 var row = document.createElement("tr");
                 var numCell = document.createElement("td");
@@ -69,7 +70,7 @@ $("#subj-dropdown a").click(function(e) {
                     $(openCell).text("Schedule not available");
                 }
                 $(row).append([numCell, nameCell, openCell]);
-                table.append(row);
+                $("#courses-table").append(row);
             }
         }
     });
