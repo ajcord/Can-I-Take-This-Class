@@ -31,7 +31,7 @@ foreach ($parsed->courses->course as $c) {
 
     echo $c." ".$c["id"].":\n";
     $enrollment_data = array();
-    while($row = mysql_fetch_assoc($retval)) {
+    while($row = mysql_fetch_array($retval)) {
         array_push($enrollment_data, $row);
     }
     // var_dump($enrollment_data);
