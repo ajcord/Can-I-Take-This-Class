@@ -3,7 +3,7 @@
 //Connect to MySQL
 $link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
 if (!$link) {
-    // die("Could not connect to MySQL: " . mysql_error());
+    die("Could not connect to MySQL: " . mysql_error());
 }
 mysql_select_db("classmat_411");
 
@@ -26,7 +26,6 @@ foreach ($catalog_parsed->subjects->subject as $s) {
     try {
         $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term."/".$subject.".xml?mode=cascade");
         $parsed = new SimpleXMLElement($data);
-        echo "done\n";
 
         //Parse the XML data
         foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
@@ -55,14 +54,12 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                 $course_num = $s->parents->course["id"];
                 $section_num = $s->sectionNumber;
                 $course_name = $c->label;
-                // echo $crn." ".$sem." ".$subject." ".$course_num." ".$section_num." ".$course_name."\n";
-                // echo "Updating records for ".$crn."... ";
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
                     "values (".$crn.", \"".$sem."\", ".$avail_num.")");
                 if (!$retval) {
-                    echo "could not enter availability data for ".$crn.": ".mysql_error()."\n";
+                    echo "\tCould not enter availability data for ".$crn.": ".mysql_error()."\n";
                 }
 
                 $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name) ".
@@ -71,15 +68,16 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                     "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
                     "subjectcode=values(subjectcode), name=values(name)");
                 if (!$retval) {
-                    echo "could not enter section data for ".$crn.": ".mysql_error()."\n";
+                    echo "\tCould not enter section data for ".$crn.": ".mysql_error()."\n";
                 }
-
-                // echo "done\n";
             }
         }
+        echo "done";
     } catch (Exception $e) {
-        echo "error:".$e->getMessage()."\n";
+        echo "error:".$e->getMessage();
     }
+
+    echo "\n";
 }
 
 mysql_close($link);
