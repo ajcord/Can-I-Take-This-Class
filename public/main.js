@@ -21,8 +21,9 @@ $("#dept-dropdown a").click(function(e) {
                 var openCell = document.createElement("td");
                 $(numCell).text(i);
                 $(nameCell).text(parsed[i].name);
+
+                //Calculate the number of closed sections vs. total
                 var avail = parsed[i].availability;
-                console.log(avail);
                 var totalSections = 0;
                 var closedSections = 0;
                 for (var i = 0; i < avail.length; i++) {
