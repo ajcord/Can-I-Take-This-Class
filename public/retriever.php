@@ -21,12 +21,13 @@ foreach ($parsed->courses->course as $c) {
     array_push($course_names, (string)$c);
 
     //This monstrosity gets the count of CRNs for each enrollment status for the specified class. It only gets the most recent data for each CRN.
-    $sql = "select availability.enrollmentstatus, count(availability.enrollmentstatus) from ".
-                "(select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from ".
-                    "availability inner join ".
-                        "(select crn from sections where subjectcode=\"".$dept."\" and coursenumber=".$c["id"].") ".
-                    "as sections using(crn) group by availability.crn order by max(timestamp) desc) ".
-                "as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
+    // $sql = "select availability.enrollmentstatus, count(availability.enrollmentstatus) from ".
+    //             "(select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from ".
+    //                 "availability inner join ".
+    //                     "(select crn from sections where subjectcode=\"".$dept."\" and coursenumber=".$c["id"].") ".
+    //                 "as sections using(crn) group by availability.crn order by max(timestamp) desc) ".
+    //             "as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
+    $sql = "select availability.enrollmentstatus, count(availability.enrollmentstatus) from (select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from availability inner join (select crn from sections where subjectcode=\"CS\" and coursenumber=125) as sections using(crn) group by availability.crn order by max(timestamp) desc) as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
     $retval = mysql_query($sql);
     if (!$retval) {
         die("Could not get availability data: ".mysql_error());
