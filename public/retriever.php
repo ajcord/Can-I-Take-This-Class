@@ -34,9 +34,8 @@ foreach ($parsed->courses->course as $c) {
     }
     // var_dump($retval);
     echo $c." ".$c["id"].":\n";
-    while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
-        var_dump($row);
-    }
+    $table = mysqli_fetch_all($retval);
+    var_dump($table);
 }
 
 mysql_close($link);
