@@ -8,6 +8,7 @@ thead {
 
 #table-container {
     position: relative;
+    padding: 0;
 }
 
 #loading-alert {
