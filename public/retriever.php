@@ -27,12 +27,12 @@ foreach ($parsed->courses->course as $c) {
     //                     "(select crn from sections where subjectcode=\"".$dept."\" and coursenumber=".$c["id"].") ".
     //                 "as sections using(crn) group by availability.crn order by max(timestamp) desc) ".
     //             "as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
-    $sql = "select availability.enrollmentstatus as status, count(availability.enrollmentstatus) as num from (select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from availability inner join (select crn from sections where subjectcode=\"CS\" and coursenumber=125) as sections using(crn) group by availability.crn order by max(timestamp) desc) as t inner join availability using(crn, semester, timestamp) group by enrollmentstatus";
+    $sql = "select availability.enrollmentstatus as status, count(availability.enrollmentstatus) as num from (select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from availability inner join (select crn from sections where subjectcode=\"CS\" and coursenumber=125) as sections using(crn) group by availability.crn order by max(timestamp) desc) as t inner join availability using(crn, semester, timestamp) group by status";
     $retval = mysql_query($sql);
     if (!$retval) {
         die("Could not get availability data: ".mysql_error());
     }
-    
+
     echo $c." ".$c["id"].":\n";
     $enrollment_data = array();
     while($row = mysql_fetch_assoc($retval)) {
