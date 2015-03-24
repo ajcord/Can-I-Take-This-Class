@@ -1,6 +1,6 @@
-$("#dept-dropdown a").click(function(e) {
+$("#subj-dropdown a").click(function(e) {
     var dept = e.target.innerHTML;
-    $("#dept-name").text(dept);
+    $("#subj-name").text(dept);
     $.ajax({
         type: "GET",
         url: "retriever.php",
@@ -22,19 +22,23 @@ $("#dept-dropdown a").click(function(e) {
                 $(numCell).text(i);
                 $(nameCell).text(parsed[i].name);
 
-                //Calculate the number of closed sections vs. total
+                //Calculate the number of open sections vs. total
                 var avail = parsed[i].availability;
                 var totalSections = 0;
-                var closedSections = 0;
+                var openSections = 0;
                 for (var i = 0; i < avail.length; i++) {
                     totalSections += parseInt(avail[i].num);
-                    if (avail[i].status == "0") {
-                        closedSections += parseInt(avail[i].num);
+                    if (parseInt(avail[i].status) > 0) {
+                        openSections += parseInt(avail[i].num);
                     }
                 }
                 if (totalSections) {
-                    var percentOpen = (totalSections - closedSections) / totalSections;
-                    $(openCell).text(Math.round(percentOpen * 100) + "%");
+                    if (openSections == 0) {
+                        $(openCell).text("Availability unknown");
+                    } else {
+                        var percentOpen = openSections / totalSections;
+                        $(openCell).text(Math.round(percentOpen * 100) + "%");
+                    }
                 } else {
                     $(openCell).text("Schedule not available");
                 }

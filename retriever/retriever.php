@@ -48,7 +48,7 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                         $avail_num = 3;
                         break;
                     default: //Unknown
-                        $avail_num = 4;
+                        $avail_num = -1;
                         break;
                 }
 
