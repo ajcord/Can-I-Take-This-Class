@@ -8,13 +8,29 @@ Subject:
         <span class="caret"></span>
     </button>
     <ul id="subj-dropdown" class="dropdown-menu" role="menu">
-<?php 
-//Get a list of subjects for next semester
-$data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/catalog/2015/fall.xml");
-$parsed = new SimpleXMLElement($data);
-foreach ($parsed->subjects->subject as $s) {
-    echo "<li><a href=\"#\">".$s["id"]."</a></li>";
+<?php
+
+//Connect to MySQL
+$link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
+if (!$link) {
+    die();
 }
+mysql_select_db("classmat_411");
+
+//Get a list of subjects for next semester
+$sql = "select subjectcode from sections where semester=\"fa15\" group by subjectcode";
+
+$retval = mysql_query($sql);
+if (!$retval) {
+    die("Could not get subjects: ".mysql_error());
+}
+
+$course_data = array();
+while($row = mysql_fetch_assoc($retval)) {
+    echo "<li><a href=\"#\">".$row["subjectcode"]."</a></li>";
+}
+
+mysql_close($link);
 ?>
     </ul>
 </div>
