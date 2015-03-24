@@ -62,13 +62,13 @@ foreach ($enrollment_data as $e) {
     $status = $e["status"];
     $status_arr[$num][$status]++;
 }
-var_dump($status_arr);
+// var_dump($status_arr);
 
 foreach ($course_data as $c) {
     $this_course_data = array(
         "num" => $c["num"],
         "name" => $c["name"],
-        "status" => $this_status_arr,
+        "status" => $this_status_arr[$c["num"]],
     );
     array_push($return_data, $this_course_data);
 }
