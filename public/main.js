@@ -1,3 +1,16 @@
+function createProgressBar(pctOpen, pctRestricted, pctClosed) {
+    var progress = document.createElement("div");
+    var open = document.createElement("div");
+    var restricted = document.createElement("div");
+    var closed = document.createElement("div");
+    $(progress).addClass("progress");
+    $(open).addClass("progress-bar progress-bar-success").css("width", pctOpen*100 + "%");
+    $(restricted).addClass("progress-bar progress-bar-warning").css("width", pctRestricted*100 + "%");
+    $(closed).addClass("progress-bar progress-bar-danger").css("width", pctClosed*100 + "%");
+    $(progress).append([open, restricted, closed]);
+    return progress;
+}
+
 $("#subj-dropdown a").click(function(e) {
     var subj = e.target.innerHTML;
     $("#subj-name").text(subj);
@@ -22,23 +35,36 @@ $("#subj-dropdown a").click(function(e) {
                 $(numCell).text(parsed[i].num);
                 $(nameCell).text(parsed[i].name);
 
-                //Calculate the number of open sections vs. total
+                //Calculate the availability of the various sections
                 var avail = parsed[i].status;
                 var totalSections = 0;
                 var openSections = 0;
+                var restrictedSections = 0;
+                var closedSections = 0;
+
                 for (var i in avail) {
                     totalSections += parseInt(avail[i]);
-                    if (parseInt(i) > 0) {
-                        openSections += parseInt(avail[i]);
+                    switch(parseInt(i)) {
+                        case 0:
+                            closedSections += parseInt(avail[i]);
+                            break;
+                        case 1:
+                        case 3:
+                            openSections += parseInt(avail[i]);
+                            break;
+                        case 2:
+                            restrictedSections += parseInt(avail[i]);
+                            break;
                     }
                 }
                 if (totalSections) {
-                    if (openSections == 0) {
-                        $(openCell).text("Availability unknown");
-                    } else {
-                        var percentOpen = openSections / totalSections;
-                        $(openCell).text(Math.round(percentOpen * 100) + "%");
-                    }
+                    $(openCell).append(
+                        createProgressBar(
+                            openSections/totalSections,
+                            restrictedSections/totalSections,
+                            closedSections/totalSections
+                        )
+                    );
                 } else {
                     $(openCell).text("Schedule not available");
                 }
