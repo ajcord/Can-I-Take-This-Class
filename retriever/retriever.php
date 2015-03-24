@@ -62,7 +62,7 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
                     "values (".$crn.", \"".$sem."\", ".$avail_num.")");
                 if (!$retval) {
-                    echo "could not enter availability data: ".mysql_error();
+                    echo "could not enter availability data for ".$crn.": ".mysql_error()."\n";
                 }
 
                 $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name) ".
@@ -71,10 +71,10 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                     "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
                     "subjectcode=values(subjectcode), name=values(name)");
                 if (!$retval) {
-                    echo "could not enter section data: ".mysql_error();
+                    echo "could not enter section data for ".$crn.": ".mysql_error()."\n";
                 }
 
-                echo "done\n";
+                // echo "done\n";
             }
         }
     } catch (Exception $e) {
