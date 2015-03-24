@@ -46,12 +46,11 @@ while($row = mysql_fetch_assoc($retval)) {
 
 mysql_close($link);
 
-var_dump($course_data);
-echo "\n<br>\n";
-var_dump($enrollment_data);
-
-// $return_data = array_combine($course_nums, $course_data);
-// echo json_encode($return_data);
+$return_data = array(
+    "names" => $course_data,
+    "sections" => $enrollment_data,
+);
+echo json_encode($return_data);
 
 
 
