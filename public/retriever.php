@@ -58,11 +58,9 @@ $return_data = array();
 
 $status_arr = array();
 foreach ($enrollment_data as $e) {
-    var_dump($e);
     $num = $e["num"];
-    $status = intval($e["status"]);
-    echo $num." ".$status."\n";
-    // $status_arr[$num]
+    $status = $e["status"];
+    $status_arr[$num][$status]++;
 }
 
 foreach ($course_data as $c) {
