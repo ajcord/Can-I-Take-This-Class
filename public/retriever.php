@@ -50,25 +50,31 @@ mysql_close($link);
 //     "names" => $course_data,
 //     "sections" => $enrollment_data,
 // );
-var_dump($course_data);
-var_dump($enrollment_data);
-// $return_data = array();
 
-// $status_arr = array();
-// foreach ($enrollment_data as $e) {
-    
-// }
+// var_dump($course_data);
+// var_dump($enrollment_data);
 
-// foreach ($course_data as $c) {
-//     $this_course_data = array(
-//         "num" => $c->num,
-//         "name" => $c->name,
-//         "status" => $this_status_arr,
-//     );
-//     array_push($return_data, $this_course_data);
-// }
+$return_data = array();
 
-// echo json_encode($return_data);
+$status_arr = array();
+foreach ($enrollment_data as $e) {
+    var_dump($e);
+    $num = $e["num"];
+    $status = intval($e["status"]);
+    echo $num." ".$status."\n";
+    // $status_arr[$num]
+}
+
+foreach ($course_data as $c) {
+    $this_course_data = array(
+        "num" => $c["num"],
+        "name" => $c["name"],
+        "status" => $this_status_arr,
+    );
+    array_push($return_data, $this_course_data);
+}
+
+echo json_encode($return_data);
 
 
 
