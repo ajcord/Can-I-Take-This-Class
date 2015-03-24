@@ -25,7 +25,7 @@ $("#subj-dropdown a").click(function(e) {
             "subject": subj,
         },
         success: function(data) {
-            $("loading-alert").hide();
+            $("#loading-alert").hide();
             var parsed = $.parseJSON(data);
             console.log(parsed);
             for (var i in parsed) {
