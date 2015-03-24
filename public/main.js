@@ -23,7 +23,11 @@ $("#dept-dropdown a").click(function(e) {
                 $(nameCell).text(parsed[i].name);
                 var avail = parsed[i].availability;
                 console.log(avail);
-                $(openCell).text(avail);
+                var totalSections = 0;
+                for (var i = 0; i < avail.length; i++) {
+                    totalSections += parseInt(avail[i].num);
+                }
+                $(openCell).text(totalSections);
                 $(row).append([numCell, nameCell, openCell]);
                 table.append(row);
             }
