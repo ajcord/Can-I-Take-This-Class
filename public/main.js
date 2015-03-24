@@ -1,17 +1,17 @@
 $("#subj-dropdown a").click(function(e) {
-    var dept = e.target.innerHTML;
-    $("#subj-name").text(dept);
+    var subj = e.target.innerHTML;
+    $("#subj-name").text(subj);
     $.ajax({
         type: "GET",
         url: "retriever.php",
         data: {
             "year": 2015,
-            "sem": "fall",
-            "dept": dept,
+            "term": "fall",
+            "subject": subj,
         },
         success: function(data) {
             var parsed = $.parseJSON(data);
-            // console.log(parsed);
+            console.log(parsed);
             var table = $("#courses-table");
             table.empty();
             for (var i in parsed) {
