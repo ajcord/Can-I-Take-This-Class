@@ -33,7 +33,7 @@ $("#dept-dropdown a").click(function(e) {
                 }
                 if (totalSections) {
                     var percentOpen = (totalSections - closedSections) / totalSections;
-                    $(openCell).text(percentOpen * 100 + "%");
+                    $(openCell).text(Math.round(percentOpen * 100) + "%");
                 } else {
                     $(openCell).text("Schedule not available");
                 }
