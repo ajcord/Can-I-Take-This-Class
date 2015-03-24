@@ -31,7 +31,8 @@ $("#dept-dropdown a").click(function(e) {
                         closedSections += parseInt(avail[i].num);
                     }
                 }
-                $(openCell).text(closedSections + " " + totalSections);
+                var percentOpen = (totalSections - closedSections) / totalSections;
+                $(openCell).text(percentOpen * 100 + "%");
                 $(row).append([numCell, nameCell, openCell]);
                 table.append(row);
             }
