@@ -14,12 +14,8 @@ $dept = $_GET["dept"];
 $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/catalog/".$year."/".$sem."/".$dept.".xml");
 $parsed = new SimpleXMLElement($data);
 $course_nums = array();
-$course_names = array();
+$course_data = array();
 foreach ($parsed->courses->course as $c) {
-    // echo $parsed["id"] . " " . $c["id"] . ": " . $c . "\n";
-    array_push($course_nums, $c["id"]);
-    array_push($course_names, (string)$c);
-
     //This monstrosity gets the count of CRNs for each enrollment status for the specified class. It only gets the most recent data for each CRN.
     // $sql = "select availability.enrollmentstatus, count(availability.enrollmentstatus) from ".
     //             "(select availability.crn, max(timestamp) timestamp, enrollmentstatus, semester from ".
@@ -36,14 +32,19 @@ foreach ($parsed->courses->course as $c) {
     echo $c." ".$c["id"].":\n";
     $enrollment_data = array();
     while($row = mysql_fetch_assoc($retval)) {
-        // var_dump($row);
         array_push($enrollment_data, $row);
     }
-    var_dump($enrollment_data);
+    // var_dump($enrollment_data);
+    $this_course_data = array(
+        "name" => (string)$c,
+        "availability" => $enrollment_data,
+    );
+    array_push($course_nums, $c["id"]);
+    array_push($course_data, $this_course_data);
 }
 
 mysql_close($link);
 
-$return_data = array_combine($course_nums, $course_names);
+$return_data = array_combine($course_nums, $course_data);
 echo json_encode($return_data);
 ?>
