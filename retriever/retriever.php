@@ -37,6 +37,7 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                 switch ($availability) {
                     case "Closed":
                         $avail_num = 0;
+                        break;
                     case "Open":
                         $avail_num = 1;
                         break;
