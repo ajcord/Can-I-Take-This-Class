@@ -17,8 +17,8 @@ echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
 //Get a list of all the departments
 $catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/catalog/".$year."/".$term.".xml");
 $catalog_parsed = new SimpleXMLElement($catalog_data);
-foreach ($catalog_parsed->subjects->subject as $s) {
-    $subject = $s["id"];
+foreach ($catalog_parsed->subjects->subject as $subj) {
+    $subject = mysql_real_escape_string($subj["id"]);
 
     echo $subject."...";
 
@@ -30,8 +30,8 @@ foreach ($catalog_parsed->subjects->subject as $s) {
         //Parse the XML data
         foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
             foreach($c->detailedSections->detailedSection as $s) {
-                $crn = $s["id"];
-                $availability = $s->enrollmentStatus;
+                $crn = mysql_real_escape_string($s["id"]);
+                $availability = mysql_real_escape_string($s->enrollmentStatus);
                 $avail_num = 0;
                 switch ($availability) {
                     case "Closed":
@@ -51,9 +51,9 @@ foreach ($catalog_parsed->subjects->subject as $s) {
                         break;
                 }
 
-                $course_num = $s->parents->course["id"];
-                $section_num = $s->sectionNumber;
-                $course_name = $c->label;
+                $course_num = mysql_real_escape_string($s->parents->course["id"]);
+                $section_num = mysql_real_escape_string($s->sectionNumber);
+                $course_name = mysql_real_escape_string($c->label);
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".

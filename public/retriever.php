@@ -7,9 +7,9 @@ if (!$link) {
 }
 mysql_select_db("classmat_411");
 
-$term = $_GET["term"];
-$year = $_GET["year"];
-$subj = $_GET["subject"];
+$term = mysql_real_escape_string($_GET["term"]);
+$year = mysql_real_escape_string($_GET["year"]);
+$subj = mysql_real_escape_string($_GET["subject"]);
 $sem = substr($term, 0, 2) . substr($year, 2, 2);
 
 // Get course data
