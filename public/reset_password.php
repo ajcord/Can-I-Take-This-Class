@@ -14,7 +14,7 @@
                 </div>
 <?php
 $token = $_GET["token"];
-echo "<input type='hidden' value=$token' name='token'>";
+echo "<input type='hidden' value='$token' name='token'>";
 ?>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
