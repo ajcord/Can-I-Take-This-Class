@@ -23,7 +23,7 @@ if ($count == 1) { //Make sure the user exists
     $prehash = $id.$password.$email;
     $hash = password_hash($prehash, PASSWORD_DEFAULT);
 
-    $sql = "insert into passwordresets (userid, hash) values ('$id', '$hash')";
+    $sql = "insert into passwordresets (userid, hash) values ('$id', '$hash') on duplicate key update";
     $retval = mysql_query($sql); //Assume success
 
     // $retval = mysql_query($sql);
