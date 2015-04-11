@@ -27,11 +27,14 @@ if ($count == 1) { //Make sure the user exists
 
     $to = $email;
     $subject = "Your password reset email for ClassMaster";
-    $body = "We recently received a request to reset the password for ".$email.
+    $url = "http://classmaster.web.engr.illinois.edu/reset_password.php?token=$hash";
+    $body = "We recently received a request to reset the password for $email".
             " at ClassMaster.<br><br>".
             "To reset your password, please click here: ".
-            "<a href=\"http://classmaster.web.engr.illinois.edu/reset_password.php?token=".$hash."\">Reset Password</a>".
-            "<br><br>Regards,<br>ClassMaster";
+            "<a href=\"$hash\">Reset Password</a><br>".
+            "or go to the following website:<br>$url".
+            "<br><br>Regards,<br>ClassMaster<br>".
+            "<a href=\"http://classmaster.web.engr.illinois.edu\">classmaster.web.engr.illinois.edu</a>";
     $headers  = "MIME-Version: 1.0\n".
                 "Content-type: text/html; charset=iso-8859-1\n".
                 "From: no-reply@classmaster.web.engr.illinois.edu";
