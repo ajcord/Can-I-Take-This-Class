@@ -43,15 +43,18 @@ if ($count == 1) { //Exactly one user can be associated with an email address
         $_SESSION["email"] = $email;
         mysql_close($link);
         header("location: $next?status=login");
+        die();
     } else {
         //Invalid password
         mysql_close($link);
         header("location: login.php?status=login_error");
+        die();
     }
 } else {
     //Invalid email
     mysql_close($link);
     header("location: login.php?status=login_error");
+    die();
 }
 
 ?>

@@ -28,12 +28,28 @@ $hash = password_hash($password, PASSWORD_DEFAULT);
 $sql = "insert into users (email, password) values ('$email', '$hash')";
 
 $retval = mysql_query($sql);
-mysql_close($link);
 
 if (!$retval) {
     //Account probably already exists
+    mysql_close($link);
     header("location: register.php?status=duplicate");
 } else {
+    //Account created. Login.
+    $sql = "select id from users where email='$email'";
+    $retval = mysql_query($sql); //Assume it worked
+    $row = mysql_fetch_assoc($retval);
+    $id = $row["id"];
+
+    //Set the session variables
+    if (!session_start()) {
+        //Session error
+        mysql_close($link);
+        header("location: login.php?status=session_error");
+        die();
+    }
+    $_SESSION["id"] = $id;
+    $_SESSION["email"] = $email;
+    mysql_close($link);
     header("location: $next?status=newuser");
 }
 

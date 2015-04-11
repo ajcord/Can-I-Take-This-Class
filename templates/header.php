@@ -43,7 +43,7 @@ if ($email): ?>
         <?php echo $email; ?> <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="settings.php">Settings</a></li>
+        <li><a href="account.php">Account settings</a></li>
         <li class="divider"></li>
         <li><a href="logout.php">Log out</a></li>
     </ul>

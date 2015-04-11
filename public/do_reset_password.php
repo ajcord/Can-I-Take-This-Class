@@ -36,6 +36,7 @@ if ($count == 1) { //Make sure the password reset exists
     if (!$retval) {
         mysql_close($link);
         header("location: login.php?status=reset_password_error");
+        die();
     }
 
     //Clear out the password reset token
@@ -44,10 +45,12 @@ if ($count == 1) { //Make sure the password reset exists
 
     mysql_close($link);
     header("location: login.php?status=reset_password_success");
+    die();
 } else {
     //Invalid token
     mysql_close($link);
     header("location: login.php?status=invalid_reset_token");
+    die();
 }
 
 ?>
