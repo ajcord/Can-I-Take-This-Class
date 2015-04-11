@@ -37,9 +37,11 @@ session_start(); //Resume session
 <?php
 $email = $_SESSION["email"];
 if ($email): ?>
-<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
         role="button" aria-expanded="false">
-    <a href="#"><?php echo $email; ?> <span class="caret"></span></a>
+        <?php echo $email; ?> <span class="caret"></span>
+    </a>
 </li>
 <ul class="dropdown-menu" role="menu">
     <li><a href="settings.php">Settings</a></li>
