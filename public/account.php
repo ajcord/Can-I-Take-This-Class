@@ -1,4 +1,10 @@
-<?php include "../templates/header.php"; ?>
+<?php
+session_start();
+if (!isset($_SESSION["id"])) {
+    header("location: login.php?status=not_logged_in&next=account.php");
+}
+include "../templates/header.php";
+?>
 
 <div class="container">
     <div class="jumbotron">
@@ -79,8 +85,8 @@ if ($status == "invalid_email") {
                             <h4 class="modal-title">Delete account</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete your account? You cannot undo this action.</p>
-                            <p>Enter your password to confirm.</p>
+                            Are you sure you want to delete your account? You cannot undo this action.<br><br>
+                            Enter your password to confirm.<br><br>
                             <label for="inputPassword" class="col-sm-2">Password:</label>
                             <div class="col-sm-10">
                                 <input type="password" class="form-control" id="inputPassword" name="password">

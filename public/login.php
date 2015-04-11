@@ -35,6 +35,10 @@ if ($status == "login_error") {
     echo "<div class='alert alert-info' role='alert'>".
         "Your account has been deleted successfully. We're sorry to see you go!".
         "</div>";
+} else if ($status == "not_logged_in") {
+    echo "<div class='alert alert-warning' role='alert'>".
+        "You must log in to view that page.".
+        "</div>";
 }
 ?>
         <form class="form-horizontal" action="authenticate.php" method="POST">
@@ -50,7 +54,14 @@ if ($status == "login_error") {
                     <input type="password" class="form-control" id="inputPassword" name="password">
                 </div>
             </div>
-            <input type="hidden" name="next" value="index.php">
+<?php
+$next = $_GET["next"];
+if (!$next || filter_var($next, FILTER_VALIDATE_URL)) {
+    //Disallow full URLs for phishing
+    $next = "index.php";
+}
+echo "<input type='hidden' name='next' value='$next'>";
+?>
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Log in</button>
                 <a href="forgot_password.php" class="btn btn-link">Forgot password</a>
