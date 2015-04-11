@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" name="change_email">Change email</button>
+                <button type="submit" class="btn btn-primary" name="change_email" value="1">Change email</button>
             </div>
             <br><br><br>
             <div class="form-group">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" name="change_password">Change password</button>
+                <button type="submit" class="btn btn-primary" name="change_password" value="1">Change password</button>
             </div>
             <br><br><br>
             <div class="col-sm-offset-2 col-sm-10">
@@ -50,7 +50,7 @@
                             <br><br><br>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" name="delete_account">Permanently delete my account</button>
+                            <button type="submit" class="btn btn-danger" name="delete_account" value="1">Permanently delete my account</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </div><!-- /.modal-content -->
