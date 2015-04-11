@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 //Provide the PHP 5.5 password interface for old versions of PHP
 require_once("../lib/password.php");
