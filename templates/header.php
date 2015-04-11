@@ -29,6 +29,12 @@
                 </button>
                 <a class="navbar-brand" href="#">ClassMaster</a>
             </div>
+<?php
+    $email = $_SESSION["email"];
+    if ($email) {
+        echo $email;
+    }
+?>
 
             <!-- Collect nav items on small screens -->
             <!--

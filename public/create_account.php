@@ -13,28 +13,18 @@ mysql_select_db("classmat_411");
 
 $email = mysql_real_escape_string($_POST["email"]);
 $password = mysql_real_escape_string($_POST["password"]);
-$hash = password_hash($password, PASSWORD_DEFAULT);
+$next = $_POST["next"];
 
+//TODO: validate email and password
+
+$hash = password_hash($password, PASSWORD_DEFAULT);
 $sql = "insert into users (email, password) values ('$email', '$hash')";
 
 $retval = mysql_query($sql);
 if (!$retval) {
-    die("Error creating account: ".mysql_error());
+    //Account probably already exists
+    header("location: register.php?status=duplicate");
+} else {
+    header("location: $next?status=newuser");
 }
-
-// $count = mysql_num_rows($retval);
-// if ($count == 0) {
-//     $row = mysql_fetch_assoc($retval);
-//     $hash = $row["password"];
-//     if (password_verify($password, $hash)) {
-//         // session_register("email");
-//         // session_register("password");
-//         // header("location: success.php");
-//         echo "Success";
-//     } else {
-//         echo "Invalid password";
-//     }
-// } else {
-//     echo "Email already exists";
-// }
 ?>

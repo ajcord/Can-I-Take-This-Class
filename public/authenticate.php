@@ -26,18 +26,21 @@ $count = mysql_num_rows($retval);
 if ($count == 1) {
     $row = mysql_fetch_assoc($retval);
     $hash = $row["password"];
-    
+
     if (password_verify($password, $hash)) {
-        session_start();
+        if (!session_start()) {
+            //Session error
+            header("location: login.php?status=session_error");
+        }
         $_SESSION["id"] = $row["id"];
-        header("location: $next?login=success");
-        // echo "Success";
+        $_SESSION["email"] = $email;
+        header("location: $next?status=login");
     } else {
-        header("location: login.php?login=error");
-        // echo "Invalid password";
+        //Invalid password
+        header("location: login.php?status=login_error");
     }
 } else {
-    header("location: login.php?login=error");
-    // echo "Invalid email";
+    //Invalid email
+    header("location: login.php?status=login_error");
 }
 ?>

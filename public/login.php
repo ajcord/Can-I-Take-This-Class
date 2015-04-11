@@ -3,7 +3,20 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Login</h1>
+        <h4>Don't have an account? <a href="register.php">Get one!</a></h4>
         <br><br>
+<?php
+$status = $_GET["status"];
+if ($status == "login_error") {
+    echo "<div class=\"alert alert-danger\" role=\"alert\">".
+        "Invalid email or password".
+        "</div>";
+} else if ($status == "session_error") {
+    echo "<div class=\"alert alert-danger\" role=\"alert\">".
+        "There was an error logging in. Please try again.".
+        "</div>";
+}
+?>
         <form class="form-horizontal" action="authenticate.php" method="POST">
             <div class="form-group">
                 <label for="inputEmail" class="col-sm-2">Email:</label>
