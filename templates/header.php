@@ -45,11 +45,11 @@ if ($email): ?>
     <ul class="dropdown-menu" role="menu">
         <li><a href="settings.php">Settings</a></li>
         <li class="divider"></li>
-        <li><a href="logout.php">Logout</a></li>
+        <li><a href="logout.php">Log out</a></li>
     </ul>
 </li>
 <?php else: ?>
-<li><a href="login.php">Login</a></li>
+<li><a href="login.php">Log in</a></li>
 <?php endif; ?>
             </ul>
 
