@@ -54,6 +54,8 @@ if ($status == "invalid_email") {
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="inputOldPassword" name="old_password">
                 </div>
+            </div>
+            <div class="form-group">
                 <label for="inputNewPassword" class="col-sm-2">New password:</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="inputNewPassword" name="new_password">
