@@ -17,18 +17,19 @@ if (!$retval) {
 $count = mysql_num_rows($retval);
 if ($count == 1) { //Make sure the user exists
     //Generate the hash value
+    $row = mysql_fetch_assoc($retval);
     $id = $row["id"];
     $password = $row["password"];
     $prehash = $id.$password.$email;
     $hash = password_hash($prehash, PASSWORD_DEFAULT);
 
     $sql = "insert into passwordresets (userid, hash) values ('$id', '$hash')";
-    // $retval = mysql_query($sql); //Assume success
+    $retval = mysql_query($sql); //Assume success
 
-    $retval = mysql_query($sql);
-    if (!$retval) {
-        die("Error resetting password: ".mysql_error());
-    }
+    // $retval = mysql_query($sql);
+    // if (!$retval) {
+    //     die("Error resetting password: ".mysql_error());
+    // }
 
     $to = $email;
     $subject = "Your password reset email for ClassMaster";
@@ -37,8 +38,9 @@ if ($count == 1) { //Make sure the user exists
             " at ClassMaster.<br><br>".
             "To reset your password, please click here: ".
             "<a href=\"$hash\">Reset Password</a><br>".
-            "or go to the following website:<br>$url".
-            "<br><br>Regards,<br>ClassMaster<br>".
+            "or go to the following website:<br>$url<br><br>".
+            "This link will be valid for 4 hours.<br><br>".
+            "Regards,<br>ClassMaster<br>".
             "<a href=\"http://classmaster.web.engr.illinois.edu\">classmaster.web.engr.illinois.edu</a>";
     $headers  = "MIME-Version: 1.0\n".
                 "Content-type: text/html; charset=iso-8859-1\n".
