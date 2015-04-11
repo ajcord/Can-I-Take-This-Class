@@ -19,6 +19,18 @@ if ($status == "login_error") {
     echo "<div class='alert alert-info' role='alert'>".
         "If the email address you entered is correct, an email containing password reset instructions has been sent to it.".
         "</div>";
+} else if ($status == "reset_password_success") {
+    echo "<div class='alert alert-success' role='alert'>".
+        "Password reset successfully".
+        "</div>";
+} else if ($status == "reset_password_error") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "Password reset failed!".
+        "</div>";
+} else if ($status == "invalid_reset_token") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "Invalid password reset link. You may have used an expired reset link.".
+        "</div>";
 }
 ?>
         <form class="form-horizontal" action="authenticate.php" method="POST">

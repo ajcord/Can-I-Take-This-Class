@@ -24,12 +24,12 @@ if ($count == 1) { //Make sure the user exists
     $hash = password_hash($prehash, PASSWORD_DEFAULT);
 
     $sql = "insert into passwordresets (userid, hash) values ('$id', '$hash') on duplicate key update hash=VALUES(hash)";
-    // $retval = mysql_query($sql); //Assume success
+    $retval = mysql_query($sql); //Assume success
 
-    $retval = mysql_query($sql);
-    if (!$retval) {
-        die("Error resetting password: ".mysql_error());
-    }
+    // $retval = mysql_query($sql);
+    // if (!$retval) {
+    //     die("Error resetting password: ".mysql_error());
+    // }
 
     $to = $email;
     $subject = "Your password reset email for ClassMaster";

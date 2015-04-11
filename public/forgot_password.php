@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1>Reset password</h1>
+        <h1>Forgot password</h1>
         <br><br>
 <?php
 $status = $_GET["status"];
