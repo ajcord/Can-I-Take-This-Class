@@ -97,6 +97,7 @@ if (isset($change_email)) {
 
 
     //TODO: Remove the user and their records from all tables
+    die("Deleting user $id");
     $sql = "delete from users where id='$id'";
     $retval = mysql_query($sql);
 
