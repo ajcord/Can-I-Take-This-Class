@@ -9,15 +9,15 @@
 $status = $_GET["status"];
 if ($status == "duplicate") {
     echo "<div class='alert alert-danger' role='alert'>".
-        "Email address is already in use".
+        "That email address is already in use.".
         "</div>";
 } else if ($status == "invalid_email") {
     echo "<div class='alert alert-danger' role='alert'>".
-        "Please enter a valid email address".
+        "Please enter a valid email address.".
         "</div>";
 } else if ($status == "invalid_password") {
     echo "<div class='alert alert-danger' role='alert'>".
-        "Your password must be at least 8 characters".
+        "Your password must be at least 8 characters.".
         "</div>";
 }
 ?>

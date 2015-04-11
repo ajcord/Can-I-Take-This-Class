@@ -9,13 +9,7 @@ Subject:
     </button>
     <ul id="subj-dropdown" class="dropdown-menu" role="menu">
 <?php
-
-//Connect to MySQL
-$link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
-if (!$link) {
-    die();
-}
-mysql_select_db("classmat_411");
+include "../templates/connect_mysql.php";
 
 //Get a list of subjects for next semester
 $sql = "select subjectcode from sections where semester='fa15' group by subjectcode";

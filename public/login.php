@@ -2,14 +2,14 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1>Login</h1>
+        <h1>Log in</h1>
         <h4>Don't have an account? <a href="register.php">Get one!</a></h4>
         <br><br>
 <?php
 $status = $_GET["status"];
 if ($status == "login_error") {
     echo "<div class='alert alert-danger' role='alert'>".
-        "Invalid email or password".
+        "Your email address or password is incorrect.".
         "</div>";
 } else if ($status == "session_error") {
     echo "<div class='alert alert-danger' role='alert'>".
@@ -33,6 +33,7 @@ if ($status == "login_error") {
             <input type="hidden" name="next" value="index.php">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Login</button>
+                <a href="forgot_password.php" class="btn btn-link">Forgot password</a>
             </div>
             <br><br>
         </form>
