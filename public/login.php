@@ -21,7 +21,7 @@ if ($status == "login_error") {
         "</div>";
 } else if ($status == "reset_password_success") {
     echo "<div class='alert alert-success' role='alert'>".
-        "Password reset successfully".
+        "Password reset successfully.".
         "</div>";
 } else if ($status == "reset_password_error") {
     echo "<div class='alert alert-danger' role='alert'>".
@@ -30,6 +30,10 @@ if ($status == "login_error") {
 } else if ($status == "invalid_reset_token") {
     echo "<div class='alert alert-danger' role='alert'>".
         "Invalid password reset link. You may have used an expired reset link.".
+        "</div>";
+} else if ($status == "deleted_account") {
+    echo "<div class='alert alert-info' role='alert'>".
+        "Your account has been deleted successfully. We're sorry to see you go!".
         "</div>";
 }
 ?>
