@@ -15,6 +15,7 @@ $new_password = mysql_real_escape_string($_POST["new_password"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
 if (isset($change_email)) {
+    die("Changing email");
     //Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         mysql_close($link);
