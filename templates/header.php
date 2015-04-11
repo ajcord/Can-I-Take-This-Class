@@ -30,6 +30,7 @@
                 <a class="navbar-brand" href="#">ClassMaster</a>
             </div>
 <?php
+    session_start(); //Resume session
     $email = $_SESSION["email"];
     if ($email) {
         echo $email;
