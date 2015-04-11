@@ -8,11 +8,11 @@
 <?php
 $status = $_GET["status"];
 if ($status == "login_error") {
-    echo "<div class=\"alert alert-danger\" role=\"alert\">".
+    echo "<div class='alert alert-danger' role='alert'>".
         "Invalid email or password".
         "</div>";
 } else if ($status == "session_error") {
-    echo "<div class=\"alert alert-danger\" role=\"alert\">".
+    echo "<div class='alert alert-danger' role='alert'>".
         "There was an error logging in. Please try again.".
         "</div>";
 }

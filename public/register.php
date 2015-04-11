@@ -7,7 +7,7 @@
 <?php
 $status = $_GET["status"];
 if ($status == "duplicate") {
-    echo "<div class=\"alert alert-danger\" role=\"alert\">".
+    echo "<div class='alert alert-danger' role='alert'>".
         "Email address is already in use".
         "</div>";
 }

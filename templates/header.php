@@ -36,20 +36,19 @@ session_start(); //Resume session
             <ul class="nav navbar-nav navbar-right">
 <?php
 $email = $_SESSION["email"];
-if ($email) {
-    echo "<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"".
-            "role=\"button\" aria-expanded=\"false\">".
-            "$email <span class=\"caret\"></span>".
-        "</a></li>";
-    echo "<ul class=\"dropdown-menu\" role=\"menu\">".
-            "<li><a href=\"settings.php\">Settings</a></li>".
-            "<li class=\"divider\"></li>".
-            "<li><a href=\"logout.php\">Logout</a></li>".
-        "</ul>";
-} else {
-    echo "<li><a href=\"login.php\">Login</a></li>";
-}
-?>
+if ($email): ?>
+<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
+        role="button" aria-expanded="false">
+    <a href="#">$email <span class="caret"></span></a>
+</li>
+<ul class="dropdown-menu" role="menu">
+    <li><a href="settings.php">Settings</a></li>
+    <li class="divider"></li>
+    <li><a href="logout.php">Logout</a></li>
+</ul>
+<?php else: ?>
+<li><a href="login.php">Login</a></li>
+<?php endif; ?>
             </ul>
 
             <!-- Collect nav items on small screens -->

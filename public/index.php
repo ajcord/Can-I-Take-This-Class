@@ -18,7 +18,7 @@ if (!$link) {
 mysql_select_db("classmat_411");
 
 //Get a list of subjects for next semester
-$sql = "select subjectcode from sections where semester=\"fa15\" group by subjectcode";
+$sql = "select subjectcode from sections where semester='fa15' group by subjectcode";
 
 $retval = mysql_query($sql);
 if (!$retval) {
@@ -27,7 +27,7 @@ if (!$retval) {
 
 $course_data = array();
 while($row = mysql_fetch_assoc($retval)) {
-    echo "<li><a href=\"#\">".$row["subjectcode"]."</a></li>";
+    echo "<li><a href='#'>".$row["subjectcode"]."</a></li>";
 }
 
 mysql_close($link);
