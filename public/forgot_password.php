@@ -4,6 +4,14 @@
     <div class="jumbotron">
         <h1>Reset password</h1>
         <br><br>
+<?php
+$status = $_GET["status"];
+if ($status == "reset_failed") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "The password reset failed. Please try again.".
+        "</div>";
+}
+?>
         Please enter your email address below. We will send you an email with instructions to reset your password.
         <br><br>
         <form class="form-horizontal" action="send_reset_email.php" method="POST">

@@ -15,6 +15,10 @@ if ($status == "login_error") {
     echo "<div class='alert alert-danger' role='alert'>".
         "There was an error logging in. Please try again.".
         "</div>";
+} else if ($status == "reset_sent") {
+    echo "<div class='alert alert-info' role='alert'>".
+        "If the email address you entered is correct, an email containing password reset instructions has been sent to it.".
+        "</div>";
 }
 ?>
         <form class="form-horizontal" action="authenticate.php" method="POST">
