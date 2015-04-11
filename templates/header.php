@@ -33,12 +33,24 @@ session_start(); //Resume session
                 </button>
                 <a class="navbar-brand" href="#">ClassMaster</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
 <?php
 $email = $_SESSION["email"];
 if ($email) {
-    echo $email;
+    echo "<li><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"".
+            "role=\"button\" aria-expanded=\"false\">".
+            "$email <span class=\"caret\"></span>".
+        "</a></li>";
+    echo "<ul class=\"dropdown-menu\" role=\"menu\">".
+            "<li><a href=\"settings.php\">Settings</a></li>".
+            "<li class=\"divider\"></li>".
+            "<li><a href=\"logout.php\">Logout</a></li>".
+        "</ul>";
+} else {
+    echo "<li><a href=\"login.php\">Login</a></li>";
 }
 ?>
+            </ul>
 
             <!-- Collect nav items on small screens -->
             <!--
