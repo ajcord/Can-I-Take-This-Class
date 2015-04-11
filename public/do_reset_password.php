@@ -8,6 +8,14 @@ include "../templates/connect_mysql.php";
 $token = mysql_real_escape_string($_POST["token"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
+//Validate password
+if (strlen($password) < 8) {
+    //Password is too short
+    mysql_close($link);
+    header("location: reset_password.php?status=invalid_password&token=$token");
+}
+
+//Verify the password reset is valid
 $sql = "select userid, timestamp from passwordresets where hash='$token' and timestamp > date_sub(now(), interval 4 hour)";
 
 $retval = mysql_query($sql);
