@@ -25,7 +25,6 @@ if (isset($change_email)) {
 
     //Update the email address on record
     $id = $_SESSION["id"];
-    die("Changing email for user $id");
     $sql = "update users set email='$email' where id='$id'";
 
     $retval = mysql_query($sql);
