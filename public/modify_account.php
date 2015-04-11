@@ -32,6 +32,7 @@ if (isset($change_email)) {
     }
 
     mysql_close($link);
+    $_SESSION["email"] = $email;
     header("location: account.php?status=changed_email");
 } else if (isset($change_password)) {
     //Verify the old password
@@ -105,6 +106,7 @@ if (isset($change_email)) {
     }
 
     mysql_close($link);
+    session_destroy();
     header("location: login.php?status=deleted_account");
     die();
 }
