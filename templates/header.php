@@ -1,3 +1,7 @@
+<?php
+session_start(); //Resume session
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,11 +34,10 @@
                 <a class="navbar-brand" href="#">ClassMaster</a>
             </div>
 <?php
-    session_start(); //Resume session
-    $email = $_SESSION["email"];
-    if ($email) {
-        echo $email;
-    }
+$email = $_SESSION["email"];
+if ($email) {
+    echo $email;
+}
 ?>
 
             <!-- Collect nav items on small screens -->
