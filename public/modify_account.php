@@ -14,7 +14,7 @@ $old_password = mysql_real_escape_string($_POST["old_password"]);
 $new_password = mysql_real_escape_string($_POST["new_password"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
-if ($change_email) {
+if (isset($change_email)) {
     //Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         mysql_close($link);
@@ -33,7 +33,7 @@ if ($change_email) {
 
     mysql_close($link);
     header("location: account.php?status=changed_email");
-} else if ($change_password) {
+} else if (isset($change_password)) {
     //Verify the old password
     $id = $_SESSION["id"];
     $sql = "select password from users where id='$id'";
@@ -74,7 +74,7 @@ if ($change_email) {
     mysql_close($link);
     header("location: account.php?status=changed_password");
     die();
-} else if ($delete_account) {
+} else if (isset($delete_account)) {
     //Verify the password
     $id = $_SESSION["id"];
     $sql = "select password from users where id='$id'";
