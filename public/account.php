@@ -15,6 +15,8 @@
                 <button type="submit" class="btn btn-primary" name="change_email" value="1">Change email</button>
             </div>
             <br><br><br>
+        </form>
+        <form class="form-horizontal" action="modify_account.php" method="POST">
             <div class="form-group">
                 <label for="inputOldPassword" class="col-sm-2">Old password:</label>
                 <div class="col-sm-10">
@@ -29,6 +31,8 @@
                 <button type="submit" class="btn btn-primary" name="change_password" value="1">Change password</button>
             </div>
             <br><br><br>
+        </form>
+        <form class="form-horizontal" action="modify_account.php" method="POST">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete this account</button>
             </div>
