@@ -48,7 +48,7 @@ if ($status == "login_error") {
             </div>
             <input type="hidden" name="next" value="index.php">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary">Log in</button>
                 <a href="forgot_password.php" class="btn btn-link">Forgot password</a>
             </div>
             <br><br>
