@@ -88,7 +88,7 @@ if (isset($change_email)) {
 
     $row = mysql_fetch_assoc($retval);
     $hash = $row["password"];
-    if (!password_verify($old_password, $hash)) {
+    if (!password_verify($password, $hash)) {
         //Invalid password
         mysql_close($link);
         header("location: account.php?status=password_error");
@@ -97,7 +97,6 @@ if (isset($change_email)) {
 
 
     //TODO: Remove the user and their records from all tables
-    die("Deleting user $id");
     $sql = "delete from users where id='$id'";
     $retval = mysql_query($sql);
 
