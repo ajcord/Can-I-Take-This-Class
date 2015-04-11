@@ -8,7 +8,7 @@ include "../templates/connect_mysql.php";
 $token = mysql_real_escape_string($_POST["token"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
-$sql = "select userid, timestamp from users where hash='$token' and timestamp > date_sub(now(), interval 4 hour)";
+$sql = "select userid, timestamp from passwordresets where hash='$token' and timestamp > date_sub(now(), interval 4 hour)";
 
 $retval = mysql_query($sql);
 if (!$retval) {
