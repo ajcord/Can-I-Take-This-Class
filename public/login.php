@@ -17,6 +17,7 @@
                     <input type="password" class="form-control" id="inputPassword" name="password">
                 </div>
             </div>
+            <input type="hidden" name="next" value="index.php">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>

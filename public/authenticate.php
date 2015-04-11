@@ -13,6 +13,7 @@ mysql_select_db("classmat_411");
 
 $email = mysql_real_escape_string($_POST["email"]);
 $password = mysql_real_escape_string($_POST["password"]);
+$next = $_POST["next"];
 
 $sql = "select id, password from users where email='$email'";
 
@@ -25,15 +26,18 @@ $count = mysql_num_rows($retval);
 if ($count == 1) {
     $row = mysql_fetch_assoc($retval);
     $hash = $row["password"];
+    
     if (password_verify($password, $hash)) {
-        // session_register("email");
-        // session_register("password");
-        // header("location: success.php");
-        echo "Success";
+        session_start();
+        $_SESSION["id"] = $row["id"];
+        header("location: $next?login=success");
+        // echo "Success";
     } else {
-        echo "Invalid password";
+        header("location: login.php?login=error");
+        // echo "Invalid password";
     }
 } else {
-    echo "Invalid email";
+    header("location: login.php?login=error");
+    // echo "Invalid email";
 }
 ?>
