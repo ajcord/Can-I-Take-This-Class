@@ -31,7 +31,7 @@ session_start(); //Resume session
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ClassMaster</a>
+                <a class="navbar-brand" href="/index.php">ClassMaster</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
 <?php
