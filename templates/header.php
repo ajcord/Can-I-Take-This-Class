@@ -42,12 +42,12 @@ if ($email): ?>
         role="button" aria-expanded="false">
         <?php echo $email; ?> <span class="caret"></span>
     </a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="settings.php">Settings</a></li>
+        <li class="divider"></li>
+        <li><a href="logout.php">Logout</a></li>
+    </ul>
 </li>
-<ul class="dropdown-menu" role="menu">
-    <li><a href="settings.php">Settings</a></li>
-    <li class="divider"></li>
-    <li><a href="logout.php">Logout</a></li>
-</ul>
 <?php else: ?>
 <li><a href="login.php">Login</a></li>
 <?php endif; ?>
