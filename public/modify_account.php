@@ -15,7 +15,6 @@ $new_password = mysql_real_escape_string($_POST["new_password"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
 if (isset($change_email)) {
-    die("Changing email");
     //Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         mysql_close($link);
@@ -25,6 +24,7 @@ if (isset($change_email)) {
 
     //Update the email address on record
     $id = $_SESSION["id"];
+    die("Changing email for user $id");
     $sql = "update users set email='$email' where id='$id'";
 
     $retval = mysql_query($sql);
