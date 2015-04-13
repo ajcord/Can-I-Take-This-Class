@@ -31,9 +31,15 @@ session_start(); //Resume session
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/index.php">ClassMaster</a>
+                <a class="navbar-brand" href="index.php">ClassMaster</a>
             </div>
-            <ul class="nav navbar-nav navbar-right">
+
+            <!-- Collect nav items on small screens -->
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="schedule.php">Schedule</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
 <?php
 $email = $_SESSION["email"];
 if ($email): ?>
@@ -51,15 +57,7 @@ if ($email): ?>
 <?php else: ?>
 <li><a href="login.php">Log in</a></li>
 <?php endif; ?>
-            </ul>
-
-            <!-- Collect nav items on small screens -->
-            <!--
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">Test</a></li>
                 </ul>
-            </div>
-            -->
+            </div><!-- /.navbar-collapse -->
         </div>
     </nav>
