@@ -1,3 +1,7 @@
+<?php
+session_start(); //Resume session
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,16 +31,33 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">ClassMaster</a>
+                <a class="navbar-brand" href="index.php">ClassMaster</a>
             </div>
 
             <!-- Collect nav items on small screens -->
-            <!--
             <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">Test</a></li>
+                <ul class="nav navbar-nav">
+                    <li><a href="schedule.php">Schedule</a></li>
                 </ul>
-            </div>
-            -->
+                <ul class="nav navbar-nav navbar-right">
+<?php
+$email = $_SESSION["email"];
+if ($email): ?>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+        role="button" aria-expanded="false">
+        <?php echo $email; ?> <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="account.php">Account settings</a></li>
+        <li class="divider"></li>
+        <li><a href="logout.php">Log out</a></li>
+    </ul>
+</li>
+<?php else: ?>
+<li><a href="login.php">Log in</a></li>
+<?php endif; ?>
+                </ul>
+            </div><!-- /.navbar-collapse -->
         </div>
     </nav>
