@@ -1,0 +1,20 @@
+body {
+    padding-top: 70px;
+}
+
+thead {
+    font-weight: bold;
+}
+
+#table-container {
+    position: relative;
+    padding: 0;
+}
+
+#loading-alert {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    right: 5px;
+    display: none;
+}
