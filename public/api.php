@@ -19,7 +19,7 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
 
 $subject_code = substr ($course,0,strlen($course)-3);
 $course_num = substr ($course,strlen($course)-3); 
-echo $subject_code . " " . $course_num. "\n";			//
+// echo $subject_code . " " . $course_num. "\n";			//
 
 	//list of all avialabity data for all semesters for this class...cs 255...all sections...then availability data
 	//2 queries total...build these into json object from there
@@ -79,7 +79,7 @@ echo $subject_code . " " . $course_num. "\n";			//
         $this_class[$type][$status_str] = intval($count);
     }
 
-    $courses_data[$course] = $this_course;
+    $courses_data[$course] = $this_class;
 }
 
 // // Get course data
