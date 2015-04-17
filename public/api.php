@@ -29,7 +29,7 @@ echo $subject_code . " " . $course_num. "\n";			//
                 "(select * from ".
                     "(select * from availability order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
-            "inner join (select crn, semester, coursenumber, name from sections ".
+            "inner join (select crn, semester, sectiontype, name from sections ".
                 "where subjectcode=\"".$subject_code."\" and coursenumber=\"".$course_num."\" and semester=\"".$sem."\") as sections ".
             "using(crn, semester) group by type, status";
 
