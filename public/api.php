@@ -23,9 +23,13 @@ echo $subject_code . " " . $course_num. "\n";			//
     
     // Get enrollment data
 
-// select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) from (select * from (select * from availability order by timestamp desc) as sorted group by crn, semester) as latest inner join (select crn, semester, sectiontype, name from sections where subjectcode="CS" and semester="fa15" and coursenumber=225) as sections using(crn, semester) group by type, status;
+// select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus)
+// from (select * from (select * from availability order by timestamp desc)
+// as sorted group by crn, semester) as latest inner join (select crn, semester,
+// sectiontype, name from sections where subjectcode="CS" and semester="fa15" and
+//coursenumber=225) as sections using(crn, semester) group by type, status;
 
-    $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
+    $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) from ".
                 "(select * from ".
                     "(select * from availability order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
