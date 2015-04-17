@@ -9,6 +9,7 @@ $cour = $_GET["courses"];
 $date = $_GET["date"];
 
 
+$sem = "fa15";
 //find way to split string list of classes based upon commas
 $course_list = explode(",", $cour);			//takes course string and splits based on comma--returns array of strings
 foreach($course_list as $course){		//insdie some database query(statistical algorithm)---maybe get list of crns in datase that match the crn and course ex split CS 225 into department cs and course 225
