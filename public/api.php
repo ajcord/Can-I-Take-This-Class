@@ -10,6 +10,8 @@ $date = $_GET["date"];
 
 
 $sem = "fa15";
+$courses_data = array();
+
 //find way to split string list of classes based upon commas
 $course_list = explode(",", $cour);			//takes course string and splits based on comma--returns array of strings
 foreach($course_list as $course){		//insdie some database query(statistical algorithm)---maybe get list of crns in datase that match the crn and course ex split CS 225 into department cs and course 225
@@ -30,7 +32,7 @@ echo $subject_code . " " . $course_num. "\n";			//
 // sectiontype, name from sections where subjectcode="CS" and semester="fa15" and
 //coursenumber=225) as sections using(crn, semester) group by type, status;
 
-    $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) from ".
+    $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
                 "(select * from ".
                     "(select * from availability order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
@@ -45,10 +47,39 @@ echo $subject_code . " " . $course_num. "\n";			//
 
     $this_class = array();
     while($row = mysql_fetch_assoc($retval)) {
-        // $
-        var_dump($row);
-        // array_push($this_class, $row);
+        // var_dump($row);
+        $type = $row["type"];
+        $status = $row["status"];
+        $count = $row["count"];
+        if (!isset($this_class, $type)) {
+            $type_arr = array();
+            $this_class[$type] = $type_arr;
+            // array_push($this_class, $type_arr);
+        }
+
+        //Insert the status into the type array
+        $status_str = "";
+        switch ($status) {
+            case "0":
+                $status_str = "CLOSED";
+                break;
+            case "1":
+                $status_str = "OPEN";
+                break;
+            case "2":
+                $status_str = "RESTRICTED";
+                break;
+            case "3":
+                $status_str = "CROSSLIST";
+                break;
+            default:
+                $status_str = "UNKNOWN";
+                break;
+        }
+        $this_class[$type][$status_str] = intval($count);
     }
+
+    $courses_data[$course] = $this_course;
 }
 
 // // Get course data
@@ -85,5 +116,5 @@ echo $subject_code . " " . $course_num. "\n";			//
 //     array_push($return_data, $this_course_data);
 // }
 
-// echo json_encode($return_data);
+echo json_encode($courses_data);
 ?>
