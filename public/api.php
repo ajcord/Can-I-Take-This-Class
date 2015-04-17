@@ -1,7 +1,7 @@
 <?php
 
 //Connect to MySQL
-// include "../templates/connect_mysql.php";	//connects to database
+include "../templates/connect_mysql.php";	//connects to database
 
 
 
@@ -20,7 +20,30 @@ echo $subject_code . " " . $course_num. "\n";			//
 
 	//list of all avialabity data for all semesters for this class...cs 255...all sections...then availability data
 	//2 queries total...build these into json object from there
+    
+    // Get enrollment data
 
+// select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) from (select * from (select * from availability order by timestamp desc) as sorted group by crn, semester) as latest inner join (select crn, semester, sectiontype, name from sections where subjectcode="CS" and semester="fa15" and coursenumber=225) as sections using(crn, semester) group by type, status;
+
+    $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
+                "(select * from ".
+                    "(select * from availability order by timestamp desc) ".
+                "as sorted group by crn, semester) as latest ".
+            "inner join (select crn, semester, coursenumber, name from sections ".
+                "where subjectcode=\"".$subject_code."\" and coursenumber=\"".$course_num."\" and semester=\"".$sem."\") as sections ".
+            "using(crn, semester) group by type, status";
+
+    $retval = mysql_query($sql);
+    if (!$retval) {
+        die("Could not get availability data: ".mysql_error());
+    }
+
+    $this_class = array();
+    while($row = mysql_fetch_assoc($retval)) {
+        // $
+        var_dump($row);
+        // array_push($this_class, $row);
+    }
 }
 
 // // Get course data
