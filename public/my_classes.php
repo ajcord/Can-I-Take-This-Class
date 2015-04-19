@@ -108,6 +108,7 @@ while($row = mysql_fetch_assoc($retval)) {
             switch ($status) {
                 case "Closed":
                     $color = "danger";
+                    break;
                 case "Open":
                 case "CrossListOpen":
                     $color = "success";
