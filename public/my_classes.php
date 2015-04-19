@@ -85,7 +85,7 @@ while($row = mysql_fetch_assoc($retval)) {
     //Figure out the color of the class row
     $are_any_completely_full = false;
     $are_any_only_restricted = false;
-    foreach ($this_class as $type => $status_data) {
+    foreach ($this_class as $type => $data) {
         //Get the total number of sections of this type
         $total = 0;
         $open = 0;
