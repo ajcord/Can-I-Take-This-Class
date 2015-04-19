@@ -11,13 +11,17 @@ include "../templates/header.php";
         <h1>My classes</h1>
         <br><br>
         <form class="form-horizontal" action="modify_classes.php" method="POST">
-            <label for="course-field">Add a class:</label>
-            <input id="course-field" name="course" type="text" class="form-control input-lg" placeholder="CS 225" />
-            <span class="input-group-btn">
-                <button id="add-course-button" class="btn btn-info btn-lg" type="submit" name="add-course-btn">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </span>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="course-field">Add a class:</label>
+                    <input id="course-field" name="course" type="text" class="form-control input-lg" placeholder="CS 225" />
+                    <span class="input-group-btn">
+                        <button id="add-course-button" class="btn btn-info btn-lg" type="submit" name="add-course-btn">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
 
             <table class="table table-striped">
                 <thead>
