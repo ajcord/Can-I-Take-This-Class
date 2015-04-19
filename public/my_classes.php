@@ -69,7 +69,6 @@ while($row = mysql_fetch_assoc($retval)) {
         if (!isset($this_class, $type)) {
             $type_arr = array();
             $this_class[$type] = $type_arr;
-            // array_push($this_class, $type_arr);
         }
 
         //Insert the status into the type array
@@ -95,8 +94,32 @@ while($row = mysql_fetch_assoc($retval)) {
     }
 
     foreach ($this_class as $type => $data) {
+        //Get the total number of sections of this type
+        $total = 0;
+        foreach  ($data as $count) {
+            $total += $count;
+        }
         //Append the section type row
-        echo "<tr><td></td><td>&#9;".$type."</td><td></td></tr>";
+        echo "<tr><td></td><td>".$type."</td><td>";
+        echo "<div class='progress'>";
+        foreach  ($data as $status => $count) {
+            $width = $count/$total;
+            $color = "";
+            switch ($status) {
+                case "Closed":
+                    $color = "danger";
+                case "Open":
+                case "CrossListOpen":
+                    $color = "success";
+                    break;
+                case "Open (Restricted)":
+                    $color = "warning";
+                    break;
+            }
+            echo "<div class='progress-bar progress-bar-".$color"' css='width:".$width."%;'></div>";
+        }
+        echo "</div>";
+        echo "</td></tr>";
     }
 
     // echo "</tr>";
