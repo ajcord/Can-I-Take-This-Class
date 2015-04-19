@@ -72,48 +72,48 @@ while($row = mysql_fetch_assoc($retval)) {
         }
 
         //Insert the status into the type array
-        $status_str = "";
-        switch ($status) {
-            case "0":
-                $status_str = "Closed";
-                break;
-            case "1":
-                $status_str = "Open";
-                break;
-            case "2":
-                $status_str = "Open (Restricted)";
-                break;
-            case "3":
-                $status_str = "CrossListOpen";
-                break;
-            default:
-                $status_str = "Unknown";
-                break;
-        }
-        $this_class[$type][$status_str] = intval($count);
+        // $status_str = "";
+        // switch ($status) {
+        //     case "0":
+        //         $status_str = "Closed";
+        //         break;
+        //     case "1":
+        //         $status_str = "Open";
+        //         break;
+        //     case "2":
+        //         $status_str = "Open (Restricted)";
+        //         break;
+        //     case "3":
+        //         $status_str = "CrossListOpen";
+        //         break;
+        //     default:
+        //         $status_str = "Unknown";
+        //         break;
+        // }
+        $this_class[$type][$status] = intval($count);
     }
 
     foreach ($this_class as $type => $data) {
         //Get the total number of sections of this type
         $total = 0;
-        foreach  ($data as $count) {
+        foreach ($data as $count) {
             $total += $count;
         }
         //Append the section type row
         echo "<tr><td></td><td>".$type."</td><td>";
         echo "<div class='progress'>";
-        foreach  ($data as $status => $count) {
+        foreach ($data as $status => $count) {
             $width = $count/$total*100;
             $color = "";
             switch ($status) {
-                case "Closed":
+                case "0":
                     $color = "danger";
                     break;
-                case "Open":
-                case "CrossListOpen":
+                case "1":
+                case "3":
                     $color = "success";
                     break;
-                case "Open (Restricted)":
+                case "2":
                     $color = "warning";
                     break;
             }
