@@ -62,7 +62,7 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 $course_name = mysql_real_escape_string($c->label);
                 $section_type = "";
                 if ($s->meetings->meeting) {
-                    $section_type = mysql_real_escape_string($s->meetings->meeting[0]->type["code"]);
+                    $section_type = mysql_real_escape_string($s->meetings->meeting[0]->type);
                 }
 
                 // Remove the section from the list of removed CRNs

@@ -57,19 +57,19 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
         $status_str = "";
         switch ($status) {
             case "0":
-                $status_str = "CLOSED";
+                $status_str = "Closed";
                 break;
             case "1":
-                $status_str = "OPEN";
+                $status_str = "Open";
                 break;
             case "2":
-                $status_str = "RESTRICTED";
+                $status_str = "Open (Restricted)";
                 break;
             case "3":
-                $status_str = "CROSSLIST";
+                $status_str = "CrossListOpen";
                 break;
             default:
-                $status_str = "UNKNOWN";
+                $status_str = "Unknown";
                 break;
         }
         $this_class[$type][$status_str] = intval($count);
