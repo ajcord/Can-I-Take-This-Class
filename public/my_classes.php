@@ -60,11 +60,17 @@ while($row = mysql_fetch_assoc($retval)) {
         die("Could not get availability data: ".mysql_error());
     }
 
+    $this_class = array();
     while ($row2 = mysql_fetch_assoc($retval2)) {
         // var_dump($row);
         $type = $row2["type"];
         $status = $row2["status"];
         $count = $row2["count"];
+        if (!isset($this_class, $type)) {
+            $type_arr = array();
+            $this_class[$type] = $type_arr;
+            // array_push($this_class, $type_arr);
+        }
 
         //Insert the status into the type array
         $status_str = "";
@@ -85,7 +91,10 @@ while($row = mysql_fetch_assoc($retval)) {
                 $status_str = "Unknown";
                 break;
         }
+        $this_class[$type][$status_str] = intval($count);
+    }
 
+    foreach ($this_class as $type) {
         //Append the section type row
         echo "<tr><td></td><td>&#9;".$type."</td><td></td></tr>";
     }
