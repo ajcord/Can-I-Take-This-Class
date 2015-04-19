@@ -23,6 +23,16 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
         $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term."/".$subject.".xml?mode=cascade");
         $parsed = new SimpleXMLElement($data);
 
+        //Get all the sections currently in this subject (to compare later)
+        $retval = mysql_query("select crn from sections where subjectcode=\"".$subject."\" and semester=\"".$sem."\"");
+        if (!$retval) {
+            echo "\tCould not get subject data for ".$subject.": ".mysql_error()."\n";
+        }
+        $removed_crns = array();
+        while($row = mysql_fetch_assoc($retval)) {
+            array_push($removed_crns, $row["crn"]);
+        }
+
         //Parse the XML data
         foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
             foreach($c->detailedSections->detailedSection as $s) {
@@ -55,6 +65,9 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                     $section_type = mysql_real_escape_string($s->meetings->meeting[0]->type["code"]);
                 }
 
+                // Remove the section from the list of removed CRNs
+                $removed_crns = array_diff($removed_crns, [$s->sectionNumber]);
+
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
                     "values (".$crn.", \"".$sem."\", ".$avail_num.")");
@@ -72,6 +85,15 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 }
             }
         }
+
+        // Delete all removed CRNs
+        foreach ($removed_crns as $crn) {
+            $retval = mysql_query("delete from sections where crn=".mysql_real_escape_string($crn)." and semester=\"".$sem."\"");
+            if (!$retval) {
+                echo "\tCould not remove section data for ".$crn.": ".mysql_error()."\n";
+            }
+        }
+
         echo "done";
     } catch (Exception $e) {
         echo "error:".$e->getMessage();
