@@ -42,8 +42,8 @@ if ($status == "deleted_course") {
                 <thead>
                     <tr>
                         <td class="col-md-1">Delete</td>
-                        <td class="col-md-6">Course</td>
-                        <td class="col-md-5">Status</td>
+                        <td class="col-md-7">Course</td>
+                        <td class="col-md-4">Status</td>
                     </tr>
                 </thead>
                 <tbody id="courses-table">
