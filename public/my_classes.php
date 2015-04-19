@@ -56,7 +56,7 @@ while($row = mysql_fetch_assoc($retval)) {
     $course_num = $row["coursenumber"];
 
     //Append the remove link
-    echo "<tr><td><a href='modify_classes.php?course=".$subject_code.$course_num"&delete_course=1'>X</a></td>";
+    echo "<tr><td><a href='modify_classes.php?course=".$subject_code.$course_num."&delete_course=1'>X</a></td>";
     //Append the course name
     echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
 
