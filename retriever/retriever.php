@@ -1,11 +1,7 @@
 <?php
 
-//Connect to MySQL
-$link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
-if (!$link) {
-    die("Could not connect to MySQL: " . mysql_error());
-}
-mysql_select_db("classmat_411");
+include "../templates/connect_mysql.php";
+
 
 //Determine which term and year to query
 $term = "fall";
@@ -54,6 +50,10 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 $course_num = mysql_real_escape_string($s->parents->course["id"]);
                 $section_num = mysql_real_escape_string($s->sectionNumber);
                 $course_name = mysql_real_escape_string($c->label);
+                $section_type = "";
+                if ($s->meetings->meeting) {
+                    $section_type = mysql_real_escape_string($s->meetings->meeting[0]->type["code"]);
+                }
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
@@ -62,11 +62,11 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                     echo "\tCould not enter availability data for ".$crn.": ".mysql_error()."\n";
                 }
 
-                $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name) ".
-                    "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\")".
+                $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name, sectiontype) ".
+                    "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\", \"".$section_type."\")".
                     "on duplicate key update ".
                     "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
-                    "subjectcode=values(subjectcode), name=values(name)");
+                    "subjectcode=values(subjectcode), name=values(name), sectiontype=values(sectiontype)");
                 if (!$retval) {
                     echo "\tCould not enter section data for ".$crn.": ".mysql_error()."\n";
                 }
