@@ -29,7 +29,7 @@ include "../templates/header.php";
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td>Delete</td>
+                        <td class="col-md-1">Delete</td>
                         <td>Course</td>
                         <td>Status</td>
                     </tr>
