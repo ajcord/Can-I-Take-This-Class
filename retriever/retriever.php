@@ -66,7 +66,7 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 }
 
                 // Remove the section from the list of removed CRNs
-                $removed_crns = array_diff($removed_crns, [$s->sectionNumber]);
+                $removed_crns = array_diff($removed_crns, [$crn]);
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
