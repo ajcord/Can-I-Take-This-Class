@@ -15,7 +15,9 @@ include "../templates/header.php";
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <td>Delete</td>
                         <td>Course</td>
+                        <td>Status</td>
                     </tr>
                 </thead>
                 <tbody id="courses-table">
@@ -26,7 +28,8 @@ include "../templates/connect_mysql.php";
 $id = $_SESSION["id"];
 
 //Get a list of courses the user wants
-$sql = "select subjectcode, coursenumber from wants where userid=".$id." and semester='fa15'";
+$sem = "fa15";
+$sql = "select subjectcode, coursenumber from wants where userid=".$id." and semester='".$sem."'";
 
 $retval = mysql_query($sql);
 if (!$retval) {
@@ -35,7 +38,58 @@ if (!$retval) {
 
 $course_data = array();
 while($row = mysql_fetch_assoc($retval)) {
-    echo "<tr><td>".$row["subjectcode"]." ".$row["coursenumber"]."</td></tr>";
+    $subject_code = $row["subjectcode"];
+    $course_num = $row["coursenumber"];
+
+    //Append the remove link
+    echo "<tr><td><a href='#'>X</a></td>";
+    //Append the course name
+    echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
+
+    //Get the most recent data for this class
+    // $sql2 = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
+    //             "(select * from ".
+    //                 "(select * from availability order by timestamp desc) ".
+    //             "as sorted group by crn, semester) as latest ".
+    //         "inner join (select crn, semester, sectiontype, name from sections ".
+    //             "where subjectcode=\"".$subject_code."\" and coursenumber=\"".$course_num."\" and semester=\"".$sem."\") as sections ".
+    //         "using(crn, semester) group by type, status";
+
+    // $retval2 = mysql_query($sql2);
+    // if (!$retval2) {
+    //     die("Could not get availability data: ".mysql_error());
+    // }
+
+    // while ($row2 = mysql_fetch_assoc($retval2)) {
+    //     // var_dump($row);
+    //     $type = $row["type"];
+    //     $status = $row["status"];
+    //     $count = $row["count"];
+
+    //     //Insert the status into the type array
+    //     $status_str = "";
+    //     switch ($status) {
+    //         case "0":
+    //             $status_str = "Closed";
+    //             break;
+    //         case "1":
+    //             $status_str = "Open";
+    //             break;
+    //         case "2":
+    //             $status_str = "Open (Restricted)";
+    //             break;
+    //         case "3":
+    //             $status_str = "CrossListOpen";
+    //             break;
+    //         default:
+    //             $status_str = "Unknown";
+    //             break;
+    //     }
+
+    //     //Append the section type row
+    // }
+
+    echo "</tr>";
 }
 
 mysql_close($link);
