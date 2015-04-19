@@ -103,7 +103,7 @@ while($row = mysql_fetch_assoc($retval)) {
         echo "<tr><td></td><td>".$type."</td><td>";
         echo "<div class='progress'>";
         foreach  ($data as $status => $count) {
-            $width = $count/$total;
+            $width = $count/$total*100;
             $color = "";
             switch ($status) {
                 case "Closed":
