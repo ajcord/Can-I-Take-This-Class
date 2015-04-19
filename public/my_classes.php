@@ -15,9 +15,7 @@ include "../templates/header.php";
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td>#</td>
-                        <td>Name</td>
-                        <td>% Open</td>
+                        <td>Course</td>
                     </tr>
                 </thead>
                 <tbody id="courses-table">
