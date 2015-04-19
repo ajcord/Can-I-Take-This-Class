@@ -10,6 +10,18 @@ include "../templates/header.php";
     <div class="jumbotron">
         <h1>My classes</h1>
         <br><br>
+<?php
+$status = $_GET["status"];
+if ($status == "deleted_course") {
+    echo "<div class='alert alert-info' role='alert'>".
+        "The course has been deleted from your list.".
+        "</div>";
+} else if ($status == "added_course") {
+    echo "<div class='alert alert-success' role='alert'>".
+        "The course has been added to your list.".
+        "</div>";
+}
+?>
         <form class="form-horizontal" action="modify_classes.php" method="GET">
             <div class="row">
                 <div class="col-md-6">
