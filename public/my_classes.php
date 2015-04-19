@@ -94,7 +94,7 @@ while($row = mysql_fetch_assoc($retval)) {
         $this_class[$type][$status_str] = intval($count);
     }
 
-    foreach ($this_class as $type) {
+    foreach ($this_class as $type => $data) {
         //Append the section type row
         echo "<tr><td></td><td>&#9;".$type."</td><td></td></tr>";
     }
