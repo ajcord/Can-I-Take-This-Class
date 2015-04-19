@@ -55,12 +55,6 @@ while($row = mysql_fetch_assoc($retval)) {
     $subject_code = $row["subjectcode"];
     $course_num = $row["coursenumber"];
 
-    //Append the remove link
-    $course_num_padded = str_pad($course_num, 3, '0', STR_PAD_LEFT);
-    echo "<tr><td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1'>X</a></td>";
-    //Append the course name
-    echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
-
     //Get the most recent data for this class
     $sql2 = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
                 "(select * from ".
@@ -77,7 +71,6 @@ while($row = mysql_fetch_assoc($retval)) {
 
     $this_class = array();
     while ($row2 = mysql_fetch_assoc($retval2)) {
-        // var_dump($row);
         $type = $row2["type"];
         $status = $row2["status"];
         $count = $row2["count"];
@@ -86,27 +79,55 @@ while($row = mysql_fetch_assoc($retval)) {
             $this_class[$type] = $type_arr;
         }
 
-        //Insert the status into the type array
-        // $status_str = "";
-        // switch ($status) {
-        //     case "0":
-        //         $status_str = "Closed";
-        //         break;
-        //     case "1":
-        //         $status_str = "Open";
-        //         break;
-        //     case "2":
-        //         $status_str = "Open (Restricted)";
-        //         break;
-        //     case "3":
-        //         $status_str = "CrossListOpen";
-        //         break;
-        //     default:
-        //         $status_str = "Unknown";
-        //         break;
-        // }
         $this_class[$type][$status] = intval($count);
     }
+
+    //Figure out the color of the class row
+    $are_any_completely_full = false;
+    $are_any_only_restricted = false;
+    foreach ($this_class as $type => $status_data) {
+        //Get the total number of sections of this type
+        $total = 0;
+        $open = 0;
+        $restricted = 0;
+        $closed = 0;
+        foreach ($data as $status => $count) {
+            $total += $count;
+            switch ($status) {
+                case "0":
+                    $closed += $count;
+                    break;
+                case "1":
+                case "3":
+                    $open += $count;
+                    break;
+                case "2":
+                    $restricted += $count;
+                    break;
+            }
+        }
+        if ($open == 0) {
+            if ($restricted == 0) {
+                $are_any_completely_full = true;
+            } else {
+                $are_any_only_restricted = true;
+            }
+        }
+    }
+
+    if ($are_any_completely_full) {
+        echo "<tr class='danger'>";
+    } else if ($are_any_only_restricted) {
+        echo "<tr class='warning'>";
+    } else {
+        echo "<tr class='success'>";
+    }
+    
+    //Append the remove link
+    $course_num_padded = str_pad($course_num, 3, '0', STR_PAD_LEFT);
+    echo "<td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1'>X</a></td>";
+    //Append the course name
+    echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
 
     foreach ($this_class as $type => $data) {
         //Get the total number of sections of this type
@@ -144,8 +165,6 @@ while($row = mysql_fetch_assoc($retval)) {
         echo "</div>";
         echo "</td></tr>";
     }
-
-    // echo "</tr>";
 }
 
 mysql_close($link);
