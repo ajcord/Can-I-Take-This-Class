@@ -62,9 +62,9 @@ while($row = mysql_fetch_assoc($retval)) {
 
     while ($row2 = mysql_fetch_assoc($retval2)) {
         // var_dump($row);
-        $type = $row["type"];
-        $status = $row["status"];
-        $count = $row["count"];
+        $type = $row2["type"];
+        $status = $row2["status"];
+        $count = $row2["count"];
 
         //Insert the status into the type array
         $status_str = "";
