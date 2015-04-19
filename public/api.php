@@ -1,13 +1,9 @@
 <?php
 
-//Connect to MySQL
 include "../templates/connect_mysql.php";	//connects to database
-
-
 
 $cour = $_GET["courses"];		
 $date = $_GET["date"];
-
 
 $sem = "fa15";
 $courses_data = array();
@@ -17,20 +13,20 @@ $course_list = explode(",", $cour);			//takes course string and splits based on 
 foreach($course_list as $course){		//insdie some database query(statistical algorithm)---maybe get list of crns in datase that match the crn and course ex split CS 225 into department cs and course 225
 	//variables subject code & course number, take substring from end of word, subject code start of wrod to 3 from end and course number is 3 from end to actual end 
 
-$subject_code = substr ($course,0,strlen($course)-3);
-$course_num = substr ($course,strlen($course)-3); 
-// echo $subject_code . " " . $course_num. "\n";			//
+    $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
+    $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
+    // echo $subject_code . " " . $course_num. "\n";			//
 
 	//list of all avialabity data for all semesters for this class...cs 255...all sections...then availability data
 	//2 queries total...build these into json object from there
     
     // Get enrollment data
 
-// select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus)
-// from (select * from (select * from availability order by timestamp desc)
-// as sorted group by crn, semester) as latest inner join (select crn, semester,
-// sectiontype, name from sections where subjectcode="CS" and semester="fa15" and
-//coursenumber=225) as sections using(crn, semester) group by type, status;
+    // select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus)
+    // from (select * from (select * from availability order by timestamp desc)
+    // as sorted group by crn, semester) as latest inner join (select crn, semester,
+    // sectiontype, name from sections where subjectcode="CS" and semester="fa15" and
+    //coursenumber=225) as sections using(crn, semester) group by type, status;
 
     $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
                 "(select * from ".
@@ -46,7 +42,7 @@ $course_num = substr ($course,strlen($course)-3);
     }
 
     $this_class = array();
-    while($row = mysql_fetch_assoc($retval)) {
+    while ($row = mysql_fetch_assoc($retval)) {
         // var_dump($row);
         $type = $row["type"];
         $status = $row["status"];
@@ -61,19 +57,19 @@ $course_num = substr ($course,strlen($course)-3);
         $status_str = "";
         switch ($status) {
             case "0":
-                $status_str = "CLOSED";
+                $status_str = "Closed";
                 break;
             case "1":
-                $status_str = "OPEN";
+                $status_str = "Open";
                 break;
             case "2":
-                $status_str = "RESTRICTED";
+                $status_str = "Open (Restricted)";
                 break;
             case "3":
-                $status_str = "CROSSLIST";
+                $status_str = "CrossListOpen";
                 break;
             default:
-                $status_str = "UNKNOWN";
+                $status_str = "Unknown";
                 break;
         }
         $this_class[$type][$status_str] = intval($count);
