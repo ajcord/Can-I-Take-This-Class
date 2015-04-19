@@ -11,7 +11,7 @@ $sem = substr($term, 0, 2) . substr($year, 2, 2);
 echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
 
 //Get a list of all the departments
-$catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/catalog/".$year."/".$term.".xml");
+$catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term.".xml");
 $catalog_parsed = new SimpleXMLElement($catalog_data);
 foreach ($catalog_parsed->subjects->subject as $subj) {
     $subject = mysql_real_escape_string($subj["id"]);
