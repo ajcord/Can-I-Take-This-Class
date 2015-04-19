@@ -13,7 +13,7 @@ include "../templates/header.php";
         <form class="form-horizontal" action="modify_classes.php" method="POST">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="course-field">Add a class:</label>
+                    <h2>Add a class</h2>
                     <div class="input-group col-md-12">
                         <input id="course-field" name="course" type="text" class="form-control input-lg" placeholder="CS 225" />
                         <span class="input-group-btn">
@@ -25,6 +25,7 @@ include "../templates/header.php";
                 </div>
             </div>
 
+            <h2>My classes</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
