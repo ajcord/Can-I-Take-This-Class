@@ -116,7 +116,7 @@ while($row = mysql_fetch_assoc($retval)) {
                     $color = "warning";
                     break;
             }
-            echo "<div class='progress-bar progress-bar-".$color."' css='width:".$width."%;'></div>";
+            echo "<div class='progress-bar progress-bar-".$color."' style='width:".$width."%;'></div>";
         }
         echo "</div>";
         echo "</td></tr>";
