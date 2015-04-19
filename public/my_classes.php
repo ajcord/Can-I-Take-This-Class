@@ -10,7 +10,7 @@ include "../templates/header.php";
     <div class="jumbotron">
         <h1>My classes</h1>
         <br><br>
-        <form class="form-horizontal" action="modify_classes.php" method="POST">
+        <form class="form-horizontal" action="modify_classes.php" method="GET">
             <div class="row">
                 <div class="col-md-6">
                     <h2>Add a class</h2>
@@ -56,7 +56,7 @@ while($row = mysql_fetch_assoc($retval)) {
     $course_num = $row["coursenumber"];
 
     //Append the remove link
-    echo "<tr><td><a href='#'>X</a></td>";
+    echo "<tr><td><a href='modify_classes.php?course=".$subject_code.$course_num"&delete_course=1'>X</a></td>";
     //Append the course name
     echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
 
