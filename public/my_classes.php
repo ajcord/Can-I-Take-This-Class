@@ -96,29 +96,36 @@ while($row = mysql_fetch_assoc($retval)) {
     foreach ($this_class as $type => $data) {
         //Get the total number of sections of this type
         $total = 0;
-        foreach ($data as $count) {
-            $total += $count;
-        }
-        //Append the section type row
-        echo "<tr><td></td><td>".$type."</td><td>";
-        echo "<div class='progress'>";
+        $open = 0;
+        $restricted = 0;
+        $closed = 0;
         foreach ($data as $status => $count) {
-            $width = $count/$total*100;
-            $color = "";
+            $total += $count;
             switch ($status) {
                 case "0":
-                    $color = "danger";
+                    $closed += $count;
                     break;
                 case "1":
                 case "3":
-                    $color = "success";
+                    $open += $count;
                     break;
                 case "2":
-                    $color = "warning";
+                    $closed += $count;
                     break;
             }
-            echo "<div class='progress-bar progress-bar-".$color."' style='width:".$width."%;'></div>";
         }
+
+        $open_width = $open/$total*100;
+        $restricted_width = $restricted/$total*100;
+        $closed_width = $closed/$total*100;
+
+
+        //Append the section type row
+        echo "<tr><td></td><td>".$type."</td><td>";
+        echo "<div class='progress'>";
+        echo "<div class='progress-bar progress-bar-success' style='width:".$open_width."%;'></div>";
+        echo "<div class='progress-bar progress-bar-warning' style='width:".$restricted_width."%;'></div>";
+        echo "<div class='progress-bar progress-bar-danger' style='width:".$closed_width."%;'></div>";
         echo "</div>";
         echo "</td></tr>";
     }
