@@ -12,10 +12,39 @@ include "../templates/header.php";
         <br><br>
         <form class="form-horizontal" action="modify_classes.php" method="POST">
 
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Name</td>
+                        <td>% Open</td>
+                    </tr>
+                </thead>
+                <tbody id="courses-table">
 <?php
-//TODO: get their classes and display them
+include "../templates/connect_mysql.php";
+
+//Get the user id
+$id = $_SESSION["id"];
+
+//Get a list of courses the user wants
+$sql = "select subjectcode, coursenumber from wants where userid=".$id." and semester='fa15'";
+
+$retval = mysql_query($sql);
+if (!$retval) {
+    die("Could not get wants: ".mysql_error());
+}
+
+$course_data = array();
+while($row = mysql_fetch_assoc($retval)) {
+    echo "<tr><td>".$row["subjectcode"]." ".$row["coursenumber"]."</td></tr>";
+}
+
+mysql_close($link);
 ?>
 
+                </tbody>
+            </table>
             <br><br><br>
         </form>
     </div>
