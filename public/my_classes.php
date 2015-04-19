@@ -110,7 +110,7 @@ while($row = mysql_fetch_assoc($retval)) {
                     $open += $count;
                     break;
                 case "2":
-                    $closed += $count;
+                    $restricted += $count;
                     break;
             }
         }
