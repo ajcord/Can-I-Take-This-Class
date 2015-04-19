@@ -17,7 +17,7 @@ include "../templates/header.php";
                     <div class="input-group col-md-12">
                         <input id="course-field" name="course" type="text" class="form-control input-lg" placeholder="CS 225" />
                         <span class="input-group-btn">
-                            <button id="add-course-button" class="btn btn-info btn-lg" type="submit" name="add-course-btn">
+                            <button id="add-course-button" class="btn btn-info btn-lg" type="submit" name="add_course">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                         </span>
