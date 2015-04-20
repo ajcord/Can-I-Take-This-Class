@@ -202,7 +202,6 @@ mysql_close($link);
 
                 </tbody>
             </table>
-            <br><br><br>
         </form>
     </div>
 </div>
