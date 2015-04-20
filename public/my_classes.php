@@ -139,7 +139,17 @@ while($row = mysql_fetch_assoc($retval)) {
     $course_num_padded = str_pad($course_num, 3, '0', STR_PAD_LEFT);
     echo "<td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1' class='btn btn-danger btn-xs'>Delete</a></td>";
     //Append the course name
-    echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
+    echo "<td>".$subject_code." ".$course_num."</td>";
+
+    if ($are_any_completely_full) {
+        echo "<td><span class='label label-danger'>Hard</span></td>";
+    } else if ($are_any_only_restricted) {
+        echo "<td><span class='label label-warning'>Medium</span></td>";
+    } else {
+        echo "<td><span class='label label-success'>Easy</span></td>";
+    }
+
+    echo "</tr>";
 
     foreach ($this_class as $type => $data) {
         //Get the total number of sections of this type
