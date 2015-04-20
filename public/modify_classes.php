@@ -48,13 +48,14 @@ if (isset($add_course)) {
         die("Error deleting course: ".mysql_error());
     }
 
-    if (mysql_affected_rows($retval) == 0) {
+    if (mysql_affected_rows() == 0) {
         //The course did not exist in the wants table
         mysql_close($link);
         header("location: my_classes.php?status=delete_error");
+    } else {
+        mysql_close($link);
+        header("location: my_classes.php?status=deleted_course");
     }
-    mysql_close($link);
-    header("location: my_classes.php?status=deleted_course");
 }
 
 ?>
