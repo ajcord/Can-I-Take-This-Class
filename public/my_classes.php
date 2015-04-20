@@ -63,7 +63,7 @@ $id = $_SESSION["id"];
 
 //Get a list of courses the user wants
 $sem = "fa15";
-$sql = "select subjectcode, coursenumber from wants where userid=".$id." and semester='".$sem."'";
+$sql = "select subjectcode, coursenumber from wants where userid=$id and semester='$sem'";
 
 $retval = mysql_query($sql);
 if (!$retval) {
@@ -81,7 +81,7 @@ while($row = mysql_fetch_assoc($retval)) {
                     "(select * from availability order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
             "inner join (select crn, semester, sectiontype, name from sections ".
-                "where subjectcode=\"".$subject_code."\" and coursenumber=\"".$course_num."\" and semester=\"".$sem."\") as sections ".
+                "where subjectcode='$subject_code' and coursenumber='$course_num' and semester='$sem') as sections ".
             "using(crn, semester) group by type, status";
 
     $retval2 = mysql_query($sql2);
@@ -145,9 +145,9 @@ while($row = mysql_fetch_assoc($retval)) {
     
     //Append the remove link
     $course_num_padded = str_pad($course_num, 3, '0', STR_PAD_LEFT);
-    echo "<td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1' class='btn btn-danger btn-xs'>Delete</a></td>";
+    echo "<td><a href='modify_classes.php?course=$subject_code$course_num_padded&delete_course=1' class='btn btn-danger btn-xs'>Delete</a></td>";
     //Append the course name
-    echo "<td>".$subject_code." ".$course_num."</td>";
+    echo "<td>$subject_code $course_num</td>";
 
     if ($are_any_completely_full) {
         echo "<td><span class='label label-danger'>Hard</span></td>";
@@ -187,11 +187,11 @@ while($row = mysql_fetch_assoc($retval)) {
 
 
         //Append the section type row
-        echo "<tr><td></td><td>".$type."</td><td>";
+        echo "<tr><td></td><td>$type</td><td>";
         echo "<div class='progress'>";
-        echo "<div class='progress-bar progress-bar-success' style='width:".$open_width."%;'></div>";
-        echo "<div class='progress-bar progress-bar-warning' style='width:".$restricted_width."%;'></div>";
-        echo "<div class='progress-bar progress-bar-danger' style='width:".$closed_width."%;'></div>";
+        echo "<div class='progress-bar progress-bar-success' style='width:$open_width%;'></div>";
+        echo "<div class='progress-bar progress-bar-warning' style='width:$restricted_width%;'></div>";
+        echo "<div class='progress-bar progress-bar-danger' style='width:$closed_width%;'></div>";
         echo "</div>";
         echo "</td></tr>";
     }
