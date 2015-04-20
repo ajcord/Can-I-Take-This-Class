@@ -15,18 +15,11 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
 
     $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
     $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
-    // echo $subject_code . " " . $course_num. "\n";			//
 
 	//list of all avialabity data for all semesters for this class...cs 255...all sections...then availability data
 	//2 queries total...build these into json object from there
     
     // Get enrollment data
-
-    // select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus)
-    // from (select * from (select * from availability order by timestamp desc)
-    // as sorted group by crn, semester) as latest inner join (select crn, semester,
-    // sectiontype, name from sections where subjectcode="CS" and semester="fa15" and
-    //coursenumber=225) as sections using(crn, semester) group by type, status;
 
     $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
                 "(select * from ".
@@ -43,14 +36,12 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
 
     $this_class = array();
     while ($row = mysql_fetch_assoc($retval)) {
-        // var_dump($row);
         $type = $row["type"];
         $status = $row["status"];
         $count = $row["count"];
         if (!isset($this_class, $type)) {
             $type_arr = array();
             $this_class[$type] = $type_arr;
-            // array_push($this_class, $type_arr);
         }
 
         //Insert the status into the type array
@@ -77,40 +68,6 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
 
     $courses_data[$course] = $this_class;
 }
-
-// // Get course data
-// $sql = "select coursenumber as num, name from sections where subjectcode=\"".$subj."\" and semester=\"".$sem."\" group by num";
-
-// $retval = mysql_query($sql);
-// if (!$retval) {
-//     die("Could not get course data: ".mysql_error());
-// }
-
-// $course_data = array();
-// while($row = mysql_fetch_assoc($retval)) {
-//     array_push($course_data, $row);
-// }
-
-
-
-
-
-// $return_data = array();
-// $status_arr = array();
-// foreach ($enrollment_data as $e) {
-//     $num = $e["num"];
-//     $status = $e["status"];
-//     $status_arr[$num][$status]++;
-// }
-
-// foreach ($course_data as $c) {
-//     $this_course_data = array(
-//         "num" => $c["num"],
-//         "name" => $c["name"],
-//         "status" => $status_arr[$c["num"]],
-//     );
-//     array_push($return_data, $this_course_data);
-// }
 
 echo json_encode($courses_data);
 ?>
