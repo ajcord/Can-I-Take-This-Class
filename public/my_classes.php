@@ -41,7 +41,7 @@ if ($status == "deleted_course") {
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <td class="col-md-1">Delete</td>
+                        <td class="col-md-1"></td>
                         <td class="col-md-7">Course</td>
                         <td class="col-md-4">Status</td>
                     </tr>
@@ -137,7 +137,7 @@ while($row = mysql_fetch_assoc($retval)) {
     
     //Append the remove link
     $course_num_padded = str_pad($course_num, 3, '0', STR_PAD_LEFT);
-    echo "<td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1'>X</a></td>";
+    echo "<td><a href='modify_classes.php?course=".$subject_code.$course_num_padded."&delete_course=1' class='btn btn-danger btn-xs'>Delete</a></td>";
     //Append the course name
     echo "<td>".$subject_code." ".$course_num."</td><td></td></tr>";
 
