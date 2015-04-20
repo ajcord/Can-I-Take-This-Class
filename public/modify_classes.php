@@ -15,6 +15,21 @@ $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
 
 if (isset($add_course)) {
     //Add the course to the user's wants
+    $sql = "select count(crn) as num from sections where subjectcode='".$subject_code."' and coursenumber='".$course_num."' and semester='".$sem."'";
+
+    $retval = mysql_query($sql);
+    if (!$retval) {
+        die("Error checking course: ".mysql_error());
+    }
+
+    if ($row = mysql_fetch_assoc($retval)) {
+        if (intval($row["num"]) == 0) {
+            //This course does not exist
+            mysql_close($link);
+            header("location: my_classes.php?status=add_error");
+        }
+    }
+
     $sql = "insert into wants (userid, subjectcode, coursenumber, semester) values (".$id.", '".$subject_code."', ".$course_num.", '".$sem."')";
 
     $retval = mysql_query($sql);
@@ -33,6 +48,11 @@ if (isset($add_course)) {
         die("Error deleting course: ".mysql_error());
     }
 
+    if (mysql_affected_rows($retval) == 0) {
+        //The course did not exist in the wants table
+        mysql_close($link);
+        header("location: my_classes.php?status=delete_error");
+    }
     mysql_close($link);
     header("location: my_classes.php?status=deleted_course");
 }

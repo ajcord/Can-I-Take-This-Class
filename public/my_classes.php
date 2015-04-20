@@ -20,6 +20,14 @@ if ($status == "deleted_course") {
     echo "<div class='alert alert-success' role='alert'>".
         "The course has been added to your list.".
         "</div>";
+} else if ($status == "delete_error") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "The course you requested to delete is not in your list.".
+        "</div>";
+} else if ($status == "add_error") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "The course does not exist.".
+        "</div>";
 }
 ?>
         <form class="form-horizontal" action="modify_classes.php" method="GET">
