@@ -37,7 +37,7 @@ session_start(); //Resume session
             <!-- Collect nav items on small screens -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="schedule.php">Schedule</a></li>
+                    <!--<li><a href="schedule.php">Schedule</a></li>-->
 <?php if (isset($_SESSION["id"])): ?>
                     <li><a href="my_classes.php">My classes</a></li>
 <?php endif; ?>
