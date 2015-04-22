@@ -92,7 +92,7 @@ $("#classbutton").click(function() {
 
                         console.log(parsed[j]);                    
                         var newDiv = document.createElement("div"); 
-                        var newContent = document.createTextNode(parsed[j]); 
+                        var newContent = document.createTextNode(j); 
                         newDiv.appendChild(newContent); //add the text node to the newly created div. 
 
                         // add the newly created element and its content into the DOM 
@@ -102,7 +102,7 @@ $("#classbutton").click(function() {
                         
                             for (var i in sections){ 
                                 var newDiv = document.createElement("div"); 
-                                var newContent = document.createTextNode(sections[i]); 
+                                var newContent = document.createTextNode(i); 
                                 newDiv.appendChild(newContent); //add the text node to the newly created div. 
 
                                 // add the newly created element and its content into the DOM 
