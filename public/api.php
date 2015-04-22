@@ -26,7 +26,7 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
                     "(select * from availability order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
             "inner join (select crn, semester, sectiontype, name from sections ".
-                "where subjectcode=\"".$subject_code."\" and coursenumber=\"".$course_num."\" and semester=\"".$sem."\") as sections ".
+                "where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem') as sections ".
             "using(crn, semester) group by type, status";
 
     $retval = mysql_query($sql);
