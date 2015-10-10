@@ -69,12 +69,6 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 $removed_crns = array_diff($removed_crns, [$crn]);
 
                 // Insert the data into MySQL
-                $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
-                    "values (".$crn.", \"".$sem."\", ".$avail_num.")");
-                if (!$retval) {
-                    echo "\tCould not enter availability data for ".$crn.": ".mysql_error()."\n";
-                }
-
                 $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name, sectiontype) ".
                     "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\", \"".$section_type."\")".
                     "on duplicate key update ".
@@ -82,6 +76,12 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                     "subjectcode=values(subjectcode), name=values(name), sectiontype=values(sectiontype)");
                 if (!$retval) {
                     echo "\tCould not enter section data for ".$crn.": ".mysql_error()."\n";
+                }
+                
+                $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
+                    "values (".$crn.", \"".$sem."\", ".$avail_num.")");
+                if (!$retval) {
+                    echo "\tCould not enter availability data for ".$crn.": ".mysql_error()."\n";
                 }
             }
         }
