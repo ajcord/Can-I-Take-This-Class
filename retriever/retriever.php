@@ -4,8 +4,8 @@ include "../templates/connect_mysql.php";
 
 
 //Determine which term and year to query
-$term = "fall";
-$year = "2015";
+$term = "spring";
+$year = "2016";
 $sem = substr($term, 0, 2) . substr($year, 2, 2);
 
 echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";

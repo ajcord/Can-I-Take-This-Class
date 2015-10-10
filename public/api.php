@@ -5,7 +5,7 @@ include "../templates/connect_mysql.php";	//connects to database
 $cour = $_GET["courses"];		
 $date = $_GET["date"];
 
-$sem = "fa15";
+$sem = "sp16";
 $courses_data = array();
 
 //find way to split string list of classes based upon commas

@@ -8,7 +8,7 @@ $delete_course = $_GET["delete_course"];
 
 $course = mysql_real_escape_string($_GET["course"]);
 $id = $_SESSION["id"];
-$sem = "fa15";
+$sem = "sp16";
 $course = str_replace(' ', '', $course);
 $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
 $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));

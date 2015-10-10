@@ -62,7 +62,7 @@ include "../templates/connect_mysql.php";
 $id = $_SESSION["id"];
 
 //Get a list of courses the user wants
-$sem = "fa15";
+$sem = "sp16";
 $sql = "select subjectcode, coursenumber from wants where userid=$id and semester='$sem'";
 
 $retval = mysql_query($sql);

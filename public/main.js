@@ -20,8 +20,8 @@ $("#subj-dropdown a").click(function(e) {
         type: "GET",
         url: "retriever.php",
         data: {
-            "year": 2015,
-            "term": "fall",
+            "year": 2016,
+            "term": "spring",
             "subject": subj,
         },
         success: function(data) {
