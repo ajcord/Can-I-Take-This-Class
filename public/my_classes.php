@@ -87,7 +87,7 @@ while($row = mysql_fetch_assoc($retval)) {
     while ($row2 = mysql_fetch_assoc($retval2)) {
 
         $crn = $row2["crn"];
-        $type = $row2["sectiontype"];
+        $type = $row2["type"];
 
         //Get the most recent data for this section
         $sql3 = "select enrollmentstatus as status from ".
