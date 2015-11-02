@@ -36,6 +36,14 @@ if ($status == "invalid_email") {
     echo "<div class='alert alert-success' role='alert'>".
         "Your password was changed successfully.".
         "</div>";
+} else if ($status == "invalid_registration_date") {
+    echo "<div class='alert alert-danger' role='alert'>".
+        "The registration date you entered is invalid.".
+        "</div>";
+} else if ($status == "changed_registration_date") {
+    echo "<div class='alert alert-success' role='alert'>".
+        "Your registration date was changed successfully.".
+        "</div>";
 } else if ($status == "delete_account_error") {
     echo "<div class='alert alert-danger' role='alert'>".
         "Account deletion failed!".
