@@ -54,6 +54,7 @@ $("#subj-dropdown a").click(function(e) {
                             openSections += parseInt(avail[i]);
                             break;
                         case 2:
+                        case 4:
                             restrictedSections += parseInt(avail[i]);
                             break;
                     }

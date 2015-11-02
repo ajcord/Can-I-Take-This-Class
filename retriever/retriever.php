@@ -52,6 +52,9 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                     case "CrossListOpen":
                         $avail_num = 3;
                         break;
+                    case "CrossListOpen (Restricted)":
+                        $avail_num = 4;
+                        break;
                     default: //Unknown
                         $avail_num = -1;
                         break;

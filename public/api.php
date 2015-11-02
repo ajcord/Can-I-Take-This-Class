@@ -59,6 +59,9 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
             case "3":
                 $status_str = "CrossListOpen";
                 break;
+            case "4":
+                $status_str = "CrossListOpen (Restricted)";
+                break;
             default:
                 $status_str = "Unknown";
                 break;

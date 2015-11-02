@@ -129,6 +129,7 @@ while($row = mysql_fetch_assoc($retval)) {
                     $open += $count;
                     break;
                 case "2":
+                case "4":
                     $restricted += $count;
                     break;
             }
@@ -183,6 +184,7 @@ while($row = mysql_fetch_assoc($retval)) {
                     $open += $count;
                     break;
                 case "2":
+                case "4":
                     $restricted += $count;
                     break;
             }
