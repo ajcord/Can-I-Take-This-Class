@@ -76,13 +76,7 @@ while($row = mysql_fetch_assoc($retval)) {
     $course_num = $row["coursenumber"];
 
     //Get the most recent data for this class
-    $sql2 = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
-                "(select * from ".
-                    "(select * from availability where semester='$sem' order by timestamp desc) ".
-                "as sorted group by crn, semester) as latest ".
-            "inner join (select crn, semester, sectiontype, name from sections ".
-                "where subjectcode='$subject_code' and coursenumber='$course_num' and semester='$sem') as sections ".
-            "using(crn, semester) group by type, status";
+    $sql2 = "select crn from sections where subjectcode='$subject_code' and coursenumber=$course_num limit 1";
 
     $retval2 = mysql_query($sql2);
     if (!$retval2) {
@@ -91,15 +85,34 @@ while($row = mysql_fetch_assoc($retval)) {
 
     $this_class = array();
     while ($row2 = mysql_fetch_assoc($retval2)) {
-        $type = $row2["type"];
-        $status = $row2["status"];
-        $count = $row2["count"];
-        if (!isset($this_class, $type)) {
-            $type_arr = array();
-            $this_class[$type] = $type_arr;
+
+        $crn = $row2["crn"];
+
+        //Get the most recent data for this class
+        $sql3 = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
+                    "(select * from ".
+                        "(select * from availability where crn=$crn and semester='$sem' order by timestamp desc) ".
+                    "as sorted group by crn, semester) as latest ".
+                "inner join (select crn, semester, sectiontype, name from sections ".
+                    "where subjectcode='$subject_code' and coursenumber='$course_num' and semester='$sem') as sections ".
+                "using(crn, semester) group by type, status";
+
+        $retval3 = mysql_query($sql3);
+        if (!$retval3) {
+            die("Could not get availability data: ".mysql_error());
         }
 
-        $this_class[$type][$status] = intval($count);
+        while ($row3 = mysql_fetch_assoc($retval3)) {
+            $type = $row3["type"];
+            $status = $row3["status"];
+            $count = $row3["count"];
+            if (!isset($this_class, $type)) {
+                $type_arr = array();
+                $this_class[$type] = $type_arr;
+            }
+
+            $this_class[$type][$status] += intval($count);
+        }
     }
 
     //Figure out the color of the class row
