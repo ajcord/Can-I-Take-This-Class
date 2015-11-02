@@ -76,7 +76,7 @@ while($row = mysql_fetch_assoc($retval)) {
     $course_num = $row["coursenumber"];
 
     //Get the list of sections in this class
-    $sql2 = "select crn, sectiontype as type from sections where subjectcode='$subject_code' and coursenumber=$course_num";
+    $sql2 = "select crn, sectiontype as type from sections where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem'";
 
     $retval2 = mysql_query($sql2);
     if (!$retval2) {
@@ -90,7 +90,7 @@ while($row = mysql_fetch_assoc($retval)) {
         $type = $row2["sectiontype"];
 
         //Get the most recent data for this section
-        $sql3 = "select * from ".
+        $sql3 = "select enrollmentstatus as status from ".
                     "(select * from availability where crn=$crn and semester='$sem' order by timestamp desc) ".
                 "as sorted group by crn, semester limit 1";
 
