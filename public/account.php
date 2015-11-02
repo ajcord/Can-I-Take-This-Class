@@ -73,6 +73,18 @@ if ($status == "invalid_email") {
             <br><br><br>
         </form>
         <form class="form-horizontal" action="modify_account.php" method="POST">
+            <div class="form-group">
+                <label for="inputRegistrationDate" class="col-sm-2">New registration date:</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="inputRegistrationDate" name="registration_date">
+                </div>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" name="change_email" value="1">Change email</button>
+            </div>
+            <br><br><br>
+        </form>
+        <form class="form-horizontal" action="modify_account.php" method="POST">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete this account</button>
             </div>

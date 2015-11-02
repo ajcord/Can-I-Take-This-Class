@@ -8,6 +8,7 @@ include "../templates/connect_mysql.php";
 
 $email = mysql_real_escape_string($_POST["email"]);
 $password = mysql_real_escape_string($_POST["password"]);
+$registration_date = mysql_real_escape_string($_POST["registration_date"]);
 $next = $_POST["next"];
 
 //Validate email
@@ -25,7 +26,7 @@ if (strlen($password) < 8) {
 }
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
-$sql = "insert into users (email, password) values ('$email', '$hash')";
+$sql = "insert into users (email, password, registers) values ('$email', '$hash', '$registration_date')";
 
 $retval = mysql_query($sql);
 

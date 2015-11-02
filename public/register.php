@@ -34,6 +34,12 @@ if ($status == "duplicate") {
                     <input type="password" class="form-control" id="inputPassword" name="password">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="inputRegistrationDate" class="col-sm-2">Registration date:</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="inputRegistrationDate" name="registration_date">
+                </div>
+            </div>
             <input type="hidden" name="next" value="index.php">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">Register</button>
