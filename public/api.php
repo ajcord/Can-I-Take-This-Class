@@ -23,7 +23,7 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
 
     $sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count from ".
                 "(select * from ".
-                    "(select * from availability order by timestamp desc) ".
+                    "(select * from availability where semester='$sem' order by timestamp desc) ".
                 "as sorted group by crn, semester) as latest ".
             "inner join (select crn, semester, sectiontype, name from sections ".
                 "where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem') as sections ".
