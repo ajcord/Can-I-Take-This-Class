@@ -15,7 +15,7 @@ $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
 
 if (isset($add_course)) {
     //Add the course to the user's wants
-    $sql = "select count(crn) as num from sections where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem'";
+    $sql = "select count(crn) as num from sections where subjectcode='$subject_code' and coursenumber='$course_num' and semester='$sem'";
 
     $retval = mysql_query($sql);
     if (!$retval) {
@@ -30,7 +30,7 @@ if (isset($add_course)) {
         }
     }
 
-    $sql = "insert into wants (userid, subjectcode, coursenumber, semester) values ($id, '$subject_code', $course_num, '$sem')";
+    $sql = "insert into wants (userid, subjectcode, coursenumber, semester) values ($id, '$subject_code', '$course_num', '$sem')";
 
     $retval = mysql_query($sql);
     if (!$retval) {
