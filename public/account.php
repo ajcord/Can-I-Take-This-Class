@@ -80,7 +80,7 @@ if ($status == "invalid_email") {
                 </div>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" name="change_email" value="1">Change email</button>
+                <button type="submit" class="btn btn-primary" name="change_registration_date" value="1">Change registration date</button>
             </div>
             <br><br><br>
         </form>
