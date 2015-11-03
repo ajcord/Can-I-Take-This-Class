@@ -1,60 +1,66 @@
 <?php
+
+function createAlert($type, $message) {
+    echo "<div class='alert alert-$type' role='alert'>$message</div>";
+}
+
 $status = $_GET["status"];
+
 if ($status == "duplicate") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The email address you entered is already in use.".
-        "</div>";
+
+    createAlert("danger", "The email address you entered is already in use.");
+
 } else if ($status == "invalid_email") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The email address you entered is invalid.".
-        "</div>";
+
+    createAlert("danger", "The email address you entered is invalid.");
+
 } else if ($status == "changed_email") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your email address was changed successfully.".
-        "</div>";
+
+    createAlert("success", "Your email address was changed successfully.");
+
 } else if ($status == "password_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The password you entered was not correct.".
-        "</div>";
+
+    createAlert("danger", "The password you entered was not correct.");
+
 } else if ($status == "invalid_password") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Your new password must be at least 8 characters.".
-        "</div>";
+
+    createAlert("danger", "Your new password must be at least 8 characters.");
+
 } else if ($status == "change_password_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Password change failed!".
-        "</div>";
+
+    createAlert("danger", "Password change failed!");
+
 } else if ($status == "changed_password") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your password was changed successfully.".
-        "</div>";
+
+    createAlert("success", "Your password was changed successfully.");
+
 } else if ($status == "invalid_registration_date") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The registration date you entered is invalid.".
-        "</div>";
+
+    createAlert("danger", "The registration date you entered is invalid.");
+
 } else if ($status == "changed_registration_date") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your registration date was changed successfully.".
-        "</div>";
+
+    createAlert("success", "Your registration date was changed successfully.");
+
 } else if ($status == "delete_account_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Account deletion failed!".
-        "</div>";
+
+    createAlert("danger", "Account deletion failed!");
+
 } else if ($status == "deleted_course") {
-    echo "<div class='alert alert-info' role='alert'>".
-        "The course has been deleted from your list.".
-        "</div>";
+
+    createAlert("info", "The course has been deleted from your list.");
+
 } else if ($status == "added_course") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "The course has been added to your list.".
-        "</div>";
+
+    createAlert("success", "The course has been added to your list.");
+
 } else if ($status == "delete_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The course you requested to delete is not in your list.".
-        "</div>";
+
+    createAlert("danger", "The course you requested to delete is not in your list.");
+
 } else if ($status == "add_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The course does not exist.".
-        "</div>";
+
+    createAlert("danger", "The course does not exist.");
+
 }
 ?>

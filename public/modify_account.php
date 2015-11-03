@@ -18,6 +18,7 @@ $registration_date = mysql_real_escape_string($_POST["registration_date"]);
 $password = mysql_real_escape_string($_POST["password"]);
 
 if (isset($change_email)) {
+
     //Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         mysql_close($link);
@@ -37,7 +38,9 @@ if (isset($change_email)) {
     mysql_close($link);
     $_SESSION["email"] = $email;
     header("location: account.php?status=changed_email");
+
 } else if (isset($change_registration_date)) {
+
     //Validate registration date
     $registers = $registration_date." 00:00:00";
     if (!DateTime::createFromFormat('Y-m-d H:i:s', $registers)) {
@@ -57,7 +60,9 @@ if (isset($change_email)) {
 
     mysql_close($link);
     header("location: account.php?status=changed_registration_date");
+
 } else if (isset($change_password)) {
+
     //Verify the old password
     $id = $_SESSION["id"];
     $sql = "select password from users where id='$id'";
@@ -98,7 +103,9 @@ if (isset($change_email)) {
     mysql_close($link);
     header("location: account.php?status=changed_password");
     die();
+
 } else if (isset($delete_account)) {
+
     //Verify the password
     $id = $_SESSION["id"];
     $sql = "select password from users where id='$id'";
@@ -132,6 +139,7 @@ if (isset($change_email)) {
     session_destroy();
     header("location: login.php?status=deleted_account");
     die();
+    
 }
 
 ?>
