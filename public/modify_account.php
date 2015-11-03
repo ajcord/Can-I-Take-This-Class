@@ -38,7 +38,7 @@ if (isset($change_email)) {
     $_SESSION["email"] = $email;
     header("location: account.php?status=changed_email");
 } else if (isset($change_registration_date)) {
-    //Validate email
+    //Validate registration date
     $registers = $registration_date." 00:00:00";
     if (!DateTime::createFromFormat('Y-m-d H:i:s', $registers)) {
         mysql_close($link);
@@ -46,7 +46,7 @@ if (isset($change_email)) {
         die();
     }
 
-    //Update the email address on record
+    //Update the registration date on record
     $id = $_SESSION["id"];
     $sql = "update users set registers='$registers' where id='$id'";
 

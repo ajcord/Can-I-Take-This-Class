@@ -10,26 +10,7 @@ include "../templates/header.php";
     <div class="jumbotron">
         <h1>My classes</h1>
         <br><br>
-<?php
-$status = $_GET["status"];
-if ($status == "deleted_course") {
-    echo "<div class='alert alert-info' role='alert'>".
-        "The course has been deleted from your list.".
-        "</div>";
-} else if ($status == "added_course") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "The course has been added to your list.".
-        "</div>";
-} else if ($status == "delete_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The course you requested to delete is not in your list.".
-        "</div>";
-} else if ($status == "add_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The course does not exist.".
-        "</div>";
-}
-?>
+<?php include "../templates/status_alert.php" ?>
         <form class="form-horizontal" action="modify_classes.php" method="GET">
             <div class="row">
                 <div class="col-md-6">
@@ -63,44 +44,40 @@ $id = $_SESSION["id"];
 
 //Get a list of courses the user wants
 $sem = "sp16";
-$sql = "select subjectcode, coursenumber from wants where userid=$id and semester='$sem'";
+$wanted_course_sql = "select subjectcode, coursenumber from wants where userid=$id and semester='$sem'";
 
-$retval = mysql_query($sql);
-if (!$retval) {
-    die("Could not get wants: ".mysql_error());
-}
+$wanted_course_retval = mysql_query($wanted_course_sql)
+    or die("Could not get wants: ".mysql_error());
 
 $course_data = array();
-while($row = mysql_fetch_assoc($retval)) {
-    $subject_code = $row["subjectcode"];
-    $course_num = $row["coursenumber"];
+while($wanted_course_row = mysql_fetch_assoc($wanted_course_retval)) {
+    $subject_code = $wanted_course_row["subjectcode"];
+    $course_num = $wanted_course_row["coursenumber"];
 
     //Get the list of sections in this class
-    $sql2 = "select crn, sectiontype as type from sections where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem'";
+    $section_list_sql = "select crn, sectiontype as type from sections ".
+                            "where subjectcode='$subject_code' and ".
+                            "coursenumber=$course_num and semester='$sem'";
 
-    $retval2 = mysql_query($sql2);
-    if (!$retval2) {
-        die("Could not get availability data: ".mysql_error());
-    }
+    $section_list_retval = mysql_query($section_list_sql)
+        or die("Could not get availability data: ".mysql_error());
 
     $this_class = array();
-    while ($row2 = mysql_fetch_assoc($retval2)) {
+    while ($section_row = mysql_fetch_assoc($section_list_retval)) {
 
-        $crn = $row2["crn"];
-        $type = $row2["type"];
+        $crn = $section_row["crn"];
+        $type = $section_row["type"];
 
         //Get the most recent data for this section
-        $sql3 = "select enrollmentstatus as status from ".
-                    "(select * from availability where crn=$crn and semester='$sem' order by timestamp desc) ".
-                "as sorted group by crn, semester limit 1";
+        $enrollment_sql = "select enrollmentstatus as status from ".
+                                "(select * from availability where crn=$crn and semester='$sem' order by timestamp desc) ".
+                            "as sorted group by crn, semester limit 1";
 
-        $retval3 = mysql_query($sql3);
-        if (!$retval3) {
-            die("Could not get availability data: ".mysql_error());
-        }
+        $enrollment_retval = mysql_query($enrollment_sql)
+            or die("Could not get availability data: ".mysql_error());
 
-        $row3 = mysql_fetch_assoc($retval3);
-        $status = $row3["status"];
+        $enrollment_row = mysql_fetch_assoc($enrollment_retval);
+        $status = $enrollment_row["status"];
         if (!isset($this_class, $type)) {
             $type_arr = array();
             $this_class[$type] = $type_arr;

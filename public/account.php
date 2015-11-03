@@ -10,46 +10,7 @@ include "../templates/header.php";
     <div class="jumbotron">
         <h1>Account settings</h1>
         <br><br>
-<?php
-$status = $_GET["status"];
-if ($status == "invalid_email") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The email address you entered is invalid.".
-        "</div>";
-} else if ($status == "changed_email") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your email address was changed successfully.".
-        "</div>";
-} else if ($status == "password_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The password you entered was not correct.".
-        "</div>";
-} else if ($status == "invalid_password") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Your new password must be at least 8 characters.".
-        "</div>";
-} else if ($status == "change_password_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Password change failed!".
-        "</div>";
-} else if ($status == "changed_password") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your password was changed successfully.".
-        "</div>";
-} else if ($status == "invalid_registration_date") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "The registration date you entered is invalid.".
-        "</div>";
-} else if ($status == "changed_registration_date") {
-    echo "<div class='alert alert-success' role='alert'>".
-        "Your registration date was changed successfully.".
-        "</div>";
-} else if ($status == "delete_account_error") {
-    echo "<div class='alert alert-danger' role='alert'>".
-        "Account deletion failed!".
-        "</div>";
-}
-?>
+<?php include "../templates/status_alert.php"; ?>
         <form class="form-horizontal" action="modify_account.php" method="POST">
             <div class="form-group">
                 <label for="inputEmail" class="col-sm-2">New email:</label>

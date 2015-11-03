@@ -20,9 +20,17 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 //Validate password
 if (strlen($password) < 8) {
-    //Password is too short
     mysql_close($link);
     header("location: register.php?status=invalid_password");
+    die();
+}
+
+//Validate registration date
+$registers = $registration_date." 00:00:00";
+if (!DateTime::createFromFormat('Y-m-d H:i:s', $registers)) {
+    mysql_close($link);
+    header("location: register.php?status=invalid_registration_date");
+    die();
 }
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
@@ -53,6 +61,5 @@ if (!$retval) {
     mysql_close($link);
     header("location: $next?status=newuser");
 }
-
 
 ?>

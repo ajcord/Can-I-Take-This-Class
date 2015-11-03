@@ -1,6 +1,6 @@
 <?php
 
-include "../templates/connect_mysql.php";	//connects to database
+include "../templates/connect_mysql.php";
 
 $cour = $_GET["courses"];		
 $date = $_GET["date"];
@@ -8,16 +8,11 @@ $date = $_GET["date"];
 $sem = "sp16";
 $courses_data = array();
 
-//find way to split string list of classes based upon commas
-$course_list = explode(",", $cour);			//takes course string and splits based on comma--returns array of strings
-foreach($course_list as $course){		//insdie some database query(statistical algorithm)---maybe get list of crns in datase that match the crn and course ex split CS 225 into department cs and course 225
-	//variables subject code & course number, take substring from end of word, subject code start of wrod to 3 from end and course number is 3 from end to actual end 
+$course_list = explode(",", $cour);
+foreach($course_list as $course){
 
     $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
     $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
-
-	//list of all avialabity data for all semesters for this class...cs 255...all sections...then availability data
-	//2 queries total...build these into json object from there
     
     // Get enrollment data
 
@@ -29,10 +24,8 @@ foreach($course_list as $course){		//insdie some database query(statistical algo
                 "where subjectcode='$subject_code' and coursenumber=$course_num and semester='$sem') as sections ".
             "using(crn, semester) group by type, status";
 
-    $retval = mysql_query($sql);
-    if (!$retval) {
-        die("Could not get availability data: ".mysql_error());
-    }
+    $retval = mysql_query($sql)
+        or die("Could not get availability data: ".mysql_error());
 
     $this_class = array();
     while ($row = mysql_fetch_assoc($retval)) {
