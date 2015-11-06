@@ -73,4 +73,7 @@ foreach($course_list as $course){
 }
 
 echo json_encode($courses_data);
+
+mysql_close($link);
+
 ?>
