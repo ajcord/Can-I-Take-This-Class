@@ -19,7 +19,7 @@ while ($row = mysql_fetch_row($retval)) {
     fputcsv($file, $row);
 }
 
-fclose($f);
+fclose($file);
 
 echo "Exported data to dump.csv";
 
