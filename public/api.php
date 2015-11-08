@@ -5,10 +5,23 @@ include "../templates/connect_mysql.php";
 $cour = $_GET["courses"];		
 $date = mysql_real_escape_string($_GET["date"]);
 
-//Find all the semesters prior to this registration date
+//Find the semester corresponding to the given date
+$current_semester_sql = "select * from registrationdates where t2.date <= '$date' ".
+                            "order by date desc limit 1";
+
+$current_semester_retval = mysql_query($semesters_sql)
+    or die("Could not get current semester: ".mysql_error());
+
+$current_semester_row = mysql_fetch_assoc($current_semester_retval);
+
+//Calculate the offset into the registration period
+$days_after_registration = date_diff(new DateTime($date),
+    new DateTime($current_semester_row["date"]));
+
+//Find all the semesters prior to the given date
 $semesters_sql = "select distinct t1.semester, t1.date from registrationdates as t1 ".
                     "inner join registrationdates as t2 ".
-                    "on t1.date < t2.date where t2.date < '$date' order by date";
+                    "on t1.date < t2.date where t2.date <= '$date' order by date";
 
 $semesters_retval = mysql_query($semesters_sql)
     or die("Could not get semester dates: ".mysql_error());
@@ -19,6 +32,10 @@ $course_list = explode(",", $cour);
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     $sem = $semester_row["semester"];
+    $start_date = $semester_row["date"];
+    $adjusted_date = new DateTime($start_date);
+    $adjusted_date = $adjusted_date.add($days_after_registration);
+    $adjusted_date = $adjusted_date.format("Y-m-d");
 
     foreach($course_list as $course) {
 
@@ -30,8 +47,8 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                                 "from sections inner join availability using(crn, semester) ".
                                 "where subjectcode='$subject_code' and coursenumber='$course_number' ".
                                 "and semester='$sem' and ".
-                                "timestamp<date_add('$date', interval 4 day) and ".
-                                "timestamp>date_sub('$date', interval 3 day) ".
+                                "timestamp<date_add('$adjusted_date', interval 4 day) and ".
+                                "timestamp>date_sub('$adjusted_date', interval 3 day) ".
                                 "group by sectiontype, enrollmentstatus";
 
         $enrollment_retval = mysql_query($enrollment_sql)
