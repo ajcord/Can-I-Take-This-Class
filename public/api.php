@@ -3,73 +3,74 @@
 include "../templates/connect_mysql.php";
 
 $cour = $_GET["courses"];		
-$date = $_GET["date"];
+$date = mysql_real_escape_string($_GET["date"]);
 
-$sem = "sp16";
+//Find all the semesters prior to this registration date
+$semesters_sql = "select distinct t1.semester, t1.date from registrationdates as t1 ".
+                    "inner join registrationdates as t2 ".
+                    "on t1.date < t2.date where t2.date < '$date' order by date";
+
+$semesters_retval = mysql_query($semesters_sql)
+    or die("Could not get semester dates: ".mysql_error());
+
 $courses_data = array();
-
 $course_list = explode(",", $cour);
-foreach($course_list as $course){
 
-    $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
-    $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
+while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
-    //Get the list of sections in this class
-    $section_list_sql = "select crn, sectiontype as type from sections ".
-                            "where subjectcode='$subject_code' and ".
-                            "coursenumber=$course_num and semester='$sem'";
+    $sem = $semester_row["semester"];
 
-    $section_list_retval = mysql_query($section_list_sql)
-        or die("Could not get availability data: ".mysql_error());
+    foreach($course_list as $course) {
 
-    $this_class = array();
-    while ($section_row = mysql_fetch_assoc($section_list_retval)) {
+        $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
+        $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
 
-        $crn = $section_row["crn"];
-        $type = $section_row["type"];
-
-        //Get the most recent data for this section
-        $enrollment_sql = "select enrollmentstatus as status from ".
-                                "(select * from availability where crn=$crn and semester='$sem' order by timestamp desc) ".
-                            "as sorted group by crn, semester limit 1";
+        //Get the most recent data for this class
+        $enrollment_sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count ".
+                                "from sections inner join availability using(crn, semester) ".
+                                "where subjectcode='$subject_code' and coursenumber='$course_number' ".
+                                "and semester='$sem' and ".
+                                "timestamp<date_add('$date', interval 4 day) and ".
+                                "timestamp>date_sub('$date', interval 3 day) ".
+                                "group by sectiontype, enrollmentstatus";
 
         $enrollment_retval = mysql_query($enrollment_sql)
             or die("Could not get availability data: ".mysql_error());
 
-        $enrollment_row = mysql_fetch_assoc($enrollment_retval);
-        $status = $enrollment_row["status"];
-        if (!isset($this_class, $type)) {
-            $type_arr = array();
-            $this_class[$type] = $type_arr;
+        $num_available_sections = array();
+        $total_sections = array();
+
+        while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
+
+            $type = $enrollment_row["type"];
+            $status = $enrollment_row["status"];
+            $count = $enrollment_row["count"];
+
+            $total_sections[$type] += $count;
+            if ($status != 0) {
+                $num_available_sections[$type] += $count;
+            }
         }
 
-        //Insert the status into the type array
-        $status_str = "";
-        switch ($status) {
-            case "0":
-                $status_str = "Closed";
-                break;
-            case "1":
-                $status_str = "Open";
-                break;
-            case "2":
-                $status_str = "Open (Restricted)";
-                break;
-            case "3":
-                $status_str = "CrossListOpen";
-                break;
-            case "4":
-                $status_str = "CrossListOpen (Restricted)";
-                break;
-            default:
-                $status_str = "Unknown";
-                break;
-        }
+        foreach ($total_sections as $type => $total) {
 
-        $this_class[$type][$status_str] += 1;
+            //Weight old semesters lower by multiplying by 1/2.
+            //Except the first semester, to make sure the percent sums to 1.
+            $factor = 0.5;
+            if ($sem == "fa15") {
+                $factor = 1;
+            }
+
+            //Guard against possibly having no available sections
+            $available = 0;
+            if (isset($num_available_sections[$type])) {
+                $available = $num_available_sections[$type];
+            }
+
+            $courses_data[$course][$type] *= $factor;
+            $courses_data[$course][$type] += $factor * $available / $total;
+        }
     }
-
-    $courses_data[$course] = $this_class;
 }
 
 echo json_encode($courses_data);
