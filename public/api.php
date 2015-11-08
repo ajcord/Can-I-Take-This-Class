@@ -34,8 +34,8 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
     $sem = $semester_row["semester"];
     $start_date = $semester_row["date"];
     $adjusted_date = new DateTime($start_date);
-    $adjusted_date = $adjusted_date.add($days_after_registration);
-    $adjusted_date = $adjusted_date.format("Y-m-d");
+    $adjusted_date = date_add($adjusted_date, $days_after_registration);
+    $adjusted_date = date_format($adjusted_date "Y-m-d");
 
     foreach($course_list as $course) {
 
