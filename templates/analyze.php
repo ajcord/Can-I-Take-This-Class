@@ -98,12 +98,12 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                     $available = $num_available_sections[$type];
                 }
 
-                $courses_data[$stat][$course][$type] += $available / $total;
+                $courses_data[$course][$stat][$type] += $available / $total;
 
                 //Weight old semesters lower by multiplying by 1/2.
                 //Except the first semester, to make sure the percent sums to 1.
                 if ($sem != "fa15") {
-                    $courses_data[$stat][$course][$type] *= 0.5;
+                    $courses_data[$course][$stat][$type] *= 0.5;
                 }
             }
         }
