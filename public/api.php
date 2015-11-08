@@ -45,7 +45,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         //Get the most recent data for this class
         $enrollment_sql = "select sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count ".
                                 "from sections inner join availability using(crn, semester) ".
-                                "where subjectcode='$subject_code' and coursenumber='$course_number' ".
+                                "where subjectcode='$subject_code' and coursenumber='$course_num' ".
                                 "and semester='$sem' and ".
                                 "timestamp<date_add('$adjusted_date', interval 4 day) and ".
                                 "timestamp>date_sub('$adjusted_date', interval 3 day) ".
