@@ -68,7 +68,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                                         "from sections inner join availability using(crn, semester) ".
                                         "where subjectcode='$subject_code' and coursenumber='$course_num' ".
                                         "and semester='$sem' and ".
-                                        "timestamp<'$adjusted_date' and ".
+                                        "timestamp>='$adjusted_date' ".
                                         "group by sectiontype, enrollmentstatus";
             }
 
