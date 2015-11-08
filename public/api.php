@@ -9,7 +9,7 @@ $date = mysql_real_escape_string($_GET["date"]);
 $current_semester_sql = "select * from registrationdates where date <= '$date' ".
                             "order by date desc limit 1";
 
-$current_semester_retval = mysql_query($semesters_sql)
+$current_semester_retval = mysql_query($current_semester_sql)
     or die("Could not get current semester: ".mysql_error());
 
 $current_semester_row = mysql_fetch_assoc($current_semester_retval);
