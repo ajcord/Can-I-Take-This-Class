@@ -15,8 +15,8 @@ $current_semester_retval = mysql_query($current_semester_sql)
 $current_semester_row = mysql_fetch_assoc($current_semester_retval);
 
 //Calculate the offset into the registration period
-$days_after_registration = date_diff(new DateTime($date),
-    new DateTime($current_semester_row["date"]));
+$days_after_registration = date_diff(new DateTime($current_semester_row["date"]),
+    new DateTime($date));
 
 //Find all the semesters prior to the given date
 $semesters_sql = "select distinct t1.semester, t1.date from registrationdates as t1 ".
