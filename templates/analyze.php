@@ -23,7 +23,7 @@ try {
     $days_after_registration = date_diff(new DateTime($current_semester_row["date"]),
         new DateTime($date));
 } catch (Exception $e) {
-    return {"error" => "Unable to parse date: $date"};
+    return ["error" => "Unable to parse date: $date"];
 }
 
 //Find all the semesters prior to the given date
