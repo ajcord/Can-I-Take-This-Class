@@ -71,21 +71,19 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
         foreach ($total_sections as $type => $total) {
 
-            //Weight old semesters lower by multiplying by 1/2.
-            //Except the first semester, to make sure the percent sums to 1.
-            $factor = 0.5;
-            if ($sem == "fa15") {
-                $factor = 1;
-            }
-
             //Guard against possibly having no available sections
             $available = 0;
             if (isset($num_available_sections[$type])) {
                 $available = $num_available_sections[$type];
             }
 
-            $courses_data[$course][$type] *= $factor;
             $courses_data[$course][$type] += $factor * $available / $total;
+
+            //Weight old semesters lower by multiplying by 1/2.
+            //Except the first semester, to make sure the percent sums to 1.
+            if ($sem != "fa15") {
+                $courses_data[$course][$type] *= 0.5;
+            }
         }
     }
 }
