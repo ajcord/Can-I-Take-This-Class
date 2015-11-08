@@ -3,7 +3,7 @@
 include "../templates/connect_mysql.php";
 
 $cour = $_GET["courses"];		
-$date = mysql_real_escape_string($_GET["date"]);
+$date = mysql_real_escape_string(urldecode($_GET["date"]));
 
 //Find the semester corresponding to the given date
 $current_semester_sql = "select * from registrationdates where date <= '$date' ".
