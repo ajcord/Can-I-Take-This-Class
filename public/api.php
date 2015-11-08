@@ -6,7 +6,7 @@ $cour = $_GET["courses"];
 $date = mysql_real_escape_string($_GET["date"]);
 
 //Find the semester corresponding to the given date
-$current_semester_sql = "select * from registrationdates where t2.date <= '$date' ".
+$current_semester_sql = "select * from registrationdates where date <= '$date' ".
                             "order by date desc limit 1";
 
 $current_semester_retval = mysql_query($semesters_sql)
