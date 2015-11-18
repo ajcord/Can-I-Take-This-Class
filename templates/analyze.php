@@ -52,7 +52,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
         foreach(["on_date", "after_date"] as $stat) {
 
-            //Get data for all section types of the class for the week surrounding the registration date
+            //Get data for all section types of the class for specified time period
             $enrollment_sql = "";
 
             if ($stat == "on_date") {
@@ -102,6 +102,9 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
                 //Weight old semesters lower by multiplying by 1/2.
                 //Except the first semester, to make sure the percent sums to 1.
+                //
+                //TODO: use counter instead. Does not take into account
+                //new classes.
                 if ($sem != "fa15") {
                     $courses_data[$course][$type][$stat] *= 0.5;
                 }
