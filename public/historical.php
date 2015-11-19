@@ -100,6 +100,14 @@ if (is_null($subject_code) && is_null($course_num)) {
 
 ?>
 
+/**
+ * Returns whether the viewport is small or extra small.
+ *
+ * @return     {boolean}  True if the screen is small or extra small, else false
+ */
+function isSmallScreen() {
+    return $(".device-sm").is(":visible");
+}
 
 $(function () {
     $("#chart-container").highcharts({
@@ -110,9 +118,9 @@ $(function () {
             text: "<?php echo $chart_title ?>"
         },
         legend: {
-            layout: "vertical",
-            align: "right",
-            verticalAlign: "middle",
+            layout: (isSmallScreen() ? "horizontal" : "vertical"),
+            align: (isSmallScreen() ? "center" : "right"),
+            verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
             floating: false,
             borderWidth: 1,
         },
@@ -144,5 +152,7 @@ $(function () {
     });
 });
 </script>
+
+<div class="device-sm visible-sm-block visible-xs-block"></div>
 
 <?php include "../templates/footer.php"; ?>
