@@ -77,6 +77,8 @@ foreach ($series as $type => $data) {
             $series[$type][$week] = 0;
         }
     }
+    
+    ksort($series[$type]);
 }
 
 echo json_encode($series);
