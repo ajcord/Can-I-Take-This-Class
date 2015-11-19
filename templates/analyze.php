@@ -95,6 +95,7 @@ function split_course($course) {
  *                                          "everything" for everything
  * @param      string  $subject_code   The subject to request, or NULL for all subjects
  * @param      int     $course_num     The course number to request, or NULL for all courses in the subject
+ * @param      bool    $only_open      Whether to return all statuses or just the number of open ones
  *
  * @return     mixed                   The query result
  */
@@ -157,7 +158,7 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
     $enrollment_sql .= " order by ";
 
     if ($stat == "everything") {
-        $enrollment_sql .= "week ";
+        $enrollment_sql .= "week, ";
     }
 
     $enrollment_sql .= "type";
