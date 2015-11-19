@@ -93,8 +93,8 @@ foreach ($series as $type => $data) {
     array_push($series_list, $row);
 }
 
-echo "var weeks = ".json_encode($weeks);
-echo "var series = ".json_encode($series_list);
+echo "var weeks = ".json_encode($weeks).";\n\n";
+echo "var series = ".json_encode($series_list).";\n\n";
 
 ?>
 
