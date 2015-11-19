@@ -79,7 +79,7 @@ foreach ($series as $type => $data) {
     }
 }
 
-var_dump($series);
+echo json_encode($series);
 
 ?>
     </div>
