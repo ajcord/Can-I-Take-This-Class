@@ -43,6 +43,7 @@ $course_num = $parsed["number"];
 
 $weeks = array();
 $series = array();
+$series_list = array();
 
 $semesters_retval = get_semesters_before_date(date("Y-m-d"));
 
@@ -79,9 +80,12 @@ foreach ($series as $type => $data) {
     }
     
     ksort($series[$type]);
+
+    $row = ["name" => $type, "data" => $series[$type]];
+    array_push($series_list, $row);
 }
 
-echo json_encode($series);
+echo json_encode($series_list);
 
 ?>
     </div>
