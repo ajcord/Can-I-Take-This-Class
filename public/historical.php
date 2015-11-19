@@ -90,7 +90,6 @@ foreach ($series as $type => $data) {
     array_push($series_list, $row);
 }
 
-echo "var weeks = ".json_encode($weeks).";\n\n";
 echo "var series = ".json_encode($series_list).";\n\n";
 
 
@@ -121,12 +120,13 @@ $(function () {
             title: {
                 text: "Week after registration begins"
             },
-            categories: weeks
+            allowDecimals: false
         },
         yAxis: {
             title: {
                 text: "Number of available sections"
-            }
+            },
+            allowDecimals: false
         },
         tooltip: {
             shared: true,
