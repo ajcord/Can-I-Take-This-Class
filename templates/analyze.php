@@ -65,8 +65,21 @@ function adjust_date($start_date, $offset) {
  */
 function split_course($course) {
 
-    $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
-    $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
+    //Check if the number is present or not
+    if (is_int(substr($course, strlen($course) - 3))) {
+
+        $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
+        $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
+
+    } else {
+
+        //Remove non-alpha characters from subject and assume number is 0
+        preg_replace("/[^A-Za-z]/", "", $course);
+        $subjectcode = mysql_real_escape_string($course);
+        $course_num = NULL;
+
+    }
+
     return ["subject" => $subject_code, "number" => $course_num];
 }
 
@@ -86,7 +99,7 @@ function split_course($course) {
  * @return     mixed                   The query result
  */
 function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_date",
-                        $subject_code = NULL, $course_num = NULL) {
+                        $subject_code = NULL, $course_num = NULL, $only_open = false) {
 
     $enrollment_sql = "select ";
 
@@ -94,7 +107,13 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
         $enrollment_sql .= "floor(datediff(timestamp, '$start_date')/7) as week, ";
     }
 
-    $enrollment_sql .= "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count ".
+    $enrollment_sql .= "sectiontype as type, ";
+
+    if (!$only_open) {
+        $enrollment_sql .= "enrollmentstatus as status, ";
+    }
+
+    $enrollment_sql .= "count(enrollmentstatus) as count ".
                         "from sections inner join availability using(crn, semester) ".
                         "where semester='$sem' ";
 
@@ -119,19 +138,33 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
             break;
     }
 
+    if ($only_open) {
+        $enrollment_sql .= "and enrollmentstatus<>0 ";
+    }
+
     $enrollment_sql .= "group by ";
 
     if (is_null($adjusted_date)) {
         $enrollment_sql .= "week, ";
     }
 
-    $enrollment_sql .= "sectiontype, enrollmentstatus order by ";
+    $enrollment_sql .= "sectiontype";
+
+    if (!$only_open) {
+        $enrollment_sql .= ", enrollmentstatus ";
+    }
+
+    $enrollment_sql .= " order by ";
 
     if ($stat == "everything") {
         $enrollment_sql .= "week ";
     }
 
-    $enrollment_sql .= "type, status";
+    $enrollment_sql .= "type";
+
+    if (!$only_open) {
+        $enrollment_sql .= ", status";
+    }
 
     $enrollment_retval = mysql_query($enrollment_sql)
         or die("Could not get availability data: ".mysql_error());
