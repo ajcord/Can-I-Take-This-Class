@@ -119,7 +119,7 @@ $(function () {
         },
         xAxis: {
             title: {
-                text: "Week"
+                text: "Week after registration begins"
             },
             categories: weeks
         },
