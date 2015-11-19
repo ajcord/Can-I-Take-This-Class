@@ -29,8 +29,8 @@ include "../templates/header.php";
 
 <?php
 
-$search = $_GET["q"];
-if (is_null($search)) {
+$q = $_GET["q"];
+if (is_null($q)) {
     return;
 }
 
@@ -38,13 +38,13 @@ include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
 
 $parsed = split_course($q);
-$subject_code = $parsed["subject_code"];
-$course_num = $parsed["course_num"];
+$subject_code = $parsed["subject"];
+$course_num = $parsed["number"];
 
 $weeks = array();
 $series = array();
 
-$semesters_retval = get_semesters_before_date($date);
+$semesters_retval = get_semesters_before_date(date("Y-m-d"));
 
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
