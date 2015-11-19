@@ -118,6 +118,9 @@ $(function () {
             borderWidth: 1,
         },
         xAxis: {
+            title: {
+                text: "Week"
+            },
             categories: weeks
         },
         yAxis: {
