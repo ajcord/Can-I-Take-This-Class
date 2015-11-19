@@ -121,7 +121,7 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
 
     $enrollment_sql += "group by ";
 
-    if ($is_null($adjusted_date)) {
+    if (is_null($adjusted_date)) {
         $enrollment_sql += "week, ";
     }
 
