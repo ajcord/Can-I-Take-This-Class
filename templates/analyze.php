@@ -94,7 +94,7 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
         $enrollment_sql .= "floor(datediff(timestamp, '$start_date')/7) as week, ";
     }
 
-    $enrollment_sql .= "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count, ".
+    $enrollment_sql .= "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count ".
                         "from sections inner join availability using(crn, semester) ".
                         "where semester='$sem' ";
 
