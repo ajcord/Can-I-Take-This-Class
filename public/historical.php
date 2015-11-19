@@ -102,7 +102,7 @@ echo "var series = ".json_encode($series_list).";\n\n";
 $(function () {
     $("#chart-container").highcharts({
         chart: {
-            type: "areaspline"
+            type: "spline"
         },
         title: {
             text: "<?php echo $subject_code." ".$course_num ?>"
