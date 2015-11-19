@@ -71,8 +71,8 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         $count = $enrollment_row["count"];
 
         //Ugly way of listing all weeks in the x axis
-        if (!array_key_exists($week, $weeks)) {
-            $weeks[$week] = $week;
+        if (!in_array($week, $weeks)) {
+            array_push($weeks, $week);
         }
 
         $series[$type][$week] += $count;
