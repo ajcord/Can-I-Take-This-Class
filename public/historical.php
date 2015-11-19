@@ -26,8 +26,10 @@ include "../templates/header.php";
                 </div>
             </div>
         </form>
+<?php if (!is_null($_GET["q"])): ?>
         <br><br>
-        <div id="chart-container"></div>
+        <div id="chart-container">Loading...</div>
+<?php endif ?>
     </div>
 </div>
 
