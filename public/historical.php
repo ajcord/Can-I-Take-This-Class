@@ -66,7 +66,9 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
             $weeks[$week] = $week;
         }
 
-        $series[$type][$week] += $count;
+        if ($status != 0) {
+            $series[$type][$week] += $count;
+        }
     }
 }
 

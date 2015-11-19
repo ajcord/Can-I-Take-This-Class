@@ -99,7 +99,7 @@ function split_course($course) {
  * @return     mixed                   The query result
  */
 function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_date",
-                        $subject_code = NULL, $course_num = NULL, $only_open = false) {
+                        $subject_code = NULL, $course_num = NULL) {
 
     $enrollment_sql = "select ";
 
@@ -107,13 +107,7 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
         $enrollment_sql .= "floor(datediff(timestamp, '$start_date')/7) as week, ";
     }
 
-    $enrollment_sql .= "sectiontype as type, ";
-
-    if (!$only_open) {
-        $enrollment_sql .= "enrollmentstatus as status, ";
-    }
-
-    $enrollment_sql .= "count(enrollmentstatus) as count ".
+    $enrollment_sql .= "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count ".
                         "from sections inner join availability using(crn, semester) ".
                         "where semester='$sem' ";
 
@@ -138,33 +132,19 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
             break;
     }
 
-    if ($only_open) {
-        $enrollment_sql .= "and enrollmentstatus<>0 ";
-    }
-
     $enrollment_sql .= "group by ";
 
     if (is_null($adjusted_date)) {
         $enrollment_sql .= "week, ";
     }
 
-    $enrollment_sql .= "sectiontype";
-
-    if (!$only_open) {
-        $enrollment_sql .= ", enrollmentstatus ";
-    }
-
-    $enrollment_sql .= " order by ";
+    $enrollment_sql .= "sectiontype, enrollmentstatus order by ";
 
     if ($stat == "everything") {
         $enrollment_sql .= "week ";
     }
 
-    $enrollment_sql .= "type";
-
-    if (!$only_open) {
-        $enrollment_sql .= ", status";
-    }
+    $enrollment_sql .= "type, status";
 
     $enrollment_retval = mysql_query($enrollment_sql)
         or die("Could not get availability data: ".mysql_error());
