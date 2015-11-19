@@ -71,13 +71,18 @@ function split_course($course) {
         $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
         $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
 
-    } else {
+    } else if (strlen($course) > 0) {
 
         //Remove non-alpha characters from subject and assume number is 0
         preg_replace("/[^A-Za-z]/", "", $course);
         $subject_code = mysql_real_escape_string(strtoupper($course));
         $course_num = NULL;
 
+    } else {
+
+        $subject_code = NULL;
+        $course_num = NULL;
+        
     }
 
     return ["subject" => $subject_code, "number" => $course_num];
