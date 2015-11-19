@@ -13,8 +13,10 @@ function get_semesters_before_date($date) {
                         "inner join registrationdates as t2 ".
                         "on t1.date < t2.date where t2.date <= '$date' order by date";
 
-    return mysql_query($semesters_sql)
+    $semesters_retval = mysql_query($semesters_sql)
         or die("Could not get semester dates: ".mysql_error());
+
+    return $semesters_retval;
 }
 
 /**
