@@ -117,10 +117,10 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
             break;
     }
 
-    $enrollment_sql += "group by "
+    $enrollment_sql += "group by ";
 
     if ($is_null($adjusted_date)) {
-        $enrollment_sql += "week, "
+        $enrollment_sql += "week, ";
     }
 
     $enrollment_sql += "sectiontype, enrollmentstatus order by ";
