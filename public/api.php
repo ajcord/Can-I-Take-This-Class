@@ -31,7 +31,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         foreach(["on_date", "after_date"] as $stat) {
 
             $enrollment_retval = query_semester($sem, $start_date, $adjusted_date,
-                                    $stat, $subject_code, $course_num);
+                                    $stat, $subject_code, $course_num, false);
 
             $num_available_sections = array();
             $total_sections = array();
