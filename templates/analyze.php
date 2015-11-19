@@ -91,47 +91,47 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
     $enrollment_sql = "select ";
 
     if ($stat == "everything") {
-        $enrollment_sql += "floor(datediff(timestamp, '$start_date')/7) as week, ";
+        $enrollment_sql .= "floor(datediff(timestamp, '$start_date')/7) as week, ";
     }
 
-    $enrollment_sql += "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count, ".
+    $enrollment_sql .= "sectiontype as type, enrollmentstatus as status, count(enrollmentstatus) as count, ".
                         "from sections inner join availability using(crn, semester) ".
                         "where semester='$sem' ";
 
     if (!is_null($subject_code)) {
-        $enrollment_sql += "and subjectcode='$subject_code' ";
+        $enrollment_sql .= "and subjectcode='$subject_code' ";
         
         if (!is_null($course_num)) {
-            $enrollment_sql += "and coursenumber='$course_num' ";
+            $enrollment_sql .= "and coursenumber='$course_num' ";
         }
     }
 
     switch($stat) {
         case "on_date":
-            $enrollment_sql += "and timestamp<date_add('$adjusted_date', interval 4 day) ".
+            $enrollment_sql .= "and timestamp<date_add('$adjusted_date', interval 4 day) ".
                                "and timestamp>date_sub('$adjusted_date', interval 3 day) ";
            break;
        case "after_date":
-            $enrollment_sql += "and timestamp>='$adjusted_date' ";
+            $enrollment_sql .= "and timestamp>='$adjusted_date' ";
             break;
         case "everything":
-            $enrollment_sql += "and timestamp>='$start_date' ";
+            $enrollment_sql .= "and timestamp>='$start_date' ";
             break;
     }
 
-    $enrollment_sql += "group by ";
+    $enrollment_sql .= "group by ";
 
     if (is_null($adjusted_date)) {
-        $enrollment_sql += "week, ";
+        $enrollment_sql .= "week, ";
     }
 
-    $enrollment_sql += "sectiontype, enrollmentstatus order by ";
+    $enrollment_sql .= "sectiontype, enrollmentstatus order by ";
 
     if ($stat == "everything") {
-        $enrollment_sql += "week ";
+        $enrollment_sql .= "week ";
     }
 
-    $enrollment_sql += "type, status";
+    $enrollment_sql .= "type, status";
 
     $enrollment_retval = mysql_query($enrollment_sql)
         or die("Could not get availability data: ".mysql_error());
