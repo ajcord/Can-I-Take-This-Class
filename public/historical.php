@@ -126,7 +126,7 @@ $(function () {
         },
         xAxis: {
             title: {
-                text: "Week after registration begins"
+                text: "Week of registration"
             },
             allowDecimals: false
         },
