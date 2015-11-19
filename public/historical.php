@@ -91,6 +91,12 @@ foreach ($series as $type => $data) {
 echo "var weeks = ".json_encode($weeks).";\n\n";
 echo "var series = ".json_encode($series_list).";\n\n";
 
+
+$chart_title = $subject_code." ".$course_num;
+if (is_null($subject_code) && is_null($course_num)) {
+    $chart_title = "University of Illinois";
+}
+
 ?>
 
 
@@ -100,17 +106,14 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "<?php echo $subject_code." ".$course_num ?>"
+            text: "<?php echo $chart_title ?>"
         },
         legend: {
             layout: "vertical",
-            align: "left",
-            verticalAlign: "top",
-            x: 150,
-            y: 100,
-            floating: true,
+            align: "right",
+            verticalAlign: "middle",
+            floating: false,
             borderWidth: 1,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF"
         },
         xAxis: {
             categories: weeks
