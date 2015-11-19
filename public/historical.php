@@ -105,7 +105,7 @@ $(function () {
             type: "areaspline"
         },
         title: {
-            text: "Number of available sections per week"
+            text: "<?php echo $subject_code." ".$course_num ?>"
         },
         legend: {
             layout: "vertical",
