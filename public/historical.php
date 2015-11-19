@@ -49,7 +49,7 @@ $parsed = split_course($q);
 $subject_code = $parsed["subject"];
 $course_num = $parsed["number"];
 
-$weeks = array();
+$weeks = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 $series = array();
 $series_list = array();
 
@@ -69,11 +69,6 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         $type = $enrollment_row["type"];
         $status = $enrollment_row["status"];
         $count = $enrollment_row["count"];
-
-        //Ugly way of listing all weeks in the x axis
-        if (!in_array($week, $weeks)) {
-            array_push($weeks, $week);
-        }
 
         $series[$type][$week] += $count;
     }
