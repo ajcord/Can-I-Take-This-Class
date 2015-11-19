@@ -26,6 +26,14 @@ include "../templates/header.php";
                 </div>
             </div>
         </form>
+        <br><br>
+        <div id="chart-container"></div>
+    </div>
+</div>
+
+<script>
+
+
 
 <?php
 
@@ -85,10 +93,53 @@ foreach ($series as $type => $data) {
     array_push($series_list, $row);
 }
 
-echo json_encode($series_list);
+echo "var weeks = ".json_encode($weeks);
+echo "var series = ".json_encode($series_list);
 
 ?>
-    </div>
-</div>
+
+
+$(function () {
+    $("#chart-container").highcharts({
+        chart: {
+            type: "areaspline"
+        },
+        title: {
+            text: "Number of available sections per week"
+        },
+        legend: {
+            layout: "vertical",
+            align: "left",
+            verticalAlign: "top",
+            x: 150,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || "#FFFFFF"
+        },
+        xAxis: {
+            categories: weeks
+        },
+        yAxis: {
+            title: {
+                text: "Number of available sections"
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: " sections"
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
+            }
+        },
+        series: series
+    });
+});
+</script>
 
 <?php include "../templates/footer.php"; ?>
