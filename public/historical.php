@@ -15,7 +15,7 @@ include "../templates/analyze.php";
                     <h2>Search for a class or subject</h2>
                     <div class="input-group col-md-12">
                         <input id="search-field" name="q" type="text" class="form-control input-lg" placeholder="e.g. CS 225, PHYS, etc." />
-<?php if (!is_null($_GET["sem"])): ?>
+<?php if (!is_null($_GET["semester"])): ?>
                         <input type="hidden" name="semester" value="<?php echo $_GET['semester'] ?>" />
 <?php endif ?>
                         <span class="input-group-btn">
