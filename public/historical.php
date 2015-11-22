@@ -15,6 +15,9 @@ include "../templates/analyze.php";
                     <h2>Search for a class or subject</h2>
                     <div class="input-group col-md-12">
                         <input id="search-field" name="q" type="text" class="form-control input-lg" placeholder="e.g. CS 225, PHYS, etc." />
+<?php if (!is_null($_GET["sem"])): ?>
+                        <input type="hidden" name="semester" value="<?php echo $_GET['semester'] ?>" />
+<?php endif ?>
                         <span class="input-group-btn">
                             <button id="search-button" class="btn btn-info btn-lg" type="submit">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -51,7 +54,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         $start_date = $semester_row["date"];
         echo "<b>$curr_sem</b> ";
     } else {
-        echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
+        echo "<a href='?q=$_GET['q']&semester=$curr_sem'>$curr_sem</a> ";
     }
 
     if ($pick_last_semester) {
