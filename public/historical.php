@@ -26,11 +26,12 @@ include "../templates/analyze.php";
         </form>
 <?php if (!is_null($_GET["q"])): ?>
         <br>
+        Semester:
 
 <?php
 
-$q = $_GET["q"];
-$sem = $_GET["semester"];
+$q = mysql_real_escape_string($_GET["q"]);
+$sem = mysql_real_escape_string($_GET["semester"]);
 $start_date = NULL;
 
 //If no semester is given, pick the latest one
@@ -55,6 +56,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     if ($pick_last_semester) {
         $sem = $curr_sem;
+        $start_date = $semester_row["date"];
     }
 }
 
@@ -62,13 +64,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         <br><br>
         <div id="chart-container">Loading...</div>
 
-        <script>
-
 <?php
-
-if (is_null($q)) {
-    return;
-}
 
 $parsed = split_course($q);
 $subject_code = $parsed["subject"];
@@ -107,8 +103,6 @@ foreach ($series as $type => $data) {
     array_push($series_list, $row);
 }
 
-echo "var series = ".json_encode($series_list).";\n\n";
-
 
 $chart_title = $subject_code." ".$course_num;
 if (is_null($subject_code) && is_null($course_num)) {
@@ -117,6 +111,8 @@ if (is_null($subject_code) && is_null($course_num)) {
 
 ?>
 
+
+<script>
 /**
  * Returns whether the viewport is small or extra small.
  *
@@ -168,11 +164,11 @@ $(function () {
                 fillOpacity: 0.5
             }
         },
-        series: series
+        series: <?php echo json_encode($series_list) ?>
     });
 });
 
-        </script>
+</script>
 
 <?php endif ?>
     </div>
