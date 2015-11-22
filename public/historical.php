@@ -33,18 +33,27 @@ $q = $_GET["q"];
 $sem = $_GET["semester"];
 $start_date = NULL;
 
-//Get the start date of the given semester
+//If no semester is given, pick the latest one
+if (is_null($sem)) {
+    $pick_last_semester = true;
+}
+
+//Get the start date of the given semester and print semester links
 $semesters_retval = get_semesters_before_date(date("Y-m-d"));
 
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     $curr_sem = $semester_row["semester"];
 
-    //Print a list of links for each previous semester
-    echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
-
     if ($curr_sem == $sem) {
         $start_date = $semester_row["date"];
+        echo "<b>$curr_sem</b> ";
+    } else {
+        echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
+    }
+
+    if ($pick_last_semester) {
+        $sem = $curr_sem;
     }
 }
 
@@ -123,6 +132,9 @@ $(function () {
         },
         title: {
             text: "<?php echo $chart_title ?>"
+        },
+        subtitle: {
+            text: "<?php echo $sem ?>"
         },
         legend: {
             layout: (isSmallScreen() ? "horizontal" : "vertical"),
