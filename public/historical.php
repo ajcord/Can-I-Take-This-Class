@@ -83,8 +83,8 @@ while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
 $last_week = get_last_week($sem, $start_date)["week"];
 
 //Fill in empty weeks with zeroes and cut off the last week
-unset($series[$type][$last_week]);
 foreach ($series as $type => $data) {
+    unset($series[$type][$last_week]);
     for ($i  = 0; $i < $last_week; $i++) {
         if (!array_key_exists($i, $data)) {
             $series[$type][$i] = 0;
