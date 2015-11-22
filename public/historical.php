@@ -7,8 +7,6 @@ include "../templates/analyze.php";
 
 <div class="container">
     <div class="jumbotron">
-        <h1>Historical data</h1>
-        <br><br>
         <form class="form-horizontal" action="historical.php" method="GET">
             <div class="row">
                 <div class="col-md-6">
@@ -28,6 +26,7 @@ include "../templates/analyze.php";
             </div>
         </form>
 <?php if (!is_null($_GET["q"])): ?>
+        <br>
         <p>
         Semester:
 
