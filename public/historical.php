@@ -87,7 +87,7 @@ unset($series[$type][$last_week]);
 foreach ($series as $type => $data) {
     for ($i  = 0; $i < $last_week; $i++) {
         if (!array_key_exists($i, $data)) {
-            $series[$type][$week] = 0;
+            $series[$type][$i] = 0;
         }
     }
     
