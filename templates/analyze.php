@@ -52,10 +52,17 @@ function get_offset_into_registration($date) {
  * @return     array           An array of the form ["week" => lastWeekNum, "date" => lastDate]
  */
 function get_last_week($sem, $date) {
-    $last_week_sql = "select floor(datediff(max(timestamp), '$date')/7) as week, ".
-                        "date_add('$date', interval
-                            floor(datediff(max(timestamp), '$date')/7) week) as date ".
-                        "from availability where semester='$sem'";
+
+    //Fetch an example CRN to make the availability query much faster
+    $crn_sql = "select crn from sections where semester='$sem' limit 1";
+
+    $crn_retval = mysql_query($crn_sql)
+        or die("Could not get a CRN: ".mysql_error());
+
+    $crn = mysql_fetch_assoc($crn_retval)["crn"];
+
+    $last_week_sql = "select floor(datediff(max(timestamp), '$date')/7) as week ".
+                        "from availability where semester='$sem' and crn='$crn'";
 
     $last_week_retval = mysql_query($last_week_sql)
         or die("Could not get last week: ".mysql_error());
