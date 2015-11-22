@@ -54,7 +54,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
         $start_date = $semester_row["date"];
         echo "<b>$curr_sem</b> ";
     } else {
-        echo "<a href='?q=$_GET['q']&semester=$curr_sem'>$curr_sem</a> ";
+        echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
     }
 
     if ($pick_last_semester) {
