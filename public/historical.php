@@ -85,7 +85,7 @@ $last_week = get_last_week($sem, $start_date)["week"];
 //Fill in empty weeks with zeroes and cut off the last week
 unset($series[$type][$last_week]);
 foreach ($series as $type => $data) {
-    for ($i  = 0; i < $last_week; $i++) {
+    for ($i  = 0; $i < $last_week; $i++) {
         if (!array_key_exists($i, $data)) {
             $series[$type][$week] = 0;
         }
