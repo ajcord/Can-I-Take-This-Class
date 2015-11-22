@@ -1,8 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION["id"])) {
-    header("location: login.php?status=not_logged_in&next=my_classes.php");
-}
 $use_highcharts = true;
 include "../templates/header.php";
 ?>
