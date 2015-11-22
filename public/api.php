@@ -16,6 +16,8 @@ $semesters_retval = get_semesters_before_date($date);
 $courses_data = array();
 $course_list = explode(",", $courses);
 
+$n = array();
+
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     $sem = $semester_row["semester"];
@@ -43,6 +45,8 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                 $count = $enrollment_row["count"];
 
                 $total_sections[$type] += $count;
+                $n[$course][$type][$stat] += $count;
+
                 if ($status != 0) {
                     $num_available_sections[$type] += $count;
                 }
@@ -56,7 +60,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                     $available = $num_available_sections[$type];
                 }
 
-                $courses_data[$course][$type][$stat] += $available / $total;
+                $courses_data[$course][$type][$stat]["percent"] += $available / $total;
 
                 //Weight old semesters lower by multiplying by 1/2.
                 //Except the first semester, to make sure the percent sums to 1.
@@ -64,8 +68,17 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
                 //TODO: use counter instead. Does not take into account
                 //new classes.
                 if ($sem != "fa15") {
-                    $courses_data[$course][$type][$stat] *= 0.5;
+                    $courses_data[$course][$type][$stat]["percent"] *= 0.5;
+                    $n[$course][$type][$stat] *= 0.5;
                 }
+            }
+
+            //Calculate the standard error for each stat
+            foreach ($total_sections as $type => $total) {
+
+                $p = $courses_data[$course][$type][$stat]["percent"];
+                $n_weighted = $n[$course][$type][$stat];
+                $courses_data[$course][$type][$stat]["error"] = sqrt($p*(1-$p)/$n_weighted);
             }
         }
     }
