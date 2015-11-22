@@ -28,7 +28,7 @@ include "../templates/analyze.php";
             </div>
         </form>
 <?php if (!is_null($_GET["q"])): ?>
-        <br>
+        <p>
         Semester:
 
 <?php
@@ -64,7 +64,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 }
 
 ?>
-        <br><br>
+        </p>
         <div id="chart-container">Loading...</div>
 
 <?php
