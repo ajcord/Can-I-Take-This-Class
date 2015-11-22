@@ -1,6 +1,8 @@
 <?php
 $use_highcharts = true;
 include "../templates/header.php";
+include "../templates/connect_mysql.php";
+include "../templates/analyze.php";
 ?>
 
 <div class="container">
@@ -14,7 +16,7 @@ include "../templates/header.php";
                     <div class="input-group col-md-12">
                         <input id="search-field" name="q" type="text" class="form-control input-lg" placeholder="e.g. CS 225, PHYS, etc." />
                         <span class="input-group-btn">
-                            <button id="search-button" class="btn btn-info btn-lg" type="submit" name="search">
+                            <button id="search-button" class="btn btn-info btn-lg" type="submit">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
                         </span>
@@ -24,14 +26,32 @@ include "../templates/header.php";
         </form>
 <?php if (!is_null($_GET["q"])): ?>
         <br><br>
+
+<?php
+
+$sem = $_GET["semester"];
+$start_date = NULL;
+
+//Get the start date of the given semester
+$semesters_retval = get_semesters_before_date(date("Y-m-d"));
+
+while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+
+    $curr_sem = $semester_row["semester"];
+
+    //Print a list of links for each previous semester
+    echo "<a href='?q=$q&semester=$sem'>$sem</a> ";
+
+    if ($curr_sem == $sem) {
+        $start_date = $semester_row["date"];
+    }
+}
+
+?>
+
         <div id="chart-container">Loading...</div>
-<?php endif ?>
-    </div>
-</div>
 
-<script>
-
-
+        <script>
 
 <?php
 
@@ -39,9 +59,6 @@ $q = $_GET["q"];
 if (is_null($q)) {
     return;
 }
-
-include "../templates/connect_mysql.php";
-include "../templates/analyze.php";
 
 $parsed = split_course($q);
 $subject_code = $parsed["subject"];
@@ -51,31 +68,26 @@ $weeks = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
 $series = array();
 $series_list = array();
 
-$semesters_retval = get_semesters_before_date(date("Y-m-d"));
+$enrollment_retval = query_semester($sem, $start_date, NULL, "everything",
+                        $subject_code, $course_num, true);
 
-while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
 
-    $sem = $semester_row["semester"];
-    $start_date = $semester_row["date"];
+    $week = $enrollment_row["week"];
+    $type = $enrollment_row["type"];
+    $status = $enrollment_row["status"];
+    $count = $enrollment_row["count"];
 
-    $enrollment_retval = query_semester($sem, $start_date, NULL, "everything",
-                            $subject_code, $course_num, true);
-
-    while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
-
-        $week = $enrollment_row["week"];
-        $type = $enrollment_row["type"];
-        $status = $enrollment_row["status"];
-        $count = $enrollment_row["count"];
-
-        $series[$type][$week] += $count;
-    }
+    $series[$type][$week] += $count;
 }
 
-//Fill in empty weeks with zeroes
+$last_week = get_last_week($sem, $start_date)["week"];
+
+//Fill in empty weeks with zeroes and cut off the last week
+unset($series[$type][$last_week]);
 foreach ($series as $type => $data) {
-    foreach ($weeks as $week) {
-        if (!array_key_exists($week, $data)) {
+    for ($i  = 0; i < $last_week; $i++) {
+        if (!array_key_exists($i, $data)) {
             $series[$type][$week] = 0;
         }
     }
@@ -147,7 +159,12 @@ $(function () {
         series: series
     });
 });
-</script>
+
+        </script>
+
+<?php endif ?>
+    </div>
+</div>
 
 <div class="device-sm visible-sm-block visible-xs-block"></div>
 

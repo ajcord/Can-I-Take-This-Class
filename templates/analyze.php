@@ -43,6 +43,27 @@ function get_offset_into_registration($date) {
 }
 
 /**
+ * Gets the date and week number of the last data for the given semester.
+ *
+ * @param      string  $sem    The semester to check
+ * @param      string  $date   The beginning of the registration period
+ *                             in YYYY-MM-DD form
+ *
+ * @return     array           An array of the form ["week" => lastWeekNum, "date" => lastDate]
+ */
+function get_last_week($sem, $date) {
+    $last_week_sql = "select floor(datediff(max(timestamp), '$date')/7) as week, ".
+                        "date_add('$date', interval
+                            floor(datediff(max(timestamp), '$date')/7) week) as date ".
+                        "from availability where semester='$sem'";
+
+    $last_week_retval = mysql_query($last_week_sql)
+        or die("Could not get last week: ".mysql_error());
+
+    return mysql_fetch_assoc($last_week_retval);
+}
+
+/**
  * Adjusts a date by the given offset.
  *
  * @param      string  $start_date  The start date
