@@ -29,6 +29,7 @@ include "../templates/analyze.php";
 
 <?php
 
+$q = $_GET["q"];
 $sem = $_GET["semester"];
 $start_date = NULL;
 
@@ -40,7 +41,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
     $curr_sem = $semester_row["semester"];
 
     //Print a list of links for each previous semester
-    echo "<a href='?q=$q&semester=$sem'>$sem</a> ";
+    echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
 
     if ($curr_sem == $sem) {
         $start_date = $semester_row["date"];
@@ -55,7 +56,6 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
 <?php
 
-$q = $_GET["q"];
 if (is_null($q)) {
     return;
 }
@@ -64,7 +64,6 @@ $parsed = split_course($q);
 $subject_code = $parsed["subject"];
 $course_num = $parsed["number"];
 
-$weeks = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26];
 $series = array();
 $series_list = array();
 
