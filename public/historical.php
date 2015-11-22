@@ -25,7 +25,7 @@ include "../templates/analyze.php";
             </div>
         </form>
 <?php if (!is_null($_GET["q"])): ?>
-        <br><br>
+        <br>
 
 <?php
 
@@ -34,6 +34,7 @@ $sem = $_GET["semester"];
 $start_date = NULL;
 
 //If no semester is given, pick the latest one
+$pick_last_semester = false;
 if (is_null($sem)) {
     $pick_last_semester = true;
 }
@@ -58,7 +59,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 }
 
 ?>
-
+        <br><br>
         <div id="chart-container">Loading...</div>
 
         <script>
