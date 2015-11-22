@@ -36,7 +36,7 @@ $start_date = NULL;
 
 //If no semester is given, pick the latest one
 $pick_last_semester = false;
-if (is_null($sem)) {
+if (is_null($_GET["semester"])) {
     $pick_last_semester = true;
 }
 
