@@ -90,6 +90,23 @@ foreach ($semesters as $curr_sem) {
         </p>
         <div id="chart-container"></div>
 
+<script>
+
+//Dummy chart for initial loading message
+$("#chart-container").highcharts({
+    title: {
+        text: "<?php echo $chart_title ?>"
+    },
+    subtitle: {
+        text: "<?php echo $sem ?>"
+    }
+})
+
+$("#chart-container").highcharts().showLoading();
+
+</script>
+
+
 <?php
 
 $parsed = split_course($q);
@@ -148,69 +165,55 @@ function isSmallScreen() {
     return $(".device-sm").is(":visible");
 }
 
-$(function () {
-
-    //Dummy chart for initial loading message
-    $("#chart-container").highcharts({
+//Actual chart
+$("#chart-container").highcharts({
+    chart: {
+        type: "spline"
+    },
+    title: {
+        text: "<?php echo $chart_title ?>"
+    },
+    subtitle: {
+        text: "<?php echo $sem ?>"
+    },
+    legend: {
+        layout: (isSmallScreen() ? "horizontal" : "vertical"),
+        align: (isSmallScreen() ? "center" : "right"),
+        verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
+        floating: false,
+        borderWidth: 1,
+    },
+    xAxis: {
         title: {
-            text: "<?php echo $chart_title ?>"
+            text: "Week of registration"
         },
-        subtitle: {
-            text: "<?php echo $sem ?>"
+        allowDecimals: false,
+        plotBands: [{
+            from: <?php echo $instruction_week ?>,
+            to: <?php echo $last_week ?>,
+            color: "rgba(68, 170, 213, 0.2)",
+            label: "Classes in session"
+        }]
+    },
+    yAxis: {
+        title: {
+            text: "Number of available sections"
+        },
+        allowDecimals: false
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: " sections"
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
         }
-    })
-    $("#chart-container").highcharts().showLoading();
-
-    //Actual chart
-    $("#chart-container").highcharts({
-        chart: {
-            type: "spline"
-        },
-        title: {
-            text: "<?php echo $chart_title ?>"
-        },
-        subtitle: {
-            text: "<?php echo $sem ?>"
-        },
-        legend: {
-            layout: (isSmallScreen() ? "horizontal" : "vertical"),
-            align: (isSmallScreen() ? "center" : "right"),
-            verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
-            floating: false,
-            borderWidth: 1,
-        },
-        xAxis: {
-            title: {
-                text: "Week of registration"
-            },
-            allowDecimals: false,
-            plotBands: [{
-                from: <?php echo $instruction_week ?>,
-                to: <?php echo $last_week ?>,
-                color: "rgba(68, 170, 213, 0.2)",
-                label: "Classes in session"
-            }]
-        },
-        yAxis: {
-            title: {
-                text: "Number of available sections"
-            },
-            allowDecimals: false
-        },
-        tooltip: {
-            shared: true,
-            valueSuffix: " sections"
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            areaspline: {
-                fillOpacity: 0.5
-            }
-        },
-        series: <?php echo json_encode($series_list) ?>
-    });
+    },
+    series: <?php echo json_encode($series_list) ?>
 });
 
 </script>
