@@ -3,7 +3,7 @@
 include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
 
-$courses = mysql_real_escape_string($_GET["courses"]);
+$courses = $_GET["courses"];
 $courses_data = array();
 $course_list = explode(",", $courses);
 $date = mysql_real_escape_string(urldecode($_GET["date"]));

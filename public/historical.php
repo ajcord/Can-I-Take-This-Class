@@ -4,7 +4,7 @@ include "../templates/header.php";
 include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
 
-$q = mysql_real_escape_string($_GET["q"]);
+$q = $_GET["q"];
 $sem = mysql_real_escape_string($_GET["semester"]);
 
 $semesters_offered = array();

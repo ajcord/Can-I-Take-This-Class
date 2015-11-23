@@ -16,8 +16,13 @@ function get_semesters_before_date($date, $subjectcode, $coursenumber) {
                             "from semesters as t1 inner join semesters as t2 ".
                             "on t1.registrationdate < t2.registrationdate ".
                             "where t2.registrationdate <= '$date' order by t1.registrationdate) as t3".
-                        "inner join sections using(semester) ".
-                        "where subjectcode='$subjectcode' and coursenumber='$coursenumber'";
+                        "inner join sections using(semester) ";
+
+    if (!is_null($subjectcode)) {
+        $semesters_sql .= "where subjectcode='$subjectcode' ";
+        if (!is_null($coursenumber)) {
+            $semesters_sql .= "and coursenumber='$coursenumber'";
+    }
 
     $semesters_retval = mysql_query($semesters_sql)
         or die("Could not get semester dates: ".mysql_error());
