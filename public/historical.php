@@ -39,6 +39,12 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
     }
 }
 
+//Check whether the course was offered at all
+$not_offered = false;
+if (is_null($semester_row)) {
+    $not_offered = true;
+}
+
 //Put the most recent semesters first
 $semesters_offered = array_reverse($semesters_offered);
 
@@ -93,6 +99,10 @@ foreach ($semesters_offered as $curr_sem) {
     } else {
         echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
     }
+}
+
+if ($not_offered) {
+    echo "<b>No semesters on record</b>"
 }
 
 ?>
@@ -206,8 +216,8 @@ $(function() {
             },
             allowDecimals: false,
             plotBands: [{
-                from: <?php echo $instruction_week ?>,
-                to: <?php echo $last_week ?>,
+                from: <?php echo $instruction_week or "undefined" ?>,
+                to: <?php echo $last_week or "undefined" ?>,
                 color: "rgba(68, 170, 213, 0.2)",
                 label: {
                     text: "Classes in session"
