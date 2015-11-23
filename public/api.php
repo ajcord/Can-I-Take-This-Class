@@ -23,6 +23,7 @@ foreach($course_list as $course) {
     $course_num = $split["number"];
 
     $semesters_retval = get_semesters_before_date($date, $subject_code, $course_num);
+    $sem_count = 0;
 
     while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
@@ -64,10 +65,7 @@ foreach($course_list as $course) {
 
                 //Weight old semesters lower by multiplying by 1/2.
                 //Except the first semester, to make sure the percent sums to 1.
-                //
-                //TODO: use counter instead. Does not take into account
-                //new classes.
-                if ($sem != "fa15") {
+                if ($sem_count != 0) {
                     $courses_data[$course][$type][$stat]["percent"] *= 0.5;
                     $n[$course][$type][$stat] *= 0.5;
                 }
@@ -81,6 +79,8 @@ foreach($course_list as $course) {
                 $courses_data[$course][$type][$stat]["error"] = sqrt($p*(1-$p)/$n_weighted);
             }
         }
+
+        $sem_count++;
     }
 
     if (mysql_num_rows($semesters_retval) == 0) {
