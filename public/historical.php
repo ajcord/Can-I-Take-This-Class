@@ -174,7 +174,8 @@ $(function () {
             plotBands: [{
                 from: <?php echo $instruction_week ?>,
                 to: <?php echo $last_week ?>,
-                color: 'rgba(68, 170, 213, 0.2)'
+                color: "rgba(68, 170, 213, 0.2)",
+                label: "Classes in session"
             }]
         },
         yAxis: {
@@ -196,7 +197,7 @@ $(function () {
             }
         },
         series: <?php echo json_encode($series_list) ?>
-    });
+    }).showLoading();
 });
 
 </script>
