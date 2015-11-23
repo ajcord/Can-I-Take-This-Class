@@ -3,7 +3,9 @@
 include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
 
-$courses = $_GET["courses"];		
+$courses = mysql_real_escape_string($_GET["courses"]);
+$courses_data = array();
+$course_list = explode(",", $courses);
 $date = mysql_real_escape_string(urldecode($_GET["date"]));
 
 try {
@@ -12,23 +14,21 @@ try {
     return ["error" => "Unable to parse date: $date"];
 }
 
-$semesters_retval = get_semesters_before_date($date);
-$courses_data = array();
-$course_list = explode(",", $courses);
-
 $n = array();
 
-while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+foreach($course_list as $course) {
 
-    $sem = $semester_row["semester"];
-    $start_date = $semester_row["date"];
-    $adjusted_date = adjust_date($start_date, $days_after_registration);
+    $split = split_course($course);
+    $subject_code = $split["subject"];
+    $course_num = $split["number"];
 
-    foreach($course_list as $course) {
+    $semesters_retval = get_semesters_before_date($date, $subject_code, $course_num);
 
-        $split = split_course($course);
-        $subject_code = $split["subject"];
-        $course_num = $split["number"];
+    while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+
+        $sem = $semester_row["semester"];
+        $start_date = $semester_row["date"];
+        $adjusted_date = adjust_date($start_date, $days_after_registration);
 
         foreach(["on_date", "after_date"] as $stat) {
 

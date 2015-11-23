@@ -6,9 +6,14 @@ include "../templates/analyze.php";
 
 $q = mysql_real_escape_string($_GET["q"]);
 $sem = mysql_real_escape_string($_GET["semester"]);
-$semesters = array();
+
+$semesters_offered = array();
 $start_date = NULL;
 $instruction_date = NULL;
+
+$parsed = split_course($q);
+$subject_code = $parsed["subject"];
+$course_num = $parsed["number"];
 
 //If no semester is given, pick the latest one
 $pick_last_semester = false;
@@ -17,7 +22,7 @@ if (is_null($_GET["semester"])) {
 }
 
 //Get the start date of the given semester
-$semesters_retval = get_semesters_before_date(date("Y-m-d"));
+$semesters_retval = get_semesters_before_date(date("Y-m-d"), $subject_code, $course_num);
 
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
@@ -25,7 +30,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
     $curr_start_date = $semester_row["date"];
     $curr_instruction_date = $semester_row["instructiondate"];
 
-    array_push($semesters, $curr_sem);
+    array_push($semesters_offered, $curr_sem);
 
     if ($curr_sem == $sem || $pick_last_semester) {
         $sem = $curr_sem;
@@ -35,7 +40,7 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 }
 
 //Put the most recent semesters first
-$semesters = array_reverse($semesters);
+$semesters_offered = array_reverse($semesters_offered);
 
 //If the semester given is not valid, pick the most recent one
 if (is_null($start_date)) {
@@ -82,7 +87,7 @@ $instruction_week = floor(date_diff(new DateTime($instruction_date),
 <?php
 
 //Print the semester links
-foreach ($semesters as $curr_sem) {
+foreach ($semesters_offered as $curr_sem) {
     if ($curr_sem == $sem) {
         echo "<b>$curr_sem</b> ";
     } else {
@@ -116,10 +121,6 @@ $("#chart-container").highcharts().showLoading();
 
 
 <?php
-
-$parsed = split_course($q);
-$subject_code = $parsed["subject"];
-$course_num = $parsed["number"];
 
 $series = array();
 $series_list = array();

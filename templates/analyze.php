@@ -1,18 +1,23 @@
 <?php
 
 /**
- * Gets a list of all semesters before the given date.
+ * Gets a list of all semesters before the given date that the class was offered.
  *
- * @param      string  $date   The date to check in the form YYYY-MM-DD
+ * @param      string  $date            The date to check in the form YYYY-MM-DD
+ * @param      string  $subjectcode     The subject code of the course to check
+ * @param      int     $coursenumber    The course number to check
  *
  * @return     mixed           The query result
  */
-function get_semesters_before_date($date) {
+function get_semesters_before_date($date, $subjectcode, $coursenumber) {
 
-    $semesters_sql = "select distinct t1.semester, t1.registrationdate as date, t1.instructiondate ".
-                        "from semesters as t1 inner join semesters as t2 ".
-                        "on t1.registrationdate < t2.registrationdate ".
-                        "where t2.registrationdate <= '$date' order by t1.registrationdate";
+    $semesters_sql = "select distinct semester, date, instructiondate from ".
+                        "(select distinct t1.semester, t1.registrationdate as date, t1.instructiondate ".
+                            "from semesters as t1 inner join semesters as t2 ".
+                            "on t1.registrationdate < t2.registrationdate ".
+                            "where t2.registrationdate <= '$date' order by t1.registrationdate) as t3".
+                        "inner join sections using(semester) ".
+                        "where subjectcode='$subjectcode' and coursenumber='$coursenumber'";
 
     $semesters_retval = mysql_query($semesters_sql)
         or die("Could not get semester dates: ".mysql_error());
