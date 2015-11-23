@@ -3,6 +3,36 @@ $use_highcharts = true;
 include "../templates/header.php";
 include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
+
+$q = mysql_real_escape_string($_GET["q"]);
+$sem = mysql_real_escape_string($_GET["semester"]);
+$start_date = NULL;
+$semesters = array();
+
+//If no semester is given, pick the latest one
+$pick_last_semester = false;
+if (is_null($_GET["semester"])) {
+    $pick_last_semester = true;
+}
+
+//Get the start date of the given semester
+$semesters_retval = get_semesters_before_date(date("Y-m-d"));
+
+while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+
+    $curr_sem = $semester_row["semester"];
+
+    array_push($semesters, $curr_sem);
+
+    if ($curr_sem == $sem) {
+        $start_date = $semester_row["date"];
+    }
+
+    if ($pick_last_semester) {
+        $sem = $curr_sem;
+        $start_date = $semester_row["date"];
+    }
+}
 ?>
 
 <div class="container">
@@ -32,33 +62,12 @@ include "../templates/analyze.php";
 
 <?php
 
-$q = mysql_real_escape_string($_GET["q"]);
-$sem = mysql_real_escape_string($_GET["semester"]);
-$start_date = NULL;
-
-//If no semester is given, pick the latest one
-$pick_last_semester = false;
-if (is_null($_GET["semester"])) {
-    $pick_last_semester = true;
-}
-
-//Get the start date of the given semester and print semester links
-$semesters_retval = get_semesters_before_date(date("Y-m-d"));
-
-while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
-
-    $curr_sem = $semester_row["semester"];
-
+//Print the semester links
+foreach (array_reverse($semesters) as $curr_sem) {
     if ($curr_sem == $sem) {
-        $start_date = $semester_row["date"];
         echo "<b>$curr_sem</b> ";
     } else {
         echo "<a href='?q=$q&semester=$curr_sem'>$curr_sem</a> ";
-    }
-
-    if ($pick_last_semester) {
-        $sem = $curr_sem;
-        $start_date = $semester_row["date"];
     }
 }
 
