@@ -9,9 +9,10 @@
  */
 function get_semesters_before_date($date) {
 
-    $semesters_sql = "select distinct t1.semester, t1.date from registrationdates as t1 ".
-                        "inner join registrationdates as t2 ".
-                        "on t1.date < t2.date where t2.date <= '$date' order by date";
+    $semesters_sql = "select distinct t1.semester, t1.registrationdate as date from semesters as t1 ".
+                        "inner join semesters as t2 ".
+                        "on t1.registrationdate < t2.registrationdate ".
+                        "where t2.registrationdate <= '$date' order by registrationdate";
 
     $semesters_retval = mysql_query($semesters_sql)
         or die("Could not get semester dates: ".mysql_error());
@@ -30,8 +31,9 @@ function get_semesters_before_date($date) {
 function get_offset_into_registration($date) {
 
     //Find the semester corresponding to the given date
-    $current_semester_sql = "select * from registrationdates where date <= '$date' ".
-                                "order by date desc limit 1";
+    $current_semester_sql = "select semester, registrationdate as date from semesters ".
+                                "where registrationdate <= '$date' ".
+                                "order by registrationdate desc limit 1";
 
     $current_semester_retval = mysql_query($current_semester_sql)
         or die("Could not get current semester: ".mysql_error());
