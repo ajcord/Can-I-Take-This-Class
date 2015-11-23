@@ -88,7 +88,7 @@ foreach ($semesters as $curr_sem) {
 
 ?>
         </p>
-        <div id="chart-container">Loading...</div>
+        <div id="chart-container"></div>
 
 <?php
 
@@ -149,6 +149,19 @@ function isSmallScreen() {
 }
 
 $(function () {
+
+    //Dummy chart for initial loading message
+    $("#chart-container").highcharts({
+        title: {
+            text: "<?php echo $chart_title ?>"
+        },
+        subtitle: {
+            text: "<?php echo $sem ?>"
+        }
+    })
+    $("#chart-container").highcharts().showLoading();
+
+    //Actual chart
     $("#chart-container").highcharts({
         chart: {
             type: "spline"
@@ -197,7 +210,7 @@ $(function () {
             }
         },
         series: <?php echo json_encode($series_list) ?>
-    }).showLoading();
+    });
 });
 
 </script>
