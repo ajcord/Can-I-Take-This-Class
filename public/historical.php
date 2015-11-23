@@ -180,57 +180,59 @@ Highcharts.setOptions({
     }
 });
 
-//Actual chart
-$("#chart-container").highcharts({
-    chart: {
-        type: "spline"
-    },
-    title: {
-        text: "<?php echo $chart_title ?>"
-    },
-    subtitle: {
-        text: "<?php echo $sem ?>"
-    },
-    legend: {
-        layout: (isSmallScreen() ? "horizontal" : "vertical"),
-        align: (isSmallScreen() ? "center" : "right"),
-        verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
-        floating: false,
-        borderWidth: 1,
-    },
-    xAxis: {
-        title: {
-            text: "Week of registration"
+$(function() {
+    //Actual chart
+    $("#chart-container").highcharts({
+        chart: {
+            type: "spline"
         },
-        allowDecimals: false,
-        plotBands: [{
-            from: <?php echo $instruction_week ?>,
-            to: <?php echo $last_week ?>,
-            color: "rgba(68, 170, 213, 0.2)",
-            label: {
-                text: "Classes in session"
+        title: {
+            text: "<?php echo $chart_title ?>"
+        },
+        subtitle: {
+            text: "<?php echo $sem ?>"
+        },
+        legend: {
+            layout: (isSmallScreen() ? "horizontal" : "vertical"),
+            align: (isSmallScreen() ? "center" : "right"),
+            verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
+            floating: false,
+            borderWidth: 1,
+        },
+        xAxis: {
+            title: {
+                text: "Week of registration"
+            },
+            allowDecimals: false,
+            plotBands: [{
+                from: <?php echo $instruction_week ?>,
+                to: <?php echo $last_week ?>,
+                color: "rgba(68, 170, 213, 0.2)",
+                label: {
+                    text: "Classes in session"
+                }
+            }]
+        },
+        yAxis: {
+            title: {
+                text: "Number of available sections"
+            },
+            allowDecimals: false
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: " sections"
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
             }
-        }]
-    },
-    yAxis: {
-        title: {
-            text: "Number of available sections"
         },
-        allowDecimals: false
-    },
-    tooltip: {
-        shared: true,
-        valueSuffix: " sections"
-    },
-    credits: {
-        enabled: false
-    },
-    plotOptions: {
-        areaspline: {
-            fillOpacity: 0.5
-        }
-    },
-    series: <?php echo json_encode($series_list) ?>
+        series: <?php echo json_encode($series_list) ?>
+    });
 });
 
 </script>
