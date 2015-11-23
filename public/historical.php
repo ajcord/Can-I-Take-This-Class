@@ -92,13 +92,17 @@ foreach ($semesters as $curr_sem) {
 
 <script>
 
+//Hide the "no data" message temporarily
+Highcharts.setOptions({
+    lang: {
+        noData: ""
+    }
+});
+
 //Dummy chart for initial loading message
 $("#chart-container").highcharts({
     title: {
-        text: "<?php echo $chart_title ?>"
-    },
-    subtitle: {
-        text: "<?php echo $sem ?>"
+        text: ""
     }
 })
 
@@ -164,6 +168,13 @@ if (is_null($subject_code) && is_null($course_num)) {
 function isSmallScreen() {
     return $(".device-sm").is(":visible");
 }
+
+//Hide the "no data" message temporarily
+Highcharts.setOptions({
+    lang: {
+        noData: "No data for the given class"
+    }
+});
 
 //Actual chart
 $("#chart-container").highcharts({
