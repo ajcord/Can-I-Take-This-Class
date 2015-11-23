@@ -102,7 +102,7 @@ foreach ($semesters_offered as $curr_sem) {
 }
 
 if ($not_offered) {
-    echo "<b>No semesters on record</b>"
+    echo "<b>No semesters on record</b>";
 }
 
 ?>
