@@ -57,7 +57,11 @@ $instruction_week = floor(date_diff(new DateTime($instruction_date),
                 <div class="col-md-6">
                     <h2>Search for a class or subject</h2>
                     <div class="input-group col-md-12">
-                        <input id="search-field" name="q" type="text" class="form-control input-lg" placeholder="e.g. CS 225, PHYS, etc." />
+                        <input id="search-field" name="q" type="text" class="form-control input-lg" placeholder="e.g. CS 225, PHYS, etc."
+<?php if (!is_null($_GET["q"])): ?>
+                            value="<?php echo $_GET['q'] ?>"
+<?php endif ?>
+                        />
 <?php if (!is_null($_GET["semester"])): ?>
                         <input type="hidden" name="semester" value="<?php echo $_GET['semester'] ?>" />
 <?php endif ?>
