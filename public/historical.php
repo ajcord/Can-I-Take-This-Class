@@ -45,7 +45,8 @@ if (is_null($start_date)) {
 }
 
 //Calculate which week instruction begins in
-$instruction_week = floor(date_diff($instruction_date, $start_date)/7);
+$instruction_week = floor(date_diff(new DateTime($instruction_date),
+                                    new DateTime($start_date))/7);
 
 ?>
 
