@@ -6,8 +6,9 @@ include "../templates/analyze.php";
 
 $q = mysql_real_escape_string($_GET["q"]);
 $sem = mysql_real_escape_string($_GET["semester"]);
-$start_date = NULL;
 $semesters = array();
+$start_date = NULL;
+$most_recent_start_date = NULL;
 
 //If no semester is given, pick the latest one
 $pick_last_semester = false;
@@ -21,18 +22,31 @@ $semesters_retval = get_semesters_before_date(date("Y-m-d"));
 while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     $curr_sem = $semester_row["semester"];
+    $curr_start_date = $semester_row["date"];
 
     array_push($semesters, $curr_sem);
 
+    $most_recent_start_date = $curr_start_date;
+
     if ($curr_sem == $sem) {
-        $start_date = $semester_row["date"];
+        $start_date = $curr_start_date;
     }
 
     if ($pick_last_semester) {
         $sem = $curr_sem;
-        $start_date = $semester_row["date"];
+        $start_date = $curr_start_date;
     }
 }
+
+//Put the most recent semesters first
+$semesters = array_reverse($semesters);
+
+//If the semester given is not valid, pick the most recent one
+if (is_null($start_date)) {
+    $sem = $semesters[0];
+    $start_date = $most_recent_start_date;
+}
+
 ?>
 
 <div class="container">
