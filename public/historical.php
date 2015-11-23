@@ -8,7 +8,7 @@ $q = mysql_real_escape_string($_GET["q"]);
 $sem = mysql_real_escape_string($_GET["semester"]);
 $semesters = array();
 $start_date = NULL;
-$most_recent_start_date = NULL;
+$instruction_date = NULL;
 
 //If no semester is given, pick the latest one
 $pick_last_semester = false;
@@ -23,18 +23,14 @@ while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
 
     $curr_sem = $semester_row["semester"];
     $curr_start_date = $semester_row["date"];
+    $curr_instruction_date = $semester_row["instructiondate"];
 
     array_push($semesters, $curr_sem);
 
-    $most_recent_start_date = $curr_start_date;
-
-    if ($curr_sem == $sem) {
-        $start_date = $curr_start_date;
-    }
-
-    if ($pick_last_semester) {
+    if ($curr_sem == $sem || $pick_last_semester) {
         $sem = $curr_sem;
         $start_date = $curr_start_date;
+        $instruction_date = $curr_instruction_date;
     }
 }
 
@@ -43,9 +39,13 @@ $semesters = array_reverse($semesters);
 
 //If the semester given is not valid, pick the most recent one
 if (is_null($start_date)) {
-    $sem = $semesters[0];
-    $start_date = $most_recent_start_date;
+    $sem = $semester_row["semester"];
+    $start_date = $semester_row["date"];
+    $instruction_date = $semester_row["instructiondate"];
 }
+
+//Calculate which week instruction begins in
+$instruction_week = floor(date_diff($instruction_date, $start_date)/7);
 
 ?>
 
@@ -77,7 +77,7 @@ if (is_null($start_date)) {
 <?php
 
 //Print the semester links
-foreach (array_reverse($semesters) as $curr_sem) {
+foreach ($semesters as $curr_sem) {
     if ($curr_sem == $sem) {
         echo "<b>$curr_sem</b> ";
     } else {
@@ -169,7 +169,12 @@ $(function () {
             title: {
                 text: "Week of registration"
             },
-            allowDecimals: false
+            allowDecimals: false,
+            plotBands: [{
+                from: <?php echo $instruction_week ?>,
+                to: <?php echo $last_week ?>,
+                color: 'rgba(68, 170, 213, 0.2)'
+            }]
         },
         yAxis: {
             title: {
