@@ -207,7 +207,9 @@ $("#chart-container").highcharts({
             from: <?php echo $instruction_week ?>,
             to: <?php echo $last_week ?>,
             color: "rgba(68, 170, 213, 0.2)",
-            label: "Classes in session"
+            label: {
+                text: "Classes in session"
+            }
         }]
     },
     yAxis: {
