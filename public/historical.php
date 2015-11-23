@@ -173,6 +173,14 @@ if (is_null($subject_code) && is_null($course_num)) {
     $chart_title = "University of Illinois";
 }
 
+if (is_null($instruction_week)) {
+    $instruction_week = "undefined";
+}
+
+if (is_null($last_week)) {
+    $last_week = "undefined";
+}
+
 ?>
 
 
@@ -218,8 +226,8 @@ $(function() {
             },
             allowDecimals: false,
             plotBands: [{
-                from: <?php echo $instruction_week or "undefined" ?>,
-                to: <?php echo $last_week or "undefined" ?>,
+                from: <?php echo $instruction_week ?>,
+                to: <?php echo $last_week ?>,
                 color: "rgba(68, 170, 213, 0.2)",
                 label: {
                     text: "Classes in session"
