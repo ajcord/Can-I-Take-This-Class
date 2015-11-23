@@ -10,6 +10,7 @@ $sem = mysql_real_escape_string($_GET["semester"]);
 $semesters_offered = array();
 $start_date = NULL;
 $instruction_date = NULL;
+$instruction_week = 0;
 
 $parsed = split_course($q);
 $subject_code = $parsed["subject"];
