@@ -82,6 +82,10 @@ foreach($course_list as $course) {
             }
         }
     }
+
+    if (mysql_num_rows($semesters_retval) == 0) {
+        $courses_data[$course]["error"] = "Course not found";
+    }
 }
 
 echo json_encode($courses_data);
