@@ -22,6 +22,7 @@ function get_semesters_before_date($date, $subjectcode, $coursenumber) {
         $semesters_sql .= "where subjectcode='$subjectcode' ";
         if (!is_null($coursenumber)) {
             $semesters_sql .= "and coursenumber='$coursenumber'";
+        }
     }
 
     $semesters_retval = mysql_query($semesters_sql)
