@@ -24,40 +24,41 @@ if (is_null($_GET["semester"])) {
 //Get the start date of the given semester
 $semesters_retval = get_semesters_before_date(date("Y-m-d"), $subject_code, $course_num);
 
-while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
-
-    $curr_sem = $semester_row["semester"];
-    $curr_start_date = $semester_row["date"];
-    $curr_instruction_date = $semester_row["instructiondate"];
-
-    array_push($semesters_offered, $curr_sem);
-
-    if ($curr_sem == $sem || $pick_last_semester) {
-        $sem = $curr_sem;
-        $start_date = $curr_start_date;
-        $instruction_date = $curr_instruction_date;
-    }
-}
-
 //Check whether the course was offered at all
 $not_offered = false;
-if (is_null($semester_row)) {
+if (mysql_num_rows($semesters_retval) == 0) {
     $not_offered = true;
+} else {
+
+    while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+
+        $curr_sem = $semester_row["semester"];
+        $curr_start_date = $semester_row["date"];
+        $curr_instruction_date = $semester_row["instructiondate"];
+
+        array_push($semesters_offered, $curr_sem);
+
+        if ($curr_sem == $sem || $pick_last_semester) {
+            $sem = $curr_sem;
+            $start_date = $curr_start_date;
+            $instruction_date = $curr_instruction_date;
+        }
+    }
+
+    //Put the most recent semesters first
+    $semesters_offered = array_reverse($semesters_offered);
+
+    //If the semester given is not valid, pick the most recent one
+    if (is_null($start_date)) {
+        $sem = $semester_row["semester"];
+        $start_date = $semester_row["date"];
+        $instruction_date = $semester_row["instructiondate"];
+    }
+
+    //Calculate which week instruction begins in
+    $instruction_week = floor(date_diff(new DateTime($instruction_date),
+                                        new DateTime($start_date))->days/7);
 }
-
-//Put the most recent semesters first
-$semesters_offered = array_reverse($semesters_offered);
-
-//If the semester given is not valid, pick the most recent one
-if (is_null($start_date)) {
-    $sem = $semester_row["semester"];
-    $start_date = $semester_row["date"];
-    $instruction_date = $semester_row["instructiondate"];
-}
-
-//Calculate which week instruction begins in
-$instruction_week = floor(date_diff(new DateTime($instruction_date),
-                                    new DateTime($start_date))->days/7);
 
 ?>
 
