@@ -23,7 +23,7 @@
         <br><br>
 
         <p>Find out whether you'll get into the classes you want.</p>
-        <a class="btn btn-primary" href="my_classes.php">My Classes</a>
+        <a class="btn btn-default" href="my_classes.php">My Classes</a>
         <a class="btn btn-default" href="courses.php">View Courses</a>
         <a class="btn btn-default" href="about.php">Learn More</a>
     </div>
