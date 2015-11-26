@@ -251,7 +251,7 @@ $(function() {
             areaspline: {
                 fillOpacity: 0.5
             },
-            line: {
+            series: {
                 marker: {
                     enabled: false
                 }
