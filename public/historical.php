@@ -250,6 +250,11 @@ $(function() {
         plotOptions: {
             areaspline: {
                 fillOpacity: 0.5
+            },
+            line: {
+                marker: {
+                    enabled: false
+                }
             }
         },
         series: <?php echo json_encode($series_list) ?>
