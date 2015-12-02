@@ -16,10 +16,6 @@ if (substr($sem, 0, 2) == "sp") {
     $term = "spring";
 }
 
-echo $sem."\n".$term." ".$year."\n";
-
-return;
-
 echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
 
 //Get a list of all the departments
