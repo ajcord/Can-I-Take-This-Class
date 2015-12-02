@@ -94,7 +94,7 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                 }
                 
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
-                    "values ('$crn', '$sem', '$avail_num')";
+                    "values ('$crn', '$sem', '$avail_num')");
                 if (!$retval) {
                     echo "\tCould not enter availability data for $crn: ".mysql_error()."\n";
                 }
