@@ -8,7 +8,13 @@ $delete_course = $_GET["delete_course"];
 
 $course = mysql_real_escape_string($_GET["course"]);
 $id = $_SESSION["id"];
-$sem = "sp16";
+
+$sem_sql = "select semester from semesters where ".
+                "date_add(now(), interval 7 day) >= registrationdate ".
+                "order by registrationdate desc limit 1";
+$sem_retval = mysql_query($sem_sql);
+$sem = mysql_fetch_assoc($sem_retval)["semester"];
+
 $course = str_replace(' ', '', $course);
 $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
 $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));

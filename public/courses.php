@@ -12,7 +12,11 @@ Subject:
 include "../templates/connect_mysql.php";
 
 //Get a list of subjects for next semester
-$sql = "select subjectcode from sections where semester='sp16' group by subjectcode";
+$sql = "select subjectcode from sections where semester=(".
+            "select semester from semesters where ".
+                "date_add(now(), interval 7 day) >= registrationdate ".
+                "order by registrationdate desc limit 1)".
+            "group by subjectcode";
 
 $retval = mysql_query($sql);
 if (!$retval) {

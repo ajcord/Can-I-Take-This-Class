@@ -42,17 +42,14 @@ include "../templates/connect_mysql.php";
 //Get the user id
 $id = $_SESSION["id"];
 
-//Get the user's registration date
-// $date_sql = "select registers from users where userid='$id'";
-
-// $date_retval = mysql_query($date_sql)
-//     or die("Could not get registration date: ".mysql_error());
-
-// $date_row = mysql_fetch_assoc($date_retval);
-// $date = $date_row["registers"];
+//Determine which term and year to query
+$sem_sql = "select semester from semesters where ".
+                "date_add(now(), interval 7 day) >= registrationdate ".
+                "order by registrationdate desc limit 1";
+$sem_retval = mysql_query($sem_sql);
+$sem = mysql_fetch_assoc($sem_retval)["semester"];
 
 //Get a list of courses the user wants
-$sem = "sp16";
 $wanted_course_sql = "select subjectcode, coursenumber from wants where userid=$id and semester='$sem'";
 
 $wanted_course_retval = mysql_query($wanted_course_sql)

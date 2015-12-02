@@ -6,7 +6,7 @@ include "../templates/connect_mysql.php";
 //Determine which term and year to query
 $sem_sql = "select semester from semesters where ".
                 "date_add(now(), interval 7 day) >= registrationdate ".
-                "order by registrationdate desc";
+                "order by registrationdate desc limit 1";
 $sem_retval = mysql_query($sem_sql);
 $sem = mysql_fetch_assoc($sem_retval)["semester"];
 
