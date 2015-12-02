@@ -4,14 +4,26 @@ include "../templates/connect_mysql.php";
 
 
 //Determine which term and year to query
-$term = "spring";
-$year = "2016";
-$sem = substr($term, 0, 2) . substr($year, 2, 2);
+$sem_sql = "select semester from semesters where ".
+                "date_add(now(), interval 7 day) >= registrationdate ".
+                "order by registrationdate desc";
+$sem_retval = mysql_query($sem_sql);
+$sem = mysql_fetch_assoc($sem_retval)["semester"];
+
+$term = "fall";
+$year = "20".substr($sem, 2, 2);
+if (substr($sem, 0, 2) == "sp") {
+    $term = "spring";
+}
+
+echo $sem."\n".$term." ".$year."\n";
+
+return;
 
 echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
 
 //Get a list of all the departments
-$catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term.".xml");
+$catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/$year/$term.xml");
 $catalog_parsed = new SimpleXMLElement($catalog_data);
 foreach ($catalog_parsed->subjects->subject as $subj) {
     $subject = mysql_real_escape_string($subj["id"]);
@@ -20,13 +32,13 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
 
     //Get the schedule data
     try {
-        $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/".$year."/".$term."/".$subject.".xml?mode=cascade");
+        $data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/$year/$term/$subject.xml?mode=cascade");
         $parsed = new SimpleXMLElement($data);
 
         //Get all the sections currently in this subject (to compare later)
-        $retval = mysql_query("select crn from sections where subjectcode=\"".$subject."\" and semester=\"".$sem."\"");
+        $retval = mysql_query("select crn from sections where subjectcode='$subject' and semester='$sem'");
         if (!$retval) {
-            echo "\tCould not get subject data for ".$subject.": ".mysql_error()."\n";
+            echo "\tCould not get subject data for $subject: ".mysql_error()."\n";
         }
         $removed_crns = array();
         while($row = mysql_fetch_assoc($retval)) {
@@ -73,27 +85,27 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
 
                 // Insert the data into MySQL
                 $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name, sectiontype) ".
-                    "values (".$crn.", \"".$sem."\", ".$course_num.", \"".$subject."\", \"".$course_name."\", \"".$section_type."\")".
+                    "values ('$crn', '$sem', '$course_num', '$subject', '$course_name', '$section_type')".
                     "on duplicate key update ".
                     "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
                     "subjectcode=values(subjectcode), name=values(name), sectiontype=values(sectiontype)");
                 if (!$retval) {
-                    echo "\tCould not enter section data for ".$crn.": ".mysql_error()."\n";
+                    echo "\tCould not enter section data for $crn: ".mysql_error()."\n";
                 }
                 
                 $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
-                    "values (".$crn.", \"".$sem."\", ".$avail_num.")");
+                    "values ('$crn', '$sem', '$avail_num')";
                 if (!$retval) {
-                    echo "\tCould not enter availability data for ".$crn.": ".mysql_error()."\n";
+                    echo "\tCould not enter availability data for $crn: ".mysql_error()."\n";
                 }
             }
         }
 
         // Delete all removed CRNs
         foreach ($removed_crns as $crn) {
-            $retval = mysql_query("delete from sections where crn=".mysql_real_escape_string($crn)." and semester=\"".$sem."\"");
+            $retval = mysql_query("delete from sections where crn=".mysql_real_escape_string($crn)." and semester='$sem'");
             if (!$retval) {
-                echo "\tCould not remove section data for ".$crn.": ".mysql_error()."\n";
+                echo "\tCould not remove section data for $crn: ".mysql_error()."\n";
             }
         }
 
