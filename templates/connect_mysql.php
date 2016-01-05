@@ -1,8 +1,10 @@
 <?php
-//Connect to MySQL
-$link = mysql_connect("engr-cpanel-mysql.engr.illinois.edu", "classmat_www", "ClassMaster");
-if (!$link) {
-    die("Could not connect to MySQL: " . mysql_error());
-}
-mysql_select_db("classmat_411");
+
+include "../../config.php";
+
+$link = mysql_connect($db_config["server"], $db_config["user"], $db_config["pass"])
+            or die("Could not connect to MySQL: " . mysql_error());
+
+mysql_select_db($db_config["database"]);
+
 ?>
