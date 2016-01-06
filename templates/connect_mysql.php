@@ -1,6 +1,6 @@
 <?php
 
-include "../../config.php";
+include __DIR__."/../../config.php";
 
 $dbh = null;
 

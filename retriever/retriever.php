@@ -1,6 +1,6 @@
 <?php
 
-include "../templates/connect_mysql.php";
+include __DIR__."/../templates/connect_mysql.php";
 
 
 //Determine which term and year to query
