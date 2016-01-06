@@ -3,55 +3,68 @@
 /**
  * Gets a list of all semesters before the given date that the class was offered.
  *
+ * @param      PDO     $dbh             The database handle
  * @param      string  $date            The date to check in the form YYYY-MM-DD
  * @param      string  $subjectcode     The subject code of the course to check
  * @param      int     $coursenumber    The course number to check
  *
  * @return     mixed           The query result
  */
-function get_semesters_before_date($date, $subjectcode, $coursenumber) {
+function get_semesters_before_date($dbh, $date, $subjectcode, $coursenumber) {
 
     $semesters_sql = "select distinct semester, date, instructiondate from ".
                         "(select distinct t1.semester, t1.registrationdate as date, t1.instructiondate ".
                             "from semesters as t1 inner join semesters as t2 ".
                             "on t1.registrationdate < t2.registrationdate ".
-                            "where t2.registrationdate <= '$date') as t3".
+                            "where t2.registrationdate <= :date) as t3".
                         "inner join sections using(semester) ";
 
     if (!is_null($subjectcode)) {
-        $semesters_sql .= "where subjectcode='$subjectcode' ";
+        $semesters_sql .= "where subjectcode=:subjectcode ";
         if (!is_null($coursenumber)) {
-            $semesters_sql .= "and coursenumber='$coursenumber'";
+            $semesters_sql .= "and coursenumber=:coursenumber";
         }
     }
 
     $semesters_sql .= " order by date";
 
-    $semesters_retval = mysql_query($semesters_sql)
-        or die("Could not get semester dates: ".mysql_error());
+    $stmt = $dbh->prepare($semesters_sql);
+    $stmt->bindParam(":date", $date);
 
-    return $semesters_retval;
+    if (!is_null($subjectcode)) {
+        $stmt->bindParam(":subjectcode", $subjectcode);
+        if (!is_null($coursenumber)) {
+            $stmt->bindParam(":coursenumber", $coursenumber);
+        }
+    }
+
+    $stmt->execute();
+
+    return $stmt;
 }
 
 /**
  * Gets the number of days into the registration period of the given date.
  *
+ * @param      PDO     $dbh    The database handle
  * @param      string  $date   The date to calculate
  *
  * @return     DateInterval     The offset from the beginning of the previous
  *                              registration period
  */
-function get_offset_into_registration($date) {
+function get_offset_into_registration($dbh, $date) {
 
     //Find the semester corresponding to the given date
     $current_semester_sql = "select semester, registrationdate as date from semesters ".
-                                "where registrationdate <= '$date' ".
+                                "where registrationdate <= :date ".
                                 "order by registrationdate desc limit 1";
 
-    $current_semester_retval = mysql_query($current_semester_sql)
-        or die("Could not get current semester: ".mysql_error());
+    $stmt = $dbh->prepare($current_semester_sql);
+    $stmt->bindParam(":date", $date);
 
-    $current_semester_row = mysql_fetch_assoc($current_semester_retval);
+    $stmt->execute();
+
+    $current_semester_row = $stmt->fetch();
 
     //Calculate the offset into the registration period
     return date_diff(new DateTime($current_semester_row["date"]), new DateTime($date));
@@ -60,23 +73,27 @@ function get_offset_into_registration($date) {
 /**
  * Gets the date and week number of the last data for the given semester.
  *
+ * @param      PDO     $dbh    The database handle
  * @param      string  $sem    The semester to check
  * @param      string  $date   The beginning of the registration period
  *                             in YYYY-MM-DD form
  *
  * @return     array           An array of the form ["week" => lastWeekNum, "date" => lastDate]
  */
-function get_last_week($sem, $date) {
+function get_last_week($dbh, $sem, $date) {
 
     //Fetches a sample CRN to make the availability query much faster
-    $last_week_sql = "select floor(datediff(max(timestamp), '$date')/7) as week ".
-                        "from availability where semester='$sem' and ".
-                        "crn=(select crn from sections where semester='$sem' limit 1)";
+    $last_week_sql = "select floor(datediff(max(timestamp), :date)/7) as week ".
+                        "from availability where semester=:sem and ".
+                        "crn=(select crn from sections where semester=:sem limit 1)";
 
-    $last_week_retval = mysql_query($last_week_sql)
-        or die("Could not get last week: ".mysql_error());
+    $stmt = $dbh->prepare($last_week_sql);
+    $stmt->bindParam(":date", $date);
+    $stmt->bindParam(":sem", $sem);
 
-    return mysql_fetch_assoc($last_week_retval);
+    $stmt->execute();
+
+    return $stmt->fetch();
 }
 
 /**
@@ -105,14 +122,14 @@ function split_course($course) {
     //Check if the number is present or not
     if (ctype_digit(substr($course, strlen($course) - 3))) {
 
-        $subject_code = mysql_real_escape_string(strtoupper(substr($course, 0, strlen($course) - 3)));
-        $course_num = mysql_real_escape_string(substr($course, strlen($course) - 3));
+        $subject_code = strtoupper(substr($course, 0, strlen($course) - 3));
+        $course_num = substr($course, strlen($course) - 3);
 
     } else if (strlen($course) > 0) {
 
         //Remove non-alpha characters from subject and assume number is 0
         preg_replace("/[^A-Za-z]/", "", $course);
-        $subject_code = mysql_real_escape_string(strtoupper($course));
+        $subject_code = strtoupper($course);
         $course_num = NULL;
 
     } else {
@@ -128,6 +145,7 @@ function split_course($course) {
 /**
  * Queries enrollment data for the given parameters.
  *
+ * @param      PDO     $dbh            The database handle
  * @param      string  $sem            The semester to query
  * @param      string  $start_date     The start date of the registration period
  * @param      string  $adjusted_date  The date to request, or NULL if not applicable
@@ -141,13 +159,13 @@ function split_course($course) {
  *
  * @return     mixed                   The query result
  */
-function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_date",
+function query_semester($dbh, $sem, $start_date, $adjusted_date = NULL, $stat = "on_date",
                         $subject_code = NULL, $course_num = NULL, $only_open = false) {
 
     $enrollment_sql = "select ";
 
     if ($stat == "everything") {
-        $enrollment_sql .= "floor(datediff(timestamp, '$start_date')/7) as week, ";
+        $enrollment_sql .= "floor(datediff(timestamp, :start_date)/7) as week, ";
     }
 
     $enrollment_sql .= "sectiontype as type, ";
@@ -158,26 +176,26 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
 
     $enrollment_sql .= "count(enrollmentstatus) as count ".
                         "from sections inner join availability using(crn, semester) ".
-                        "where semester='$sem' ";
+                        "where semester=:sem ";
 
     if (!is_null($subject_code)) {
-        $enrollment_sql .= "and subjectcode='$subject_code' ";
+        $enrollment_sql .= "and subjectcode=:subject_code ";
         
         if (!is_null($course_num)) {
-            $enrollment_sql .= "and coursenumber='$course_num' ";
+            $enrollment_sql .= "and coursenumber=:course_num ";
         }
     }
 
     switch($stat) {
         case "on_date":
-            $enrollment_sql .= "and timestamp<date_add('$adjusted_date', interval 4 day) ".
-                               "and timestamp>date_sub('$adjusted_date', interval 3 day) ";
+            $enrollment_sql .= "and timestamp<date_add(:adjusted_date, interval 4 day) ".
+                               "and timestamp>date_sub(:adjusted_date, interval 3 day) ";
            break;
        case "after_date":
-            $enrollment_sql .= "and timestamp>='$adjusted_date' ";
+            $enrollment_sql .= "and timestamp>=:adjusted_date ";
             break;
         case "everything":
-            $enrollment_sql .= "and timestamp>='$start_date' ";
+            $enrollment_sql .= "and timestamp>=:start_date ";
             break;
     }
 
@@ -209,10 +227,31 @@ function query_semester($sem, $start_date, $adjusted_date = NULL, $stat = "on_da
         $enrollment_sql .= ", status";
     }
 
-    $enrollment_retval = mysql_query($enrollment_sql)
-        or die("Could not get availability data: ".mysql_error());
+    $stmt = $dbh->prepare($enrollment_sql);
 
-    return $enrollment_retval;
+    $stmt->bindParam(":sem", $sem);
+
+    if (!is_null($subject_code)) {
+        $stmt->bindParam(":subject_code", $subject_code);
+
+        if (!is_null($course_num)) {
+            $stmt->bindParam(":course_num", $course_num);
+        }
+    }
+
+    switch($stat) {
+        case "on_date":
+       case "after_date":
+            $stmt->bindParam(":adjusted_date", $adjusted_date);
+            break;
+        case "everything":
+            $stmt->bindParam(":start_date", $start_date);
+            break;
+    }
+
+    $stmt->execute();
+
+    return $stmt;
 }
 
 ?>

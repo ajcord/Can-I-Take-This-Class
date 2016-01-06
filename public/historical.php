@@ -5,7 +5,7 @@ include "../templates/connect_mysql.php";
 include "../templates/analyze.php";
 
 $q = $_GET["q"];
-$sem = mysql_real_escape_string($_GET["semester"]);
+$sem = $_GET["semester"];
 
 $semesters_offered = array();
 $start_date = NULL;
@@ -23,15 +23,15 @@ if (is_null($_GET["semester"])) {
 }
 
 //Get the start date of the given semester
-$semesters_retval = get_semesters_before_date(date("Y-m-d"), $subject_code, $course_num);
+$semesters_retval = get_semesters_before_date($dbh, date("Y-m-d"), $subject_code, $course_num);
 
 //Check whether the course was offered at all
 $not_offered = false;
-if (mysql_num_rows($semesters_retval) == 0) {
+if ($semesters_retval->rowCount() == 0) {
     $not_offered = true;
 } else {
 
-    while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+    while ($semester_row = $semesters_retval->fetch()) {
 
         $curr_sem = $semester_row["semester"];
         $curr_start_date = $semester_row["date"];
@@ -117,10 +117,10 @@ $("#chart-container").highcharts().showLoading();
 $series = array();
 $series_list = array();
 
-$enrollment_retval = query_semester($sem, $start_date, NULL, "everything",
+$enrollment_retval = query_semester($dbh, $sem, $start_date, NULL, "everything",
                         $subject_code, $course_num, true);
 
-while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
+while ($enrollment_row = $enrollment_retval->fetch()) {
 
     $week = $enrollment_row["week"];
     $type = $enrollment_row["type"];
@@ -130,7 +130,7 @@ while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
     $series[$type][$week] += $count;
 }
 
-$last_week = get_last_week($sem, $start_date)["week"];
+$last_week = get_last_week($dbh, $sem, $start_date)["week"];
 
 //Fill in empty weeks with zeroes and cut off the last week
 foreach ($series as $type => $data) {
@@ -206,8 +206,8 @@ $(function() {
             },
             allowDecimals: false,
             plotBands: [{
-                from: <?php echo $instruction_week ?>,
-                to: <?php echo $last_week ?>,
+                from: <?= $instruction_week ?>,
+                to: <?= $last_week ?>,
                 color: "rgba(68, 170, 213, 0.2)",
                 label: {
                     text: "Classes in session"

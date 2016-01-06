@@ -2,9 +2,12 @@
 
 include "../../config.php";
 
-$link = mysql_connect($db_config["server"], $db_config["user"], $db_config["pass"])
-            or die("Could not connect to MySQL: " . mysql_error());
+$dbh = null;
 
-mysql_select_db($db_config["database"]);
+try {
+    $dbh = new PDO("mysql:host={$db_config["server"]};dbname={$db_config["database"]}", $db_config["user"], $db_config["pass"]);
+} catch (PDOException $e) {
+    die("Error connecting to database: " . $e->getMessage());
+}
 
 ?>
