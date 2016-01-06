@@ -7,8 +7,8 @@ include "../templates/connect_mysql.php";
 $sem_sql = "select semester from semesters where ".
                 "date_add(now(), interval 7 day) >= registrationdate ".
                 "order by registrationdate desc limit 1";
-$sem_retval = mysql_query($sem_sql);
-$sem = mysql_fetch_assoc($sem_retval)["semester"];
+$sem_retval = $dbh->query($sem_sql);
+$sem = $sem_retval->fetch()["semester"];
 
 $term = "fall";
 $year = "20".substr($sem, 2, 2);
@@ -22,7 +22,7 @@ echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
 $catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/$year/$term.xml");
 $catalog_parsed = new SimpleXMLElement($catalog_data);
 foreach ($catalog_parsed->subjects->subject as $subj) {
-    $subject = mysql_real_escape_string($subj["id"]);
+    $subject = $subj["id"];
 
     echo $subject."...";
 
@@ -32,20 +32,21 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
         $parsed = new SimpleXMLElement($data);
 
         //Get all the sections currently in this subject (to compare later)
-        $retval = mysql_query("select crn from sections where subjectcode='$subject' and semester='$sem'");
-        if (!$retval) {
-            echo "\tCould not get subject data for $subject: ".mysql_error()."\n";
-        }
+        $retval = $dbh->prepare("select crn from sections where subjectcode=:subject and semester=:sem");
+        $retval->bindParam(":subject", $subject);
+        $retval->bindParam(":sem", $sem);
+        $retval->execute();
+
         $removed_crns = array();
-        while($row = mysql_fetch_assoc($retval)) {
+        while($row = $retval->fetch()) {
             array_push($removed_crns, $row["crn"]);
         }
 
         //Parse the XML data
         foreach ($parsed->cascadingCourses->cascadingCourse as $c) {
             foreach($c->detailedSections->detailedSection as $s) {
-                $crn = mysql_real_escape_string($s["id"]);
-                $availability = mysql_real_escape_string($s->enrollmentStatus);
+                $crn = $s["id"];
+                $availability = $s->enrollmentStatus;
                 $avail_num = 0;
                 switch ($availability) {
                     case "Closed":
@@ -68,41 +69,48 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
                         break;
                 }
 
-                $course_num = mysql_real_escape_string($s->parents->course["id"]);
-                $section_num = mysql_real_escape_string($s->sectionNumber);
-                $course_name = mysql_real_escape_string($c->label);
+                $course_num = $s->parents->course["id"];
+                $section_num = $s->sectionNumber;
+                $course_name = $c->label;
                 $section_type = "";
                 if ($s->meetings->meeting) {
-                    $section_type = mysql_real_escape_string($s->meetings->meeting[0]->type);
+                    $section_type = $s->meetings->meeting[0]->type;
                 }
 
                 // Remove the section from the list of removed CRNs
                 $removed_crns = array_diff($removed_crns, [$crn]);
 
                 // Insert the data into MySQL
-                $retval = mysql_query("insert into sections (crn, semester, coursenumber, subjectcode, name, sectiontype) ".
-                    "values ('$crn', '$sem', '$course_num', '$subject', '$course_name', '$section_type')".
+                $stmt = $dbh->prepare("insert into sections (crn, semester, coursenumber, subjectcode, name, sectiontype) ".
+                    "values (:crn, :sem, :course_num, :subject, :course_name, :section_type)".
                     "on duplicate key update ".
                     "crn=values(crn), semester=values(semester), coursenumber=values(coursenumber), ".
                     "subjectcode=values(subjectcode), name=values(name), sectiontype=values(sectiontype)");
-                if (!$retval) {
-                    echo "\tCould not enter section data for $crn: ".mysql_error()."\n";
-                }
+
+                $stmt->bindParam(":crn", $crn);
+                $stmt->bindParam(":sem", $sem);
+                $stmt->bindParam(":course_num", $course_num);
+                $stmt->bindParam(":subject", $subject);
+                $stmt->bindParam(":course_name", $course_name);
+                $stmt->bindParam(":section_type", $section_type);
+                $stmt->execute();
                 
-                $retval = mysql_query("insert into availability (crn, semester, enrollmentstatus) ".
-                    "values ('$crn', '$sem', '$avail_num')");
-                if (!$retval) {
-                    echo "\tCould not enter availability data for $crn: ".mysql_error()."\n";
-                }
+                $stmt = $dbh->prepare("insert into availability (crn, semester, enrollmentstatus) ".
+                    "values (:crn, :sem, :avail_num)");
+
+                $stmt->bindParam(":crn", $crn);
+                $stmt->bindParam(":sem", $sem);
+                $stmt->bindParam(":avail_num", $avail_num);
+                $stmt->execute();
             }
         }
 
         // Delete all removed CRNs
         foreach ($removed_crns as $crn) {
-            $retval = mysql_query("delete from sections where crn=".mysql_real_escape_string($crn)." and semester='$sem'");
-            if (!$retval) {
-                echo "\tCould not remove section data for $crn: ".mysql_error()."\n";
-            }
+            $retval = $dbh->prepare("delete from sections where crn=:crn and semester=:sem");
+            $stmt->bindParam(":crn", $crn);
+            $stmt->bindParam(":sem", $sem);
+            $stmt->execute();
         }
 
         echo "done";
@@ -113,6 +121,5 @@ foreach ($catalog_parsed->subjects->subject as $subj) {
     echo "\n";
 }
 
-mysql_close($link);
 echo "\nFinished retrieval at ".date("Y-m-d H:i:s")."\n\n\n";
 ?>

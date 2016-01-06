@@ -6,10 +6,10 @@ include "../templates/analyze.php";
 $courses = $_GET["courses"];
 $courses_data = array();
 $course_list = explode(",", $courses);
-$date = mysql_real_escape_string(urldecode($_GET["date"]));
+$date = urldecode($_GET["date"]);
 
 try {
-    $days_after_registration = get_offset_into_registration($date);
+    $days_after_registration = get_offset_into_registration($dbh, $date);
 } catch (Exception $e) {
     return ["error" => "Unable to parse date: $date"];
 }
@@ -22,10 +22,10 @@ foreach($course_list as $course) {
     $subject_code = $split["subject"];
     $course_num = $split["number"];
 
-    $semesters_retval = get_semesters_before_date($date, $subject_code, $course_num);
+    $semesters_retval = get_semesters_before_date($dbh, $date, $subject_code, $course_num);
     $sem_count = 0;
 
-    while ($semester_row = mysql_fetch_assoc($semesters_retval)) {
+    while ($semester_row = $semesters_retval->fetch()) {
 
         $sem = $semester_row["semester"];
         $start_date = $semester_row["date"];
@@ -33,13 +33,13 @@ foreach($course_list as $course) {
 
         foreach(["on_date", "after_date"] as $stat) {
 
-            $enrollment_retval = query_semester($sem, $start_date, $adjusted_date,
+            $enrollment_retval = query_semester($dbh, $sem, $start_date, $adjusted_date,
                                     $stat, $subject_code, $course_num, false);
 
             $num_available_sections = array();
             $total_sections = array();
 
-            while ($enrollment_row = mysql_fetch_assoc($enrollment_retval)) {
+            while ($enrollment_row = $enrollment_retval->fetch()) {
 
                 $type = $enrollment_row["type"];
                 $status = $enrollment_row["status"];
@@ -83,13 +83,11 @@ foreach($course_list as $course) {
         $sem_count++;
     }
 
-    if (mysql_num_rows($semesters_retval) == 0) {
+    if ($semesters_retval->rowCount() == 0) {
         $courses_data[$course]["error"] = "Course not found";
     }
 }
 
 echo json_encode($courses_data);
-
-mysql_close($link);
 
 ?>
