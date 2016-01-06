@@ -2,7 +2,12 @@
 
 <div class="container">
     <div class="jumbotron text-center">
-        <h1>ClassMaster</h1>
+        <h1>Can I Take This Class?</h1>
+
+        <p>
+            Find out whether you'll get into the classes you want.
+            <a href="about.php">Learn More</a>
+        </p>
         
         <form class="form-horizontal" action="historical.php" method="GET">
             <div class="row">
@@ -19,13 +24,6 @@
                 </div>
             </div>
         </form>
-
-        <br><br>
-
-        <p>Find out whether you'll get into the classes you want.</p>
-        <a class="btn btn-default" href="my_classes.php">My Classes</a>
-        <a class="btn btn-default" href="courses.php">View Courses</a>
-        <a class="btn btn-default" href="about.php">Learn More</a>
     </div>
 </div>
 
