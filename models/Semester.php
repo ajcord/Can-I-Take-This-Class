@@ -69,7 +69,7 @@ class Semester {
         
         $stmt->execute();
 
-        return new DateTime($stmt->fetch()["registrationdate"]);
+        return new DateTime($stmt->fetchColumn());
     }
 
     /**
@@ -83,7 +83,7 @@ class Semester {
         
         $stmt->execute();
 
-        return new DateTime($stmt->fetch()["instructiondate"]);
+        return new DateTime($stmt->fetchColumn());
     }
 
     /**
@@ -102,7 +102,7 @@ class Semester {
         $date = $this->getRegistrationDate()->format("Y-m-d");
         $stmt->execute();
 
-        return intval($stmt->fetch()["week"]);
+        return intval($stmt->fetchColumn());
     }
 }
 
