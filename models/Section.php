@@ -83,20 +83,19 @@ class Section {
      */
     private function getColumn($col) {
 
-        $sql = "SELECT :col FROM sections WHERE crn=:crn AND semester=:sem";
+        $sql = "SELECT $col FROM sections WHERE crn=:crn AND semester=:sem";
         $stmt = $this->dbh->prepare($sql);
-        $stmt->bindParam(":col", $col);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
 
         $stmt->execute();
 
-        $row = $stmt->fetch();
-        if ($row == false) {
-            throw new Exception("CRN $crn does not exist in semester $sem");
+        $value = $stmt->fetchColumn();
+        if ($value === false) {
+            throw new Exception("CRN $this->crn does not exist in semester $sem");
         }
 
-        return $row[$col];
+        return $value;
     }
 
     /**
@@ -110,12 +109,11 @@ class Section {
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
-        $stmt->bindParam(":date", $dateString);
+        $stmt->bindParam(":date", $date->format("Y-m-d"));
 
-        $dateString = $date->format("Y-m-d");
         $stmt->execute();
 
-        return $stmt->fetch()["enrollmentstatus"];
+        return $stmt->fetchColumn();
     }
 
     /**
@@ -124,8 +122,8 @@ class Section {
     public function getAllAvailability() {
 
         $sql = "SELECT DATE(timestamp) AS date, enrollmentstatus FROM availability WHERE crn=:crn AND semester=:sem";
-        $stmt = $dbh->prepare($sql);
-        $stmt->bindValue(":crn", $crn);
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
 
         $stmt->execute();
