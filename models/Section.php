@@ -54,28 +54,28 @@ class Section {
      * Returns the subject code of the section.
      */
     public function getSubjectCode() {
-        return getColumn("subjectcode");
+        return $this->getColumn("subjectcode");
     }
 
     /**
      * Returns the course number of the section.
      */
     public function getCourseNumber() {
-        return intval(getColumn("coursenumber"));
+        return intval($this->getColumn("coursenumber"));
     }
 
     /**
      * Returns the type of the section.
      */
     public function getSectionType() {
-        return getColumn("sectiontype");
+        return $this->getColumn("sectiontype");
     }
 
     /**
      * Returns the name of the section.
      */
     public function getName() {
-        return getColumn("name");
+        return $this->getColumn("name");
     }
 
     /**
