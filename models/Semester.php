@@ -55,7 +55,7 @@ class Semester {
      * Returns a string representation of the course.
      */
     public function __toString() {
-        return getCode();
+        return $this->getCode();
     }
 
     /**
@@ -99,7 +99,7 @@ class Semester {
         $stmt->bindParam(":date", $date);
         $stmt->bindParam(":code", $this->code);
         
-        $date = getRegistrationDate()->format("Y-m-d");
+        $date = $this->getRegistrationDate()->format("Y-m-d");
         $stmt->execute();
 
         return intval($stmt->fetch()["week"]);
