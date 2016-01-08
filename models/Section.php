@@ -83,7 +83,12 @@ class Section {
      */
     private function getColumn($col) {
 
-        $sql = "SELECT $col FROM sections WHERE crn=:crn AND semester=:sem";
+        $sql = <<<SQL
+            SELECT $col
+            FROM sections
+            WHERE crn=:crn
+                AND semester=:sem
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
@@ -101,11 +106,17 @@ class Section {
     /**
      * Returns the availability of the section on the given date.
      * 
-     * @param DateTime $date The date the check
+     * @param DateTime $date The date to check
      */
     public function getAvailabilityOnDate($date) {
 
-        $sql = "SELECT enrollmentstatus FROM availability WHERE crn=:crn AND semester=:sem AND DATE(timestamp)=:date";
+        $sql = <<<SQL
+            SELECT enrollmentstatus
+            FROM availability
+            WHERE crn=:crn
+                AND semester=:sem
+                AND DATE(timestamp)=:date
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
@@ -121,7 +132,13 @@ class Section {
      */
     public function getAllAvailability() {
 
-        $sql = "SELECT DATE(timestamp) AS date, enrollmentstatus FROM availability WHERE crn=:crn AND semester=:sem";
+        $sql = <<<SQL
+            SELECT DATE(timestamp) AS date,
+                enrollmentstatus
+            FROM availability
+            WHERE crn=:crn
+                AND semester=:sem
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());

@@ -62,28 +62,32 @@ class Semester {
      * Returns the date that registration begins.
      */
     public function getRegistrationDate() {
-
-        $sql = "SELECT registrationdate FROM semesters WHERE semester=:code";
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->bindParam(":code", $this->code);
-        
-        $stmt->execute();
-
-        return new DateTime($stmt->fetchColumn());
+        return new DateTime($this->getColumn("registrationdate"));
     }
 
     /**
      * Returns the date that instruction begins.
      */
     public function getInstructionDate() {
+        return new DateTime($this->getColumn("instructiondate"));
+    }
 
-        $sql = "SELECT instructiondate FROM semesters WHERE semester=:code";
+    /**
+     * Gets the specified column for the semester.
+     */
+    private function getColumn($col) {
+
+        $sql =  <<<SQL
+            SELECT $col
+            FROM semesters
+            WHERE semester=:code
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(":code", $this->code);
         
         $stmt->execute();
 
-        return new DateTime($stmt->fetchColumn());
+        return new $stmt->fetchColumn();
     }
 
     /**
@@ -92,9 +96,17 @@ class Semester {
     public function getNumWeeks() {
 
         // Fetches a sample CRN to make the availability query much faster
-        $sql = "SELECT FLOOR(DATEDIFF(MAX(timestamp), :date)/7) AS week ".
-                    "FROM availability WHERE semester=:code AND ".
-                    "crn=(SELECT crn FROM sections WHERE semester=:code LIMIT 1)";
+        $sql = <<<SQL
+            SELECT FLOOR(DATEDIFF(MAX(timestamp), :date)/7) AS week
+            FROM availability
+            WHERE semester=:code
+                AND crn=(
+                    SELECT crn
+                    FROM sections
+                    WHERE semester=:code
+                    LIMIT 1
+                )
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindParam(":date", $date);
         $stmt->bindParam(":code", $this->code);
