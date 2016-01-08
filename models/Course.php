@@ -1,5 +1,7 @@
 <?php
 
+require_once "Section.php";
+
 /**
 * Represents a course and its historical availability data.
 */
@@ -43,21 +45,21 @@ class Course {
     /**
      * Returns an array of the course's sections for the given semester.
      * 
-     * @param string $sem The semester to check
+     * @param Semester $sem The semester to check
      */
-    public function getSections($sem) {
+    public function getSections($semester) {
 
         $sql = "SELECT crn FROM sections WHERE subjectcode=:subject_code AND coursenumber=:course_num AND semester=:sem";
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":subject_code", $this->subject_code);
         $stmt->bindValue(":course_num", $this->course_num);
-        $stmt->bindParam(":sem", $sem->getCode());
+        $stmt->bindParam(":sem", $semester->getCode());
 
         $stmt->execute();
 
         $sections = [];
         foreach ($stmt as $row) {
-            $sections[] = new Section($this->dbh, $row["crn"], $sem);
+            $sections[] = new Section($this->dbh, $row["crn"], $semester);
         }
 
         return $sections;
