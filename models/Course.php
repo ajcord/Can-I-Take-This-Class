@@ -28,7 +28,7 @@ class Course {
             throw new UnexpectedValueException("Invalid subject code: $subject_code");
         }
         
-        if (is_int($course_num) && $course_num > 0 && $course_num < 999) {
+        if (is_int($course_num) && $course_num > 0 && $course_num <= 999) {
             $this->course_num = $course_num;
         } else {
             throw new UnexpectedValueException("Invalid course number: $course_num");
