@@ -72,6 +72,32 @@ SQL;
     }
 
     /**
+     * Returns an array of semesters that the class was offered.
+     */
+    public function getSemestersOffered() {
+
+        $sql = <<<SQL
+            SELECT DISTINCT semester
+            FROM sections
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+SQL;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":subject_code", $this->subject_code);
+        $stmt->bindValue(":course_num", $this->course_num);
+
+        $stmt->execute();
+
+        $semesters = [];
+        foreach ($stmt as $row) {
+            $semesters[] = new Section($this->dbh, $row["semester"]);
+        }
+
+        return $semesters;
+    }
+}
+
+    /**
      * Returns the number of the course's sections with each availability status
      * on the given date.
      * 
@@ -137,26 +163,5 @@ SQL;
 
         return $result;
     }
-
-    /**
-     * Returns an array of codes of all semesters that the class was offered.
-     */
-    public function getSemestersOffered() {
-
-        $sql = <<<SQL
-            SELECT DISTINCT semester
-            FROM sections
-            WHERE subjectcode=:subject_code
-                AND coursenumber=:course_num
-SQL;
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->bindValue(":subject_code", $this->subject_code);
-        $stmt->bindValue(":course_num", $this->course_num);
-
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-    }
-}
 
 ?>
