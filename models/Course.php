@@ -49,7 +49,13 @@ class Course {
      */
     public function getSections($semester) {
 
-        $sql = "SELECT crn FROM sections WHERE subjectcode=:subject_code AND coursenumber=:course_num AND semester=:sem";
+        $sql = <<<SQL
+            SELECT crn
+            FROM sections
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+                AND semester=:sem
+SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":subject_code", $this->subject_code);
         $stmt->bindValue(":course_num", $this->course_num);
@@ -65,20 +71,92 @@ class Course {
         return $sections;
     }
 
-    // /**
-    //  * Returns an array of codes of all semesters that the class was offered.
-    //  */
-    // public function getSemestersOffered() {
+    /**
+     * Returns the number of the course's sections with each availability status
+     * on the given date.
+     * 
+     * @param DateTime $date The date to check
+     */
+    public function getAvailabilityOnDate($date) {
 
-    //     $sql = "SELECT DISTINCT semester FROM sections WHERE subjectcode=:subject_code AND coursenumber=:course_num";
-    //     $stmt = $this->dbh->prepare($sql);
-    //     $stmt->bindValue(":subject_code", $this->subject_code);
-    //     $stmt->bindValue(":course_num", $this->course_num);
+        $sql = <<<SQL
+            SELECT semester,
+                sectiontype,
+                enrollmentstatus,
+                COUNT(enrollmentstatus) AS count
+            FROM sections INNER JOIN availability
+                USING(crn, semester)
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+                AND DATE(timestamp)=:date
+            GROUP BY semester,
+                sectiontype,
+                enrollmentstatus
+SQL;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":subject_code", $this->subject_code);
+        $stmt->bindValue(":course_num", $this->course_num);
+        $stmt->bindParam(":date", $date->format("Y-m-d"));
 
-    //     $stmt->execute();
+        $stmt->execute();
 
-    //     return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-    // }
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Returns the availability of the section on all dates.
+     * 
+     * @param array(Semester) $semesters An array of the semesters to fetch
+     */
+    public function getAllAvailabilityForSemesters($semesters) {
+
+        $sql = <<<SQL
+            SELECT DATE(timestamp) AS date,
+                sectiontype,
+                enrollmentstatus,
+                COUNT(enrollmentstatus) AS count
+            FROM sections INNER JOIN availability
+                USING(crn, semester)
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+                AND semester=:sem
+            GROUP BY date,
+                sectiontype,
+                enrollmentstatus
+SQL;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":crn", $this->crn);
+        $stmt->bindValue(":sem", $sem);
+
+        $result = [];
+        foreach ($semesters as $semester) {
+            $sem = $semester->getCode();
+            $stmt->execute();
+            $result[$sem] = $stmt->fetchAll();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns an array of codes of all semesters that the class was offered.
+     */
+    public function getSemestersOffered() {
+
+        $sql = <<<SQL
+            SELECT DISTINCT semester
+            FROM sections
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+SQL;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":subject_code", $this->subject_code);
+        $stmt->bindValue(":course_num", $this->course_num);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    }
 }
 
 ?>
