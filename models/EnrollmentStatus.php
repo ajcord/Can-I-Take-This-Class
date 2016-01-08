@@ -3,9 +3,7 @@
 /**
 * Enum for enrollment statuses.
 */
-class EnrollmentStatus extends SplEnum {
-
-    const __default = self::UNKNOWN;
+class EnrollmentStatus {
 
     const UNKNOWN = -1;
     const CLOSED = 0;
