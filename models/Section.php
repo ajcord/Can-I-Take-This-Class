@@ -19,9 +19,9 @@ class Section {
     public function __construct($dbh, $crn, $semester) {
 
         $this->dbh = $dbh;
-
-        if (preg_match("/^[0-9]{5}$/", $crn)) {
-            $this->crn = intval($crn);
+        
+        if (is_int($crn) && $crn >= 10000 && $crn <= 99999) {
+            $this->crn = $crn;
         } else {
             throw new UnexpectedValueException("Invalid CRN: $crn");
         }
@@ -110,9 +110,9 @@ class Section {
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":crn", $this->crn);
         $stmt->bindValue(":sem", $this->semester->getCode());
-        $stmt->bindParam(":date", $date);
+        $stmt->bindParam(":date", $dateString);
 
-        $date = $date->format("Y-m-d");
+        $dateString = $date->format("Y-m-d");
         $stmt->execute();
 
         return $stmt->fetch()["enrollmentstatus"];
