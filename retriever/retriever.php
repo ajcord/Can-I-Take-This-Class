@@ -16,7 +16,7 @@ if (substr($sem, 0, 2) == "sp") {
     $term = "spring";
 }
 
-echo "Starting retrieval at ".date("Y-m-d H:i:s")."\n\n";
+echo "Starting retrieval for $sem at ".date("Y-m-d H:i:s")."\n\n";
 
 //Get a list of all the departments
 $catalog_data = file_get_contents("http://courses.illinois.edu/cisapp/explorer/schedule/$year/$term.xml");
