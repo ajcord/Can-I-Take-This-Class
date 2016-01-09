@@ -95,7 +95,6 @@ SQL;
 
         return $semesters;
     }
-}
 
     /**
      * Returns the number of the course's sections with each availability status
@@ -163,5 +162,6 @@ SQL;
 
         return $result;
     }
+}
 
 ?>
