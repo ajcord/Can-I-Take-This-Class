@@ -41,6 +41,7 @@ class Semester {
      * Returns the semester's year.
      */
     public function getYear() {
+        // TODO: fix Y2.1K bug by year 2099
         return intval("20".substr($this->code, 2, 2));
     }
 
@@ -77,6 +78,7 @@ class Semester {
      */
     private function getColumn($col) {
 
+        // PDO can't bind column or table names, so it has to be interpolated
         $sql =  <<<SQL
             SELECT $col
             FROM semesters
