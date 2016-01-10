@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Controls statistical predictions of class availability.
+ * Makes statistical predictions of class availability.
  */
-class PredictionController {
+class Predictor {
     
     private $course;
     private $registration_date;
 
     /**
-     * Constructs a PredictionController.
+     * Constructs a Predictor.
      * 
      * @param Course $course The course to predict
      * @param DateTime $registration_date The user's registration date

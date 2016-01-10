@@ -1,0 +1,11 @@
+.navbar {
+    margin-top: 20px;
+}
+
+.jumbotron h1 {
+    margin-bottom: 20px;
+}
+
+.jumbotron h1 .label {
+    padding: .1em .4em .15em;
+}
