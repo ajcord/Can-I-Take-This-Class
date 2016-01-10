@@ -18,7 +18,7 @@ function percent_string($percent, $error) {
 
     $lower_bound = round(max($percent - $error, 0)*100);
     $upper_bound = round(min($percent + $error, 1)*100);
-    
+
     if ($lower_bound == $upper_bound) {
         return round($lower_bound)."%";
     } else {
@@ -40,27 +40,52 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <div class="jumbotron text-center">
 
 <? if ($overall >= 0.90): ?>
-    <h1>Yes (<?= $overall_pct ?>)</h1>
-<? elseif ($overall >= 0.60): ?>
-    <h1>Probably (<?= $overall_pct ?>)</h1>
+
+    <h1>Yes <span class="label label-success"><?= $overall_pct ?></span></h1>
+    <p>
+        You have a very good chance of getting into getting into <?= $course ?>.
+        &#x1f604; &#x1f389;
+    </p>
+
+<? elseif ($overall >= 0.70): ?>
+
+    <h1>Probably <span class="label label-success"><?= $overall_pct ?></span></h1>
+    <p>
+        You have a decent chance of getting into <?= $course ?>.
+        &#x1f60a; &#x1f44d;
+    </p>
+
 <? elseif ($overall >= 0.40): ?>
-    <h1>Maybe (<?= $overall_pct ?>)</h1>
-<? elseif ($overall >= 0.10): ?>
-    <h1>Probably not (<?= $overall_pct ?>)</h1>
+
+    <h1>Maybe <span class="label label-warning"><?= $overall_pct ?></span></h1>
+    <p>
+        Your odds aren't great, but you might still get into <?= $course ?>.
+    </p>
+
+<? elseif ($overall >= 0.20): ?>
+
+    <h1>Probably not <span class="label label-danger"><?= $overall_pct ?></span></h1>
+    <p>
+        Don't count on getting into <?= $course ?>.
+    </p>
+
 <? else: ?>
-    <h1>No (<?= $overall_pct ?>)</h1>
+
+    <h1>Nope <span class="label label-danger"><?= $overall_pct ?></span></h1>
+    <p>
+        You will almost certainly not get into <?= $course ?> on your
+        registration day. Sorry!
+    </p>
+
 <? endif ?>
 
 <? if ($overall < 0.60): ?>
     <? if ($overall_after > ($overall + 0.10)): ?>
         <p>
-            But it has a better chance of opening up later
-            (<?= $overall_after_pct ?>). Keep trying!
-        </p>
-    <? else: ?>
-        <p>
-            It probably won't open up later during registration
-            (<?= $overall_after_pct ?>).
+            However: keep trying because the class usually opens up more
+            eventually.<br>
+            You have a <?= $overall_after_pct ?> chance of getting in
+            by the start of the semester.
         </p>
     <? endif ?>
 <? endif ?>
