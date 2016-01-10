@@ -6,10 +6,10 @@ require_once __DIR__."/../../models/Predictor.php";
 
 $subject_code = $_GET["subjectcode"];
 $course_num = intval($_GET["coursenumber"]);
-$registration_date = new DateTime($_GET["registrationdate"]);
+$registration_date = new DateTime($_GET["date"]);
 
 $course = new Course($dbh, $subject_code, $course_num);
-$predictor = new Predictor($course, $registration_date);
+$predictor = new Predictor($dbh, $course, $registration_date);
 
 $result = $predictor->getOverallLikelihood();
 
@@ -84,14 +84,17 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <? if ($overall < 0.60): ?>
     <? if ($overall_after > ($overall + 0.10)): ?>
         <p>
-            However: keep trying because the class usually opens up more
-            eventually.<br>
-            You have a <?= $overall_after_pct ?> chance of getting in
-            by the start of the semester.
+            However: you have a <?= $overall_after_pct ?> chance of getting in
+            by the start of the semester, so keep trying!
         </p>
     <? endif ?>
 <? endif ?>
 
 </div>
+
+<!-- Detailed breakdown by section type -->
+<!-- <h2>Breakdown by section</h2> -->
+
+<!-- Chart of past semesters -->
 
 <? include __DIR__."/../../templates/footer.php" ?>
