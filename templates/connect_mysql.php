@@ -1,5 +1,7 @@
 <?php
 
+// TODO: have a separate user for public (which can only select)
+// than for retrieving (which can insert/delete)
 include __DIR__."/../../config.php";
 
 $dbh = null;

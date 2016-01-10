@@ -43,6 +43,20 @@ class Course {
     }
 
     /**
+     * Returns the subject code of the course.
+     */
+    public function getSubjectCode() {
+        return $this->subject_code;
+    }
+
+    /**
+     * Returns the course number of the course.
+     */
+    public function getCourseNumber() {
+        return $this->course_num;
+    }
+
+    /**
      * Returns an array of the course's sections for the given semester.
      * 
      * @param Semester $sem The semester to check
@@ -90,7 +104,7 @@ SQL;
 
         $semesters = [];
         foreach ($stmt as $row) {
-            $semesters[] = new Section($this->dbh, $row["semester"]);
+            $semesters[] = new Semester($this->dbh, $row["semester"]);
         }
 
         return $semesters;
