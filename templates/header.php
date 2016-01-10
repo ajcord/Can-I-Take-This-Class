@@ -30,8 +30,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.php">Can I Take This Class?</a>
+                    <a class="navbar-brand" href="/">Can I Take This Class?</a>
                 </div>
             </div>
         </nav>
-        
