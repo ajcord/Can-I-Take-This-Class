@@ -1,15 +1,17 @@
 <?php
 
-// TODO: write a router to do this better
 require_once __DIR__."/../../templates/connect_mysql.php";
-require_once __DIR__."/../../controllers/PredictionController.php";
 require_once __DIR__."/../../models/Course.php";
+require_once __DIR__."/../../models/Predictor.php";
 
-$course = new Course($dbh, $_GET["subjectcode"], intval($_GET["coursenumber"]));
+$subject_code = $_GET["subjectcode"];
+$course_num = intval($_GET["coursenumber"]);
 $registration_date = new DateTime($_GET["registrationdate"]);
 
-$controller = new PredictionController($course, $registration_date);
-$result = $controller->getOverallLikelihood();
+$course = new Course($dbh, $subject_code, $course_num);
+$predictor = new Predictor($course, $registration_date);
+
+$result = $predictor->getOverallLikelihood();
 
 /**
  * Returns a string representing a percentage with error.
