@@ -143,35 +143,55 @@ SQL;
     }
 
     /**
-     * Returns the availability of the section on all dates.
-     * 
-     * @param array(Semester) $semesters An array of the semesters to fetch
+     * Returns the weekly availability of the course for all semesters.
      */
-    public function getAllAvailabilityForSemesters($semesters) {
+    public function getAllWeeklyAvailability() {
 
         $sql = <<<SQL
-            SELECT DATE(timestamp) AS date,
+            SELECT semester,
+                FLOOR(DATEDIFF(DATE(timestamp), registrationdate)/7) AS week,
                 sectiontype,
-                enrollmentstatus,
                 COUNT(enrollmentstatus) AS count
-            FROM sections INNER JOIN availability
-                USING(crn, semester)
+            FROM sections INNER JOIN availability using(crn, semester)
+                INNER JOIN semesters using(semester)
             WHERE subjectcode=:subject_code
                 AND coursenumber=:course_num
-                AND semester=:sem
-            GROUP BY date,
-                sectiontype,
-                enrollmentstatus
+                AND DATE(timestamp)>=registrationdate
+                AND enrollmentstatus>0
+            GROUP BY semester, week, sectiontype
+            ORDER BY registrationdate, week, sectiontype
 SQL;
         $stmt = $this->dbh->prepare($sql);
-        $stmt->bindValue(":crn", $this->crn);
-        $stmt->bindValue(":sem", $sem);
+        $stmt->bindValue(":subject_code", $this->subject_code);
+        $stmt->bindValue(":course_num", $this->course_num);
+
+        $stmt->execute();
 
         $result = [];
-        foreach ($semesters as $semester) {
-            $sem = $semester->getCode();
-            $stmt->execute();
-            $result[$sem] = $stmt->fetchAll();
+        foreach ($stmt as $row) {
+            $sem = $row["semester"];
+            $type = $row["sectiontype"];
+            $week = $row["week"];
+            $result[$sem][$type][$week] = intval($row["count"]);
+        }
+
+        foreach ($result as $sem => $sections) {
+
+            $num_weeks = (new Semester($this->dbh, $sem))->getNumWeeks();
+            foreach ($sections as $type => $section) {
+
+                // Remove the last week of data because it might be incomplete
+                unset($result[$sem][$type][$num_weeks]);
+
+                // Fill in any missing values with 0
+                for ($i = 0; $i < $num_weeks; $i++) {
+                    if (!array_key_exists($i, $section)) {
+                        $result[$sem][$type][$i] = 0;
+                    }
+                }
+
+                ksort($result[$sem][$type]);
+            }
         }
 
         return $result;

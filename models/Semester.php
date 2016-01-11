@@ -74,6 +74,14 @@ class Semester {
     }
 
     /**
+     * Returns the number of weeks between registration
+     * and instruction beginning.
+     */
+    public function getInstructionWeek() {
+        return $this->getColumn("FLOOR(DATEDIFF(instructiondate, registrationdate)/7)");
+    }
+
+    /**
      * Gets the specified column for the semester.
      */
     private function getColumn($col) {
@@ -89,7 +97,7 @@ SQL;
         
         $stmt->execute();
 
-        return new $stmt->fetchColumn();
+        return $stmt->fetchColumn();
     }
 
     /**

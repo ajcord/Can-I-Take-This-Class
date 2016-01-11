@@ -39,7 +39,7 @@ $overall_pct = percent_string($overall, $overall_error);
 $overall_after_pct = percent_string($overall_after, $overall_after_error);
 ?>
 
-<? include __DIR__."/../../templates/header.php" ?>
+<? $use_highcharts = true; include __DIR__."/../../templates/header.php" ?>
 
 <div class="jumbotron text-center">
 
@@ -99,9 +99,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <h2>Breakdown by section</h2>
 
 <?php
-
 $result = $predictor->getItemizedLikelihood();
-
 ?>
 
 <table class="table table-hover">
@@ -143,5 +141,108 @@ $result = $predictor->getItemizedLikelihood();
 </table>
 
 <!-- Chart of past semesters -->
+<h2>Previous semesters</h2>
+
+<?php
+$result = $course->getAllWeeklyAvailability();
+?>
+
+<script>
+Highcharts.setOptions({
+    lang: {
+        noData: "No data for the given class"
+    }
+});
+
+/**
+ * Returns whether the viewport is small or extra small.
+ *
+ * @return     {boolean}  True if the screen is small or extra small, else false
+ */
+function isSmallScreen() {
+    return $(".device-sm").is(":visible");
+}
+</script>
+
+<? foreach ($result as $sem => $sections): ?>
+
+        <?php
+            
+            $semester = new Semester($dbh, $sem);
+            $instruction_week = $semester->getInstructionWeek();
+            $last_week = $semester->getNumWeeks();
+
+            $series_arr = [];
+            foreach ($sections as $type => $data) {
+                $series_arr[] = [
+                    "name" => $type,
+                    "data" => $data,
+                ];
+            }
+            $series = json_encode($series_arr);
+        ?>
+
+        <div id="<?= $sem ?>-chart-container"></div>
+
+        <script>
+            $("#<?= $sem ?>-chart-container").highcharts({
+                chart: {
+                    type: "spline"
+                },
+                title: {
+                    text: "<?= $course ?>"
+                },
+                subtitle: {
+                    text: "<?= $sem ?>"
+                },
+                legend: {
+                    layout: (isSmallScreen() ? "horizontal" : "vertical"),
+                    align: (isSmallScreen() ? "center" : "right"),
+                    verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
+                    floating: false,
+                    borderWidth: 1,
+                },
+                xAxis: {
+                    title: {
+                        text: "Week of registration"
+                    },
+                    allowDecimals: false,
+                    plotBands: [{
+                        from: <?= $instruction_week ?>,
+                        to: <?= $last_week ?>,
+                        color: "rgba(68, 170, 213, 0.2)",
+                        label: {
+                            text: "Classes in session"
+                        }
+                    }]
+                },
+                yAxis: {
+                    title: {
+                        text: "Number of available sections"
+                    },
+                    allowDecimals: false
+                },
+                tooltip: {
+                    shared: true,
+                    valueSuffix: " sections"
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    areaspline: {
+                        fillOpacity: 0.5
+                    },
+                    series: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                series: <?= $series ?>
+            });
+        </script>
+
+<? endforeach ?>
 
 <? include __DIR__."/../../templates/footer.php" ?>
