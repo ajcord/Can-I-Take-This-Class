@@ -8,6 +8,8 @@ $subject_code = $_GET["subjectcode"];
 $course_num = intval($_GET["coursenumber"]);
 $registration_date = new DateTime($_GET["date"]);
 
+$formatted_date = strftime("%x", $registration_date->getTimestamp());
+
 $course = new Course($dbh, $subject_code, $course_num);
 $predictor = new Predictor($dbh, $course, $registration_date);
 
@@ -77,7 +79,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <h1>Nope <span class="label label-danger"><?= $overall_pct ?></span></h1>
     <p>
         You will almost certainly not get into <?= $course ?> on your
-        registration day.
+        registration date.
         &#x1f641;
     </p>
 
@@ -94,8 +96,36 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 </div>
 
-<!-- Detailed breakdown by section type -->
-<!-- <h2>Breakdown by section</h2> -->
+<h2>Breakdown by section</h2>
+
+<?php
+
+$result = $predictor->getItemizedLikelihood();
+
+?>
+
+<table class="table table-striped">
+    <caption>
+        Your chances of getting into each type of section in the class,
+        both on your registration date and after it.
+    </caption>
+    <thead>
+        <tr>
+            <td>Type</td>
+            <td>On <?= $formatted_date ?></td>
+            <td>After <?= $formatted_date ?></td>
+        </tr>
+    </thead>
+    <tbody>
+<? foreach (array_keys($result["on_date"]) as $type): ?>
+        <tr>
+            <td><?= $type ?></td>
+            <td><?= percent_string($result["on_date"][$type]["percent"], $result["on_date"][$type]["error"]) ?></td>
+            <td><?= percent_string($result["after_date"][$type]["percent"], $result["after_date"][$type]["error"]) ?></td>
+        </tr>
+<? endforeach ?>
+    </tbody>
+</table>
 
 <!-- Chart of past semesters -->
 
