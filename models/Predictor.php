@@ -25,9 +25,24 @@ class Predictor {
     }
 
     /**
-     * Calculates the overall likelihood of getting into the class.
+     * Calculates the likelihood of getting into the course.
      */
     public function getOverallLikelihood() {
+        return $this->getLikelihood(false);
+    }
+
+    /**
+     * Calculates the likelihood of getting into each section type.
+     */
+    public function getItemizedLikelihood() {
+        return $this->getLikelihood(true);
+    }
+
+    /**
+     * Calculates the likelihood of getting into the course
+     * or each section type.
+     */
+    private function getLikelihood($itemized) {
         
         $result = [];
 
@@ -59,7 +74,11 @@ SQL;
         $stmt->bindValue(":subject_code", $this->course->getSubjectCode());
         $stmt->bindValue(":course_num", $this->course->getCourseNumber());
 
-        $result["on_date"] = $this->calculateLikelihood($stmt, $adjusted_dates);
+        if ($itemized) {
+            $result["on_date"] = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
+        } else {
+            $result["on_date"] = $this->calculateOverallLikelihood($stmt, $adjusted_dates);
+        }
         
         // Get stats after the given date
         $sql = <<<SQL
@@ -91,7 +110,11 @@ SQL;
         $stmt->bindValue(":subject_code", $this->course->getSubjectCode());
         $stmt->bindValue(":course_num", $this->course->getCourseNumber());
 
-        $result["after_date"] = $this->calculateLikelihood($stmt, $adjusted_dates);
+        if ($itemized) {
+            $result["after_date"] = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
+        } else {
+            $result["after_date"] = $this->calculateOverallLikelihood($stmt, $adjusted_dates);
+        }
 
         return $result;
     }
@@ -101,12 +124,9 @@ SQL;
      * for each section type, calculates the weighted average of
      * several semester's percentages along with the error.
      */
-    private function calculateLikelihood($stmt, $adjusted_dates) {
+    private function calculateOverallLikelihood($stmt, $adjusted_dates) {
 
-        $result = [
-            "percent" => 0,
-            "error" => 0,
-        ];
+        $result = [];
 
         // Must be bound here because of scope
         $stmt->bindParam(":date", $dateFormatted);
@@ -154,6 +174,78 @@ SQL;
             }
 
             $result["error"] = sqrt($result["error"]);
+
+            $sem_count++;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Given a SQL statemtent handle to get a single semester's percentage
+     * for each section type, calculates the weighted average of
+     * several semester's percentages along with the error.
+     */
+    private function calculateItemizedLikelihood($stmt, $adjusted_dates) {
+
+        $result = [];
+
+        // Must be bound here because of scope
+        $stmt->bindParam(":date", $dateFormatted);
+
+        $sem_count = 0;
+
+        foreach ($adjusted_dates as $date) {
+
+            $dateFormatted = $date->format("Y-m-d");
+            $stmt->execute();
+
+            // Pick the smallest percentage and its corresponding error
+            $min_percent = [];
+            $min_percent_error = [];
+            $offered = false;
+
+            foreach ($stmt as $row) {
+                
+                $type = $row["sectiontype"];
+                $percent = floatval($row["percent"]);
+                $error = floatval($row["error"]);
+
+                if (!isset($min_percent[$type])) {
+                    $min_percent[$type] = 1;
+                    $min_percent_error[$type] = 0;
+                }
+
+                if ($percent < $min_percent[$type]) {
+                    $min_percent[$type] = $percent;
+                    $min_percent_error[$type] = $error;
+                }
+
+                $offered = true;
+            }
+
+            if (!$offered) {
+                // Don't calculate for semesters it wasn't offered
+                continue;
+            }
+
+            foreach (array_keys($min_percent) as $type) {
+                
+                // Remember:
+                // E(aX + bY) = a * E(X) + b * E(Y)
+                // Var(aX + bY) = a^2 * Var(X) + b^2 * Var(Y)
+                // SD(aX + bY) = sqrt(a^2 * SD(X)^2 + b^2 * SD(Y)^2)
+                $result[$type]["percent"] += $min_percent[$type];
+                $result[$type]["error"] = $result[$type]["error"]**2 +
+                    $min_percent_error[$type]**2;
+
+                if ($sem_count > 0) {
+                    $result[$type]["percent"] *= 0.5;
+                    $result[$type]["error"] *= 0.25;
+                }
+
+                $result[$type]["error"] = sqrt($result[$type]["error"]);
+            }
 
             $sem_count++;
         }
