@@ -9,3 +9,7 @@
 .jumbotron h1 .label {
     padding: .1em .4em .15em;
 }
+
+.table > thead {
+    font-weight: bold;
+}

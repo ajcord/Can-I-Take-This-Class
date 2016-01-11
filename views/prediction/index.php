@@ -104,7 +104,7 @@ $result = $predictor->getItemizedLikelihood();
 
 ?>
 
-<table class="table table-striped">
+<table class="table table-hover">
     <caption>
         Your chances of getting into each type of section in the class,
         both on your registration date and after it.
@@ -118,10 +118,25 @@ $result = $predictor->getItemizedLikelihood();
     </thead>
     <tbody>
 <? foreach (array_keys($result["on_date"]) as $type): ?>
-        <tr>
+    <?php
+        $section = $result["on_date"][$type]["percent"];
+        $section_error = $result["on_date"][$type]["error"];
+        $section_after = $result["after_date"][$type]["percent"];
+        $section_after_error = $result["after_date"][$type]["error"];
+
+        $section_pct = percent_string($section, $section_error);
+        $section_after_pct = percent_string($section_after, $section_after_error);
+    ?>
+    <? if ($section >= 0.70): ?>
+        <tr class="success">
+    <? elseif ($section >= 0.40): ?>
+        <tr class="warning">
+    <? else: ?>
+        <tr class="danger">
+    <? endif ?>
             <td><?= $type ?></td>
-            <td><?= percent_string($result["on_date"][$type]["percent"], $result["on_date"][$type]["error"]) ?></td>
-            <td><?= percent_string($result["after_date"][$type]["percent"], $result["after_date"][$type]["error"]) ?></td>
+            <td><?= $section_pct ?></td>
+            <td><?= $section_after_pct ?></td>
         </tr>
 <? endforeach ?>
     </tbody>
