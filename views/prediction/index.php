@@ -56,7 +56,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <h1>Probably <span class="label label-success"><?= $overall_pct ?></span></h1>
     <p>
         You have a decent chance of getting into <?= $course ?>.
-        &#x1f60a; &#x1f44d;
+        &#x1f603; &#x1f44d;
     </p>
 
 <? elseif ($overall >= 0.40): ?>
