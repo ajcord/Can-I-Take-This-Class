@@ -74,10 +74,11 @@ SQL;
         $stmt->bindValue(":subject_code", $this->course->getSubjectCode());
         $stmt->bindValue(":course_num", $this->course->getCourseNumber());
 
+        $itemized_likelihood = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
         if ($itemized) {
-            $result["on_date"] = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
+            $result["on_date"] = $itemized_likelihood;
         } else {
-            $result["on_date"] = $this->calculateOverallLikelihood($stmt, $adjusted_dates);
+            $result["on_date"] = $this->calculateOverallLikelihood($itemized_likelihood);
         }
         
         // Get stats after the given date
@@ -110,72 +111,11 @@ SQL;
         $stmt->bindValue(":subject_code", $this->course->getSubjectCode());
         $stmt->bindValue(":course_num", $this->course->getCourseNumber());
 
+        $itemized_likelihood = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
         if ($itemized) {
-            $result["after_date"] = $this->calculateItemizedLikelihood($stmt, $adjusted_dates);
+            $result["after_date"] = $itemized_likelihood;
         } else {
-            $result["after_date"] = $this->calculateOverallLikelihood($stmt, $adjusted_dates);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Given a SQL statemtent handle to get a single semester's percentage
-     * for each section type, calculates the weighted average of
-     * several semester's percentages along with the error.
-     */
-    private function calculateOverallLikelihood($stmt, $adjusted_dates) {
-
-        $result = [];
-
-        // Must be bound here because of scope
-        $stmt->bindParam(":date", $dateFormatted);
-
-        $sem_count = 0;
-
-        foreach ($adjusted_dates as $date) {
-
-            $dateFormatted = $date->format("Y-m-d");
-            $stmt->execute();
-
-            // Pick the smallest percentage and its corresponding error
-            $min_percent = 1;
-            $min_percent_error = 0;
-            $offered = false;
-
-            foreach ($stmt as $row) {
-                
-                $percent = floatval($row["percent"]);
-                $error = floatval($row["error"]);
-
-                if ($percent < $min_percent) {
-                    $min_percent = $percent;
-                    $min_percent_error = $error;
-                }
-
-                $offered = true;
-            }
-
-            if (!$offered) {
-                // Don't calculate for semesters it wasn't offered
-                continue;
-            }
-
-            // Remember:
-            // E(aX + bY) = a * E(X) + b * E(Y)
-            // Var(aX + bY) = a^2 * Var(X) + b^2 * Var(Y)
-            // SD(aX + bY) = sqrt(a^2 * SD(X)^2 + b^2 * SD(Y)^2)
-            $result["percent"] += $min_percent;
-            $result["error"] = $result["error"]**2 + $min_percent_error**2;
-
-            if ($sem_count > 0) {
-                $result["percent"] *= 0.5;
-                $result["error"] *= 0.25;
-            }
-
-            $result["error"] = sqrt($result["error"]);
-
-            $sem_count++;
+            $result["after_date"] = $this->calculateOverallLikelihood($itemized_likelihood);
         }
 
         return $result;
@@ -248,6 +188,31 @@ SQL;
             }
 
             $sem_count++;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Given the likelihood of each section over all semesters,
+     * calculates the likelihood of getting into the course as a whole.
+     */
+    private function calculateOverallLikelihood($itemized_likelihood) {
+
+        $result = [
+            "percent" => 1,
+            "error" => 0,
+        ];
+
+        foreach ($itemized_likelihood as $type) {
+
+            $percent = floatval($type["percent"]);
+            $error = floatval($type["error"]);
+
+            if ($percent < $result["percent"]) {
+                $result["percent"] = $percent;
+                $result["error"] = $error;
+            }
         }
 
         return $result;
