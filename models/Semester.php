@@ -118,6 +118,40 @@ SQL;
 
         return intval($stmt->fetchColumn());
     }
+
+    /**
+     * Given a registration date for an arbitrary semester,
+     * returns an array of corresponding registration date for prior semesters.
+     */
+    public static function adjustDate($dbh, $date) {
+
+        $sql = <<<SQL
+            SELECT date_add(registrationdate,
+                interval datediff(:date,
+                    (
+                        SELECT registrationdate
+                        FROM semesters
+                        WHERE registrationdate<=:date
+                        ORDER BY registrationdate DESC
+                        LIMIT 1)
+                    )
+                day) AS date
+            FROM semesters
+            WHERE registrationdate<=:date
+            ORDER BY registrationdate
+SQL;
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(":date", $date->format("Y-m-d"));
+
+        $stmt->execute();
+
+        $dates = [];
+        foreach ($stmt as $row) {
+            $dates[] = new DateTime($row["date"]);
+        }
+
+        return $dates;
+    }
 }
 
 ?>
