@@ -46,7 +46,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <h1>Yes <span class="label label-success"><?= $overall_pct ?></span></h1>
     <p>
         You have a very good chance of getting into getting into <?= $course ?>.
-        &#x1f604; &#x1f389;
+        &#x1f60e; &#x1f389;
     </p>
 
 <? elseif ($overall >= 0.70): ?>
@@ -69,6 +69,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <h1>Probably not <span class="label label-danger"><?= $overall_pct ?></span></h1>
     <p>
         Don't count on getting into <?= $course ?>.
+        &#x1f615;
     </p>
 
 <? else: ?>
@@ -76,7 +77,8 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <h1>Nope <span class="label label-danger"><?= $overall_pct ?></span></h1>
     <p>
         You will almost certainly not get into <?= $course ?> on your
-        registration day. Sorry!
+        registration day.
+        &#x1f641;
     </p>
 
 <? endif ?>
@@ -84,7 +86,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <? if ($overall < 0.60): ?>
     <? if ($overall_after > ($overall + 0.10)): ?>
         <p>
-            However: you have a <?= $overall_after_pct ?> chance of getting in
+            However, you have a <?= $overall_after_pct ?> chance of getting in
             by the start of the semester, so keep trying!
         </p>
     <? endif ?>
