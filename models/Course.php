@@ -143,7 +143,6 @@ SQL;
     }
 
     /**
-<<<<<<< HEAD
      * Returns the weekly availability of the course for all semesters.
      */
     public function getAllWeeklyAvailability() {
@@ -193,37 +192,6 @@ SQL;
 
                 ksort($result[$sem][$type]);
             }
-=======
-     * Returns the availability of the section on all dates.
-     * 
-     * @param array(Semester) $semesters An array of the semesters to fetch
-     */
-    public function getAllAvailabilityForSemesters($semesters) {
-
-        $sql = <<<SQL
-            SELECT DATE(timestamp) AS date,
-                sectiontype,
-                enrollmentstatus,
-                COUNT(enrollmentstatus) AS count
-            FROM sections INNER JOIN availability
-                USING(crn, semester)
-            WHERE subjectcode=:subject_code
-                AND coursenumber=:course_num
-                AND semester=:sem
-            GROUP BY date,
-                sectiontype,
-                enrollmentstatus
-SQL;
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->bindValue(":crn", $this->crn);
-        $stmt->bindValue(":sem", $sem);
-
-        $result = [];
-        foreach ($semesters as $semester) {
-            $sem = $semester->getCode();
-            $stmt->execute();
-            $result[$sem] = $stmt->fetchAll();
->>>>>>> origin/mvc
         }
 
         return $result;
