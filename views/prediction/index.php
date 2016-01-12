@@ -147,11 +147,39 @@ $result = $predictor->getItemizedLikelihood();
 $result = $course->getAllWeeklyAvailability();
 ?>
 
+<ul class="nav nav-tabs" id="chart-tabs" role="tablist">
+    <? foreach (array_keys($result) as $sem): ?>
+        <li role="presentation">
+            <a href="#<?= $sem ?>-pane" role="tab" data-toggle="tab"><?= $sem ?></a>
+        </li>
+    <? endforeach ?>
+</ul>
+
+
 <script>
+
+// Setup Bootstrap tabs
+$("#chart-tabs a").click(function (e) {
+    e.preventDefault();
+    $(this).tab("show");
+});
+
+// Reflow the chart when tab is selected
+$(function() {
+    $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+        $(e.target.hash + " > div").highcharts().reflow();
+    });
+});
+
 Highcharts.setOptions({
     lang: {
         noData: "No data for the given class"
     }
+});
+
+// Select the first tab
+$(document).ready(function() {
+    $("#chart-tabs > li:first > a").tab("show");
 });
 
 /**
@@ -164,6 +192,7 @@ function isSmallScreen() {
 }
 </script>
 
+<div class="tab-content" id="chart-tab-panels">
 <? foreach ($result as $sem => $sections): ?>
 
         <?php
@@ -182,10 +211,12 @@ function isSmallScreen() {
             $series = json_encode($series_arr);
         ?>
 
-        <div id="<?= $sem ?>-chart-container"></div>
+        <div id="<?= $sem ?>-pane" role="tabpanel" class="tab-pane">
+            <div id="<?= $sem ?>-chart" class="chart"></div>
+        </div>
 
         <script>
-            $("#<?= $sem ?>-chart-container").highcharts({
+            $("#<?= $sem ?>-chart").highcharts({
                 chart: {
                     type: "spline"
                 },
@@ -244,5 +275,8 @@ function isSmallScreen() {
         </script>
 
 <? endforeach ?>
+</div>
+
+<div class="device-sm visible-sm-block visible-xs-block"></div>
 
 <? include __DIR__."/../../templates/footer.php" ?>

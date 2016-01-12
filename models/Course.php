@@ -159,7 +159,7 @@ SQL;
                 AND DATE(timestamp)>=registrationdate
                 AND enrollmentstatus>0
             GROUP BY semester, week, sectiontype
-            ORDER BY registrationdate, week, sectiontype
+            ORDER BY registrationdate desc, week, sectiontype
 SQL;
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(":subject_code", $this->subject_code);
