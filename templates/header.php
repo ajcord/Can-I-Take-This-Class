@@ -26,11 +26,3 @@
 <body>
 
     <div class="container">
-
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Can I Take This Class?</a>
-                </div>
-            </div>
-        </nav>

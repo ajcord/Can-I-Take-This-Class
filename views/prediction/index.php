@@ -96,22 +96,18 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 </div>
 
-<h2>Breakdown by section</h2>
+<h2>Breakdown</h2>
 
 <?php
 $result = $predictor->getItemizedLikelihood();
 ?>
 
 <table class="table table-hover">
-    <caption>
-        Your chances of getting into each type of section in the class,
-        both on your registration date and after it.
-    </caption>
     <thead>
         <tr>
-            <td>Type</td>
+            <td>Section Type</td>
             <td>On <?= $formatted_date ?></td>
-            <td>After <?= $formatted_date ?></td>
+            <td>Eventually</td>
         </tr>
     </thead>
     <tbody>
