@@ -18,7 +18,7 @@
         <div class="form-group form-group-lg">
             <label for="date" class="col-sm-2 col-sm-offset-2 control-label">Registration date</label>
             <div class="col-sm-4">
-                <input type="date" id="date" class="form-control" name="date" placeholder="mm/dd/yyyy" />
+                <input type="date" id="date" class="form-control" name="date" placeholder="yyyy-mm-dd" min="2015-04-06" />
             </div>
         </div>
         <div class="form-group form-group-lg">
