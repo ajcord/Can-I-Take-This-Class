@@ -67,7 +67,6 @@ class Predictor {
                     AND DATE(timestamp)>=registrationdate
                     AND DATE(timestamp)>=DATE_SUB(:date, INTERVAL 3 DAY)
                     AND DATE(timestamp)<DATE_ADD(:date, INTERVAL 4 DAY)
-                    AND sectiontype<>"Online"
                 GROUP BY sectiontype
             ) AS t
 SQL;
@@ -105,7 +104,6 @@ SQL;
                         ORDER BY registrationdate DESC
                         LIMIT 1
                     )
-                    AND sectiontype<>"Online"
                 GROUP BY sectiontype
             ) AS t
 SQL;
