@@ -71,7 +71,10 @@ foreach ($course_list as $course_str) {
         $sections[$type]["after_date"] = $section;
     }
 
-    $courses[$course_str] = array_merge($overall, ["sections" => $sections]);
+    $courses[$course_str] = [
+        "overall" => $overall,
+        "sections" => $sections,
+    ];
 
     // TODO: this logic belongs to the model, not the view.
     if ($overall["on_date"]["percent"] <= $smallest_course["on_date"]["percent"]) {
@@ -79,7 +82,10 @@ foreach ($course_list as $course_str) {
     }
 }
 
-$result = array_merge($smallest_course, ["courses" => $courses]);
+$result = [
+    "overall" => $smallest_course,
+    "courses" => $courses,
+];
 
 echo json_encode($result);
 ?>

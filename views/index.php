@@ -6,7 +6,7 @@
     <? if ($status == "invalid_course"): ?>
         <div class="alert alert-danger">
             Invalid course. Enter a course in one of the following formats:
-            SUBJ 123, subj 123, SUBJ123, subj123.
+            SUBJ 123, SUBJ123, subj 123, subj123.
         </div>
     <? elseif ($status == "invalid_date"): ?>
         <div class="alert alert-danger">

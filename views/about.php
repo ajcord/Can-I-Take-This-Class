@@ -12,6 +12,12 @@
         when classes will fill up.
     </p>
 
+    <h2>For Developers</h2>
+    <p>
+        Want to use these predictions in your own project?
+        Check out the <a href="/docs/index">API</a>!
+    </p>
+
     <h2>How It Works</h2>
     <p>
         First, it calculates the percentage of open sections
