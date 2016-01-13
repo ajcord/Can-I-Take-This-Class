@@ -34,7 +34,7 @@ $course_list = explode(",", $_GET["courses"]);
 foreach ($course_list as $course_str) {
 
     // Parse course into subject code and course number
-    if (!preg_match("/^([A-Za-z]{2,4})[ ]?(\d{3})$/", $course_str, $matches)) {
+    if (!preg_match("/^([A-Za-z]{2,4})(\d{3})$/", $course_str, $matches)) {
         handle_error("Invalid course");
     }
 

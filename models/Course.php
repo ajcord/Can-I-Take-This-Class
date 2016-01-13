@@ -148,8 +148,7 @@ SQL;
                 sectiontype,
                 enrollmentstatus,
                 COUNT(enrollmentstatus) AS count
-            FROM sections INNER JOIN availability
-                USING(crn, semester)
+            FROM sections INNER JOIN availability USING (crn, semester)
             WHERE subjectcode=:subject_code
                 AND coursenumber=:course_num
                 AND DATE(timestamp)=:date
@@ -177,8 +176,8 @@ SQL;
                 FLOOR(DATEDIFF(DATE(timestamp), registrationdate)/7) AS week,
                 sectiontype,
                 COUNT(enrollmentstatus) AS count
-            FROM sections INNER JOIN availability using(crn, semester)
-                INNER JOIN semesters using(semester)
+            FROM sections INNER JOIN availability USING (crn, semester)
+                INNER JOIN semesters USING (semester)
             WHERE subjectcode=:subject_code
                 AND coursenumber=:course_num
                 AND DATE(timestamp)>=registrationdate

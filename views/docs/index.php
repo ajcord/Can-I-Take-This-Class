@@ -27,8 +27,7 @@
             <li>
                 <code>Course</code>:
                     A string containing a 2-4 character subject code
-                    (case insensitive) followed by a 3-digit course number,
-                    optionally separated by a single space.
+                    (case insensitive) followed by a 3-digit course number.
             </li>
             <li>
                 <code>Date</code>:
