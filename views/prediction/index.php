@@ -117,7 +117,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <? if ($overall_after > ($overall + 0.10)): ?>
         <p>
             However, you have a <?= $overall_after_pct ?> chance of getting in
-            by the start of the semester, so keep trying!
+            eventually, so keep trying!
         </p>
     <? endif ?>
 <? endif ?>
