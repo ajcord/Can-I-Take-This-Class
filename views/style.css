@@ -13,3 +13,16 @@
 .table > thead {
     font-weight: bold;
 }
+
+html {
+    background-color: #f5f5f5;
+}
+
+body {
+    background-color: #fff;
+}
+
+footer {
+    background-color: #f5f5f5;
+    padding: 20px;
+}

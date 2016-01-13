@@ -26,10 +26,10 @@
 
     <p>
         Find out whether you'll get into the classes you want at UIUC.
-        <a href="about.php">Learn More</a>
+        <a href="/about">Learn More</a>
     </p>
     
-    <form class="form-horizontal" action="/prediction/" method="GET">
+    <form class="form-horizontal" action="/prediction" method="GET">
         <div class="form-group form-group-lg">
             <label for="course" class="col-sm-2 col-sm-offset-2 control-label">Class</label>
             <div class="col-sm-4">

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__."/../../templates/connect_mysql.php";
-require_once __DIR__."/../../models/Course.php";
-require_once __DIR__."/../../models/Predictor.php";
+require_once __DIR__."/../templates/connect_mysql.php";
+require_once __DIR__."/../models/Course.php";
+require_once __DIR__."/../models/Predictor.php";
 
 /**
  * Returns a string representing a percentage with error.
@@ -67,7 +67,7 @@ $overall_pct = percent_string($overall, $overall_error);
 $overall_after_pct = percent_string($overall_after, $overall_after_error);
 ?>
 
-<? $use_highcharts = true; include __DIR__."/../../templates/header.php" ?>
+<? $use_highcharts = true; include __DIR__."/../templates/header.php" ?>
 
 <div class="jumbotron text-center">
 
@@ -123,7 +123,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <? endif ?>
 
 <h3>Search for another class:</h3>
-<form class="form-inline" action="/prediction/" method="GET">
+<form class="form-inline" action="/prediction" method="GET">
     <div class="form-group form-group-lg">
         <label for="course" class="sr-only">Class</label>
         <input type="text" id="course" name="course" class="form-control" placeholder="Enter a class"
@@ -325,4 +325,4 @@ function isSmallScreen() {
 
 <div class="device-sm visible-sm-block visible-xs-block"></div>
 
-<? include __DIR__."/../../templates/footer.php" ?>
+<? include __DIR__."/../templates/footer.php" ?>
