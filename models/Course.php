@@ -86,6 +86,31 @@ SQL;
     }
 
     /**
+     * Returns true if the class has been offered in any semester,
+     * and false otherwise.
+     */
+    public function exists() {
+
+        $sql = <<<SQL
+            SELECT COUNT(DISTINCT semester)
+            FROM sections
+            WHERE subjectcode=:subject_code
+                AND coursenumber=:course_num
+SQL;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(":subject_code", $this->subject_code);
+        $stmt->bindValue(":course_num", $this->course_num);
+
+        $stmt->execute();
+
+        if ($stmt->fetchColumn() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Returns an array of semesters that the class was offered.
      */
     public function getSemestersOffered() {

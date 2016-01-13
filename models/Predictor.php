@@ -60,12 +60,12 @@ class Predictor {
                     AVG(IF(enrollmentstatus>0,1,0)) AS percent,
                     COUNT(*) AS n
                 FROM availability
-                    INNER JOIN sections
-                    USING(crn, semester)
+                    INNER JOIN sections USING(crn, semester)
                 WHERE subjectcode=:subject_code
                     AND coursenumber=:course_num
                     AND DATE(timestamp)>=DATE_SUB(:date, INTERVAL 3 DAY)
                     AND DATE(timestamp)<DATE_ADD(:date, INTERVAL 4 DAY)
+                    AND sectiontype<>"Online"
                 GROUP BY sectiontype
             ) AS t
 SQL;
@@ -92,8 +92,7 @@ SQL;
                     AVG(IF(enrollmentstatus>0,1,0)) AS percent,
                     COUNT(*) AS n
                 FROM availability
-                    INNER JOIN sections
-                    USING(crn, semester)
+                    INNER JOIN sections USING(crn, semester)
                 WHERE subjectcode=:subject_code
                     AND coursenumber=:course_num
                     AND DATE(timestamp)>=:date
@@ -104,6 +103,7 @@ SQL;
                         ORDER BY registrationdate DESC
                         LIMIT 1
                     )
+                    AND sectiontype<>"Online"
                 GROUP BY sectiontype
             ) AS t
 SQL;

@@ -4,17 +4,6 @@ require_once __DIR__."/../../templates/connect_mysql.php";
 require_once __DIR__."/../../models/Course.php";
 require_once __DIR__."/../../models/Predictor.php";
 
-$subject_code = $_GET["subjectcode"];
-$course_num = intval($_GET["coursenumber"]);
-$registration_date = new DateTime($_GET["date"]);
-
-$formatted_date = strftime("%x", $registration_date->getTimestamp());
-
-$course = new Course($dbh, $subject_code, $course_num);
-$predictor = new Predictor($dbh, $course, $registration_date);
-
-$result = $predictor->getOverallLikelihood();
-
 /**
  * Returns a string representing a percentage with error.
  */
@@ -29,6 +18,45 @@ function percent_string($percent, $error) {
         return $lower_bound."&ndash;".$upper_bound."%";
     }
 }
+
+/**
+ * Redirects to the homepage, passing an error code.
+ */
+function handle_error($code) {
+
+    $course = urlencode($_GET["course"]);
+    $date = urlencode($_GET["date"]);
+    header("Location: /?course=$course&date=$date&status=$code");
+    exit;
+}
+
+// Parse course into subject code and course number
+if (!preg_match("/^([A-Za-z]{2,4})[ ]?(\d{3})$/", $_GET["course"], $matches)) {
+    handle_error("invalid_course");
+}
+
+$subject_code = $matches[1];
+$course_num = intval($matches[2]);
+
+// Parse registration date
+$parsed_date = strtotime($_GET["date"]);
+if ($parsed_date === false || $parsed_date < strtotime("2015-04-06")) {
+    handle_error("invalid_date");
+}
+
+$registration_date = new DateTime($_GET["date"]);
+$formatted_date = strftime("%x", $registration_date->getTimestamp());
+
+// Initialize the models
+$course = new Course($dbh, $subject_code, $course_num);
+$predictor = new Predictor($dbh, $course, $registration_date);
+
+if (!$course->exists()) {
+    handle_error("course_does_not_exist");
+}
+
+// Get the overall prediction
+$result = $predictor->getOverallLikelihood();
 
 $overall = $result["on_date"]["percent"];
 $overall_error = $result["on_date"]["error"];
@@ -93,6 +121,32 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
         </p>
     <? endif ?>
 <? endif ?>
+
+<h3>Search for another class:</h3>
+<form class="form-horizontal" action="/prediction/" method="GET">
+    <div class="form-group form-group-lg">
+        <label for="course" class="col-sm-2 col-sm-offset-2 control-label">
+            <span class="sr-only">Class</span>
+        </label>
+        <div class="col-sm-4">
+            <input type="text" id="course" name="course" class="form-control" placeholder="Enter a class"
+            <? if (isset($_GET["course"])): ?>
+                value="<?= htmlspecialchars($_GET["course"]) ?>"
+            <? endif ?>
+            />
+        </div>
+    </div>
+    <input type="hidden" name="date"
+    <? if (isset($_GET["date"])): ?>
+        value="<?= htmlspecialchars($_GET["date"]) ?>"
+    <? endif ?>
+    />
+    <div class="form-group form-group-lg">
+        <div class="col-sm-offset-4 col-sm-4">
+            <button type="submit" id="search-button" class="btn btn-primary">Will I Get In?</button>
+        </div>
+    </div>
+</form>
 
 </div>
 
