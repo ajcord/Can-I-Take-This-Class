@@ -61,8 +61,10 @@ class Predictor {
                     COUNT(*) AS n
                 FROM availability
                     INNER JOIN sections USING(crn, semester)
+                    INNER JOIN semesters USING(semester)
                 WHERE subjectcode=:subject_code
                     AND coursenumber=:course_num
+                    AND DATE(timestamp)>=registrationdate
                     AND DATE(timestamp)>=DATE_SUB(:date, INTERVAL 3 DAY)
                     AND DATE(timestamp)<DATE_ADD(:date, INTERVAL 4 DAY)
                     AND sectiontype<>"Online"
