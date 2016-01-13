@@ -123,29 +123,24 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 <? endif ?>
 
 <h3>Search for another class:</h3>
-<form class="form-horizontal" action="/prediction/" method="GET">
+<form class="form-inline" action="/prediction/" method="GET">
     <div class="form-group form-group-lg">
-        <label for="course" class="col-sm-2 col-sm-offset-2 control-label">
-            <span class="sr-only">Class</span>
-        </label>
-        <div class="col-sm-4">
-            <input type="text" id="course" name="course" class="form-control" placeholder="Enter a class"
-            <? if (isset($_GET["course"])): ?>
-                value="<?= htmlspecialchars($_GET["course"]) ?>"
-            <? endif ?>
-            />
-        </div>
+        <label for="course" class="sr-only">Class</label>
+        <input type="text" id="course" name="course" class="form-control" placeholder="Enter a class"
+        <? if (isset($_GET["course"])): ?>
+            value="<?= htmlspecialchars($_GET["course"]) ?>"
+        <? endif ?>
+        />
     </div>
-    <input type="hidden" name="date"
-    <? if (isset($_GET["date"])): ?>
-        value="<?= htmlspecialchars($_GET["date"]) ?>"
-    <? endif ?>
-    />
     <div class="form-group form-group-lg">
-        <div class="col-sm-offset-4 col-sm-4">
-            <button type="submit" id="search-button" class="btn btn-primary btn-lg">Will I Get In?</button>
-        </div>
+        <label for="date" class="sr-only">Registration date</label>
+        <input type="date" id="date" class="form-control" name="date" placeholder="yyyy-mm-dd" min="2015-04-06"
+        <? if (isset($_GET["date"])): ?>
+            value="<?= htmlspecialchars($_GET["date"]) ?>"
+        <? endif ?>
+        />
     </div>
+    <button type="submit" id="search-button" class="btn btn-primary btn-lg">Will I Get In?</button>
 </form>
 
 </div>
