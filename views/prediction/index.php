@@ -209,8 +209,12 @@ $("#chart-tabs a").click(function (e) {
     $(this).tab("show");
 });
 
-// Reflow the chart when tab is selected
 $(function() {
+
+    // Select the first tab
+    $("#chart-tabs > li:first > a").tab("show");
+
+    // Reflow the chart when tab is selected
     $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
         $(e.target.hash + " > div").highcharts().reflow();
     });
@@ -220,11 +224,6 @@ Highcharts.setOptions({
     lang: {
         noData: "No data for the given class"
     }
-});
-
-// Select the first tab
-$(document).ready(function() {
-    $("#chart-tabs > li:first > a").tab("show");
 });
 
 /**
@@ -261,61 +260,63 @@ function isSmallScreen() {
         </div>
 
         <script>
-            $("#<?= $sem ?>-chart").highcharts({
-                chart: {
-                    type: "spline"
-                },
-                title: {
-                    text: "<?= $course ?>"
-                },
-                subtitle: {
-                    text: "<?= $sem ?>"
-                },
-                legend: {
-                    layout: (isSmallScreen() ? "horizontal" : "vertical"),
-                    align: (isSmallScreen() ? "center" : "right"),
-                    verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
-                    floating: false,
-                    borderWidth: 1,
-                },
-                xAxis: {
+            $(function() {
+                $("#<?= $sem ?>-chart").highcharts({
+                    chart: {
+                        type: "spline"
+                    },
                     title: {
-                        text: "Week of registration"
+                        text: "<?= $course ?>"
                     },
-                    allowDecimals: false,
-                    plotBands: [{
-                        from: <?= $instruction_week ?>,
-                        to: <?= $last_week ?>,
-                        color: "rgba(68, 170, 213, 0.2)",
-                        label: {
-                            text: "Classes in session"
+                    subtitle: {
+                        text: "<?= $sem ?>"
+                    },
+                    legend: {
+                        layout: (isSmallScreen() ? "horizontal" : "vertical"),
+                        align: (isSmallScreen() ? "center" : "right"),
+                        verticalAlign: (isSmallScreen() ? "bottom" : "middle"),
+                        floating: false,
+                        borderWidth: 1,
+                    },
+                    xAxis: {
+                        title: {
+                            text: "Week of registration"
+                        },
+                        allowDecimals: false,
+                        plotBands: [{
+                            from: <?= $instruction_week ?>,
+                            to: <?= $last_week ?>,
+                            color: "rgba(68, 170, 213, 0.2)",
+                            label: {
+                                text: "Classes in session"
+                            }
+                        }]
+                    },
+                    yAxis: {
+                        title: {
+                            text: "Number of available sections"
+                        },
+                        allowDecimals: false
+                    },
+                    tooltip: {
+                        shared: true,
+                        valueSuffix: " sections"
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        areaspline: {
+                            fillOpacity: 0.5
+                        },
+                        series: {
+                            marker: {
+                                enabled: false
+                            }
                         }
-                    }]
-                },
-                yAxis: {
-                    title: {
-                        text: "Number of available sections"
                     },
-                    allowDecimals: false
-                },
-                tooltip: {
-                    shared: true,
-                    valueSuffix: " sections"
-                },
-                credits: {
-                    enabled: false
-                },
-                plotOptions: {
-                    areaspline: {
-                        fillOpacity: 0.5
-                    },
-                    series: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                },
-                series: <?= $series ?>
+                    series: <?= $series ?>
+                });
             });
         </script>
 
