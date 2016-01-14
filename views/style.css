@@ -9,10 +9,6 @@ body {
     background-color: #fff;
 }
 
-.alert {
-    margin-top: 20px;
-}
-
 .jumbotron {
     background-position: center;
     background-size: cover;
@@ -43,6 +39,10 @@ body {
 .jumbotron p {
     font-weight: 300;
     font-size: 24px;
+    text-shadow: 1px 1px 5px #000;
+}
+
+.jumbotron label {
     text-shadow: 1px 1px 5px #000;
 }
 

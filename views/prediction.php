@@ -73,7 +73,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 <? if ($overall >= 0.90): ?>
 
-    <h1>Yes <span class="label label-success"><?= $overall_pct ?></span></h1>
+    <h1>Yes! <span class="label label-success"><?= $overall_pct ?></span></h1>
     <p>
         You have a very good chance of getting into getting into <?= $course ?>.
         &#x1f60e; &#x1f389;
@@ -145,8 +145,14 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 </div>
 
+
+
 <div class="container">
-<h2>Breakdown</h2>
+<h2>Breakdown by section</h2>
+<p>
+    This table shows your chances of getting into each type of section,
+    both on your registration date and after it.
+</p>
 
 <?php
 $result = $predictor->getItemizedLikelihood();
@@ -186,8 +192,13 @@ $result = $predictor->getItemizedLikelihood();
     </tbody>
 </table>
 
-<!-- Chart of past semesters -->
-<h2>Previous semesters</h2>
+
+
+<h2>Historical data</h2>
+<p>
+    These charts show the number of available sections each week.
+    Click a tab to view the data for that semester.
+</p>
 
 <?php
 $result = $course->getAllWeeklyAvailability();

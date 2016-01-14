@@ -1,32 +1,38 @@
 <?php include "../templates/header.php" ?>
 
-<? if (isset($_GET["status"])):
-    $status = $_GET["status"] ?>
+<div class="jumbotron text-center" id="main-jumbotron">
 
-    <? if ($status == "invalid_course"): ?>
-        <div class="alert alert-danger">
-            Invalid course. Enter a course in one of the following formats:
-            SUBJ 123, SUBJ123, subj 123, subj123.
-        </div>
-    <? elseif ($status == "invalid_date"): ?>
-        <div class="alert alert-danger">
-            Invalid date. Enter a date in the format YYYY-MM-DD that occurs
-            after April 6, 2015.
-        </div>
-    <? elseif ($status == "course_does_not_exist"): ?>
-        <div class="alert alert-danger">
-            The selected course does not exist in any semester on record.
-        </div>
+    <? if (isset($_GET["status"])):
+        $status = $_GET["status"] ?>
+
+        <? if ($status == "invalid_course"): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    Invalid course. Enter a course in one of the following formats:
+                    SUBJ 123, SUBJ123, subj 123, subj123.
+                </div>
+            </div>
+        <? elseif ($status == "invalid_date"): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    Invalid date. Enter a date that occurs on or after
+                    April 6, 2015.
+                </div>
+            </div>
+        <? elseif ($status == "course_does_not_exist"): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    The selected course does not exist in any semester on record.
+                </div>
+            </div>
+        <? endif ?>
+
     <? endif ?>
 
-<? endif ?>
-
-<div class="jumbotron text-center" id="main-jumbotron">
     <h1>Can I Take This Class?</h1>
 
     <p>
         Find out whether you'll get into the classes you want at UIUC.
-        <a href="#about">Learn More</a>
     </p>
     
     <form class="form-horizontal" action="/prediction" method="GET">
@@ -59,7 +65,7 @@
 </div>
 
 <div class="container">
-    <h2 id="about">About</h2>
+    <h2>About</h2>
     <p>
         <b>Can I Take This Class</b> is a tool for students at the
         University of Illinois at Urbana-Champaign to predict
@@ -103,18 +109,20 @@
         chances.
     </p>
 
+    <h2>For Developers</h2>
+    <p>
+        Want to use these predictions in your own project?
+        Check out the <a href="/docs/index">API</a>!
+        The project's source code is available on
+        <a href="https://github.com/ajcord/CS411-Project">GitHub</a>.
+    </p>
+
     <h2>History</h2>
     <p>
         Can I Take This Class was developed by Alex Cordonnier
         as a continuation of ClassMaster, a CS 411 final project
         developed by Clarence Elliott, Gaurang Jain, Sean Mulroe,
         and Alex Cordonnier.
-    </p>
-
-    <h2>For Developers</h2>
-    <p>
-        Want to use these predictions in your own project?
-        Check out the <a href="/docs/index">API</a>!
     </p>
 </div>
 
