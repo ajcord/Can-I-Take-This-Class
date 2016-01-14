@@ -65,64 +65,76 @@
 </div>
 
 <div class="container">
-    <h2>About</h2>
+    <h2>Overview</h2>
     <p>
         <b>Can I Take This Class</b> is a tool for students at the
-        University of Illinois at Urbana-Champaign to predict
-        their chances of getting into the classes they want.
+        <a href="http://illinois.edu">University of Illinois at Urbana-Champaign</a>
+        to predict their chances of getting into the classes they want.
         It uses historical course registration data to predict
-        when classes will fill up.
+        when classes will fill up and when they will open up again.
+    </p>
+    <p>
+        It was developed by
+        <a href="http://alexcordonnier.com">Alex Cordonnier</a>
+        as the successor to ClassMaster, a CS 411 final project
+        developed with Clarence Elliott, Gaurang Jain, and Sean Mulroe.
     </p>
 
-    <h2>How It Works</h2>
+    <h2>How it works</h2>
     <p>
-        First, it calculates the percentage of open sections
-        on the days surrounding your corresponding registration date
-        in previous semesters.
+        First, it calculates the percentage of sections that were open
+        in previous semesters around the equivalent registration date.
         More recent semesters are weighted more heavily
         because classes and demand change over time.
     </p>
     <p>
-        Next, it calculates the percentage of sections that open up
-        later during registration or after classes start.
-        Even if a class is full on the day you register,
-        it might eventually become available due to
-        students dropping and sections being added.
+        Next, it calculates the percentage of sections
+        that historically open up later during registration
+        or even after classes start.
     </p>
     <p>
-        Finally, assuming you need to get into one of each type of section
-        (e.g. Lecture, Discussion, etc.),
-        your chances of getting into a class are only as good as
-        the lowest section's chances.
+        Finally, assuming you need to get into one of each type of section,
+        your chances of getting into a class are as good as
+        the lowest section type's chances.
     </p>
     <p>
-        There are some things that it can't do.
-        You can't select a specific section you want (e.g. Tuesday 3pm)
-        because days and times vary by semester.
-        All sections of a given type are treated equally, without regard
-        to restrictions.
-        Classes where not every section type is required,
-        such as Special Topics classes, aren't predicted accurately.
-        New classes are impossible to predict because there is no
-        historical data to use.
-        However, most classes should provide a good estimate of your
-        chances.
-    </p>
-
-    <h2>For Developers</h2>
-    <p>
-        Want to use these predictions in your own project?
-        Check out the <a href="/docs/index">API</a>!
-        The project's source code is available on
+        Want to know more?
+        Check out the source code on
         <a href="https://github.com/ajcord/CS411-Project">GitHub</a>.
     </p>
 
-    <h2>History</h2>
+    <h2>What it doesn't do</h2>
     <p>
-        Can I Take This Class was developed by Alex Cordonnier
-        as a continuation of ClassMaster, a CS 411 final project
-        developed by Clarence Elliott, Gaurang Jain, Sean Mulroe,
-        and Alex Cordonnier.
+        Can I Take This Class works well for most classes,
+        but there are a few things it can't do:
+    </p>
+    <ul>
+        <li>
+            Predict classes that haven't been offered before
+            or were last offered before Fall 2015
+        </li>
+        <li>
+            Predict specific sections, like if you really want
+            the 11 AM lecture and not the 8 AM one
+        </li>
+        <li>
+            Figure out restrictions on a section or course.
+            Restricted courses are treated as if they are open.
+        </li>
+        <li>
+            Register for you or tell you when a class opens up
+        </li>
+    </ul>
+    <p>
+        It works best on classes where you need one of every type of section.
+        For other classes, you can use the table provided
+        under the prediction to see what your chances would really be.
+    </p>
+
+    <h2>For developers</h2>
+    <p>
+        Want to use these predictions in your own project?
+        Check out the <a href="/docs/index">API</a>!
     </p>
 </div>
 

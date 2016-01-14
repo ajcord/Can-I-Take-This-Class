@@ -6,6 +6,11 @@ html {
 
 body {
     background-color: #fff;
+    font-family: "Merriweather", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, input, button, label, table, .nav-tabs {
+    font-family: "Lato", sans-serif;
 }
 
 #main-jumbotron {
@@ -27,10 +32,6 @@ body {
     text-shadow: 1px 1px 30px #000;
 }
 
-#main-jumbotron h1 .label {
-    text-shadow: none;
-}
-
 .jumbotron h1 .label {
     padding: .1em .4em .15em;
 }
@@ -39,13 +40,13 @@ body {
     text-shadow: 1px 1px 5px #000;
 }
 
+#main-jumbotron label {
+    font-weight: 400;
+}
+
 .form-horizontal .form-group {
     margin-left: 0;
     margin-right: 0;
-}
-
-p {
-    font-family: "Merriweather", sans-serif;
 }
 
 .table > thead {
@@ -54,6 +55,7 @@ p {
 
 footer {
     background-color: #f5f5f5;
+    color: #777;
     padding: 20px;
     margin-top: 40px;
 }
