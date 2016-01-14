@@ -9,7 +9,7 @@ body {
     font-family: "Merriweather", sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, input, button, label, table, .nav-tabs {
+h1, h2, h3, h4, h5, h6, input, button, label, table, .nav-tabs, .alert {
     font-family: "Lato", sans-serif;
 }
 
