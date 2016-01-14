@@ -69,7 +69,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 <? $use_highcharts = true; include __DIR__."/../templates/header.php" ?>
 
-<div class="jumbotron text-center">
+<div class="jumbotron text-center" id="prediction-jumbotron">
 
 <? if ($overall >= 0.90): ?>
 
@@ -140,11 +140,12 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
         <? endif ?>
         />
     </div>
-    <button type="submit" id="search-button" class="btn btn-primary btn-lg">Will I Get In?</button>
+    <button type="submit" id="search-button" class="btn btn-warning btn-lg">Will I Get In?</button>
 </form>
 
 </div>
 
+<div class="container">
 <h2>Breakdown</h2>
 
 <?php
@@ -263,7 +264,10 @@ function isSmallScreen() {
             $(function() {
                 $("#<?= $sem ?>-chart").highcharts({
                     chart: {
-                        type: "spline"
+                        type: "spline",
+                        style: {
+                            fontFamily: "'Lato', sans-serif"
+                        }
                     },
                     title: {
                         text: "<?= $course ?>"
@@ -321,6 +325,7 @@ function isSmallScreen() {
         </script>
 
 <? endforeach ?>
+</div>
 </div>
 
 <div class="device-sm visible-sm-block visible-xs-block"></div>

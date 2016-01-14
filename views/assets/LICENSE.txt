@@ -1,0 +1,9 @@
+alma_mater.jpg:
+    - Modified from original by IllinoisLibrary
+    - Re-released under CC BY 2.0
+    - Original: https://commons.wikimedia.org/wiki/File:Alma_Mater_Restored_2014.jpg
+
+illini_union.jpg:
+    - Modified from original by Daniel Schwen
+    - Re-released under CC BY-SA 4.0
+    - Original: https://commons.wikimedia.org/wiki/File:UIUC_Illini_Union_and_Main_Quad.jpg
