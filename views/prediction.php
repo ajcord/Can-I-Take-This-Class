@@ -122,7 +122,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <? endif ?>
 <? endif ?>
 
-<h3>Search for another class:</h3>
+<h2>Search for another class:</h2>
 <form class="form-inline" action="/prediction" method="GET">
     <div class="form-group form-group-lg">
         <label for="course" class="sr-only">Class</label>
@@ -140,7 +140,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
         <? endif ?>
         />
     </div>
-    <button type="submit" id="search-button" class="btn btn-warning btn-lg">Will I Get In?</button>
+    <button type="submit" id="search-button" class="btn btn-info btn-lg">Will I Get In?</button>
 </form>
 
 </div>

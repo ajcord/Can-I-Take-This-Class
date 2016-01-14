@@ -58,7 +58,7 @@
         </div>
         <div class="form-group form-group-lg">
             <div class="col-sm-offset-4 col-sm-4">
-                <button type="submit" id="search-button" class="btn btn-warning btn-lg">Will I Get In?</button>
+                <button type="submit" id="search-button" class="btn btn-info btn-lg">Will I Get In?</button>
             </div>
         </div>
     </form>

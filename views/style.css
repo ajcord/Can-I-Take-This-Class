@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Merriweather:400,300,700);
+
 html {
     background-color: #f5f5f5;
 }
@@ -6,35 +8,44 @@ body {
     background-color: #fff;
 }
 
-.jumbotron {
+#main-jumbotron {
+    background-image: url(assets/illini_union.jpg);
     background-position: center;
     background-size: cover;
     color: #fff;
-}
-
-#main-jumbotron {
-    background-image: url(assets/illini_union.jpg);
-}
-
-#prediction-jumbotron {
-    background-image: url(assets/alma_mater.jpg);
 }
 
 .jumbotron h1 {
     margin-bottom: 20px;
 }
 
-.jumbotron h1, .jumbotron h3 {
+.jumbotron h2 {
+    margin-top: 30px;
+}
+
+#main-jumbotron h1 {
     text-shadow: 1px 1px 30px #000;
+}
+
+#main-jumbotron h1 .label {
+    text-shadow: none;
 }
 
 .jumbotron h1 .label {
     padding: .1em .4em .15em;
-    text-shadow: none;
 }
 
-.jumbotron p, .jumbotron label {
+#main-jumbotron p, #main-jumbotron label {
     text-shadow: 1px 1px 5px #000;
+}
+
+.form-horizontal .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+p {
+    font-family: "Merriweather", sans-serif;
 }
 
 .table > thead {
