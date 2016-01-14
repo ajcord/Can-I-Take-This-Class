@@ -2,31 +2,26 @@
 
 <div class="jumbotron text-center" id="main-jumbotron">
 
-    <? if (isset($_GET["status"])):
-        $status = $_GET["status"] ?>
-
-        <? if ($status == "invalid_course"): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    Invalid course. Enter a course in one of the following formats:
-                    SUBJ 123, SUBJ123, subj 123, subj123.
-                </div>
+    <? if ($_GET["status"] == "invalid_course"): ?>
+        <div class="container">
+            <div class="alert alert-danger">
+                Invalid course. Enter a course in one of the following formats:
+                SUBJ 123, SUBJ123, subj 123, subj123.
             </div>
-        <? elseif ($status == "invalid_date"): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    Invalid date. Enter a date that occurs on or after
-                    April 6, 2015.
-                </div>
+        </div>
+    <? elseif ($_GET["status"] == "invalid_date"): ?>
+        <div class="container">
+            <div class="alert alert-danger">
+                Invalid date. Enter a date that occurs on or after
+                April 6, 2015.
             </div>
-        <? elseif ($status == "course_does_not_exist"): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    The selected course does not exist in any semester on record.
-                </div>
+        </div>
+    <? elseif ($_GET["status"] == "course_does_not_exist"): ?>
+        <div class="container">
+            <div class="alert alert-danger">
+                The selected course does not exist in any semester on record.
             </div>
-        <? endif ?>
-
+        </div>
     <? endif ?>
 
     <h1>Can I Take This Class?</h1>
@@ -36,7 +31,12 @@
     </p>
     
     <form class="form-horizontal" action="/prediction" method="GET">
-        <div class="form-group form-group-lg">
+        <? if ($_GET["status"] == "invalid_course" ||
+                $_GET["status"] == "course_does_not_exist"): ?>
+            <div class="form-group form-group-lg has-error">
+        <? else: ?>
+            <div class="form-group form-group-lg">
+        <? endif ?>
             <label for="course" class="col-sm-2 col-sm-offset-2 control-label">Class</label>
             <div class="col-sm-4">
                 <input type="text" id="course" name="course" class="form-control" placeholder="Enter a class"
@@ -46,7 +46,11 @@
                 />
             </div>
         </div>
-        <div class="form-group form-group-lg">
+        <? if ($_GET["status"] == "invalid_date"): ?>
+            <div class="form-group form-group-lg has-error">
+        <? else: ?>
+            <div class="form-group form-group-lg">
+        <? endif ?>
             <label for="date" class="col-sm-2 col-sm-offset-2 control-label">Registration date</label>
             <div class="col-sm-4">
                 <input type="date" id="date" class="form-control" name="date" placeholder="Enter your registration date" min="2015-04-06"
