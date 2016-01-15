@@ -44,6 +44,10 @@ h1, h2, h3, h4, h5, h6, input, button, label, table, .nav-tabs, .alert {
     font-weight: 400;
 }
 
+#main-jumbotron form {
+    margin-top: 30px;
+}
+
 .form-horizontal .form-group {
     margin-left: 0;
     margin-right: 0;
