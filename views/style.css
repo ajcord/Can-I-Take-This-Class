@@ -53,6 +53,10 @@ h1, h2, h3, h4, h5, h6, input, button, label, table, .nav-tabs, .alert {
     margin-right: 0;
 }
 
+input[type="date"] {
+    -webkit-appearance: none;
+}
+
 .table > thead {
     font-weight: bold;
 }
