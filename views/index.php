@@ -138,7 +138,8 @@
     <h2>For developers</h2>
     <p>
         Want to use these predictions in your own project?
-        Check out the <a href="/docs/index">API</a>!
+        Check out the
+        <a href="https://github.com/ajcord/CS411-Project/wiki/API-Docs">API</a>!
     </p>
 </div>
 
