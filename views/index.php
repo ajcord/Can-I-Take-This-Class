@@ -104,7 +104,7 @@
     <p>
         Want to know more?
         Check out the source code on
-        <a href="https://github.com/ajcord/CS411-Project">GitHub</a>.
+        <a href="https://github.com/ajcord/Can-I-Take-This-Class">GitHub</a>.
     </p>
 
     <h2>What it doesn't do</h2>
@@ -139,7 +139,7 @@
     <p>
         Want to use these predictions in your own project?
         Check out the
-        <a href="https://github.com/ajcord/CS411-Project/wiki/API-Docs">API</a>!
+        <a href="https://github.com/ajcord/Can-I-Take-This-Class/wiki/API-Docs">API</a>!
     </p>
 </div>
 
