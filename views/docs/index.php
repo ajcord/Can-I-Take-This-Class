@@ -1,4 +1,4 @@
-<?php include "../../templates/header.php"; ?>
+<?php $page_title = "API Docs"; include "../../templates/header.php"; ?>
 
 <div class="container">
     <div class="page-header">

@@ -67,7 +67,7 @@ $overall_pct = percent_string($overall, $overall_error);
 $overall_after_pct = percent_string($overall_after, $overall_after_error);
 ?>
 
-<? $use_highcharts = true; include __DIR__."/../templates/header.php" ?>
+<? $page_title = $course; $use_highcharts = true; include __DIR__."/../templates/header.php" ?>
 
 <div class="jumbotron text-center" id="prediction-jumbotron">
 

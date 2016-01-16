@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Can I Take This Class?</title>
+    <? if (is_null($page_title)): ?>
+        <title>Can I Take This Class?</title>
+    <? else: ?>
+        <title><?=$page_title ?> - Can I Take This Class?</title>
+    <? endif ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
 
