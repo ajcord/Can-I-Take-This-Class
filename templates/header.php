@@ -1,7 +1,3 @@
-<?php
-session_start(); //Resume session
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +5,15 @@ session_start(); //Resume session
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>ClassMaster</title>
+    <? if (is_null($page_title)): ?>
+        <title>Can I Take This Class?</title>
+    <? else: ?>
+        <title><?=$page_title ?> - Can I Take This Class?</title>
+    <? endif ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
     
@@ -28,47 +28,3 @@ session_start(); //Resume session
     <![endif]-->
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <!-- Combine brand with collapse button for small screens -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.php">ClassMaster</a>
-            </div>
-
-            <!-- Collect nav items on small screens -->
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="historical.php">Historical data</a></li>
-<?php if (isset($_SESSION["id"])): ?>
-                    <li><a href="my_classes.php">My classes</a></li>
-<?php endif; ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-<?php
-$email = $_SESSION["email"];
-if ($email): ?>
-<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-        role="button" aria-expanded="false">
-        <?php echo $email; ?> <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="my_classes.php">My classes</a></li>
-        <li><a href="account.php">Account settings</a></li>
-        <li class="divider"></li>
-        <li><a href="logout.php">Log out</a></li>
-    </ul>
-</li>
-<?php else: ?>
-<li><a href="login.php">Log in</a></li>
-<?php endif; ?>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div>
-    </nav>
