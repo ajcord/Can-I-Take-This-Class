@@ -8,7 +8,7 @@
                 The data and predictions provided by this website
                 are not guaranteed to be correct or up to date and
                 are not a substitute for meeting with an academic advisor.
-            </div>
+            </p>
         </div>
     </footer>
 
