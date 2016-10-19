@@ -176,15 +176,15 @@ SQL;
                 // Var(aX + bY) = a^2 * Var(X) + b^2 * Var(Y)
                 // SD(aX + bY) = sqrt(a^2 * SD(X)^2 + b^2 * SD(Y)^2)
                 $result[$type]["percent"] += $min_percent[$type];
-                $result[$type]["error"] = $result[$type]["error"]**2 +
+                $variance = $result[$type]["error"]**2 +
                     $min_percent_error[$type]**2;
 
                 if ($sem_count > 0) {
                     $result[$type]["percent"] *= 0.5;
-                    $result[$type]["error"] *= 0.25;
+                    $variance *= 0.25;
                 }
 
-                $result[$type]["error"] = sqrt($result[$type]["error"]);
+                $result[$type]["error"] = sqrt($variance);
             }
 
             $sem_count++;
