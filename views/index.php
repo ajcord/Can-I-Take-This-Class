@@ -69,13 +69,13 @@
 </div>
 
 <div class="container">
-    <h2>Overview</h2>
+    <h2>About</h2>
     <p>
-        <b>Can I Take This Class</b> is a tool for students at the
-        <a href="http://illinois.edu">University of Illinois at Urbana-Champaign</a>
-        to predict their chances of getting into the classes they want.
-        It uses historical course registration data to predict
-        when classes will fill up and when they will open up again.
+        <b>Can I Take This Class</b> analyzes registration data
+        to predict whether you'll get the classes you want.
+        Kind of like a Magic 8 Ball, except it's smart and
+        you don't need to shake it.
+        Works at every four year university in Champaign-Urbana, IL.
     </p>
     <p>
         It was developed by
@@ -84,60 +84,11 @@
         developed with Clarence Elliott, Gaurang Jain, and Sean Mulroe.
     </p>
 
-    <h2>How it works</h2>
-    <p>
-        First, it calculates the percentage of sections that were open
-        in previous semesters around the equivalent registration date.
-        More recent semesters are weighted more heavily
-        because classes and demand change over time.
-    </p>
-    <p>
-        Next, it calculates the percentage of sections
-        that historically open up later during registration
-        or even after classes start.
-    </p>
-    <p>
-        Finally, assuming you need to get into one of each type of section,
-        your chances of getting into a class are as good as
-        the lowest section type's chances.
-    </p>
-    <p>
-        Want to know more?
-        Check out the source code on
-        <a href="https://github.com/ajcord/Can-I-Take-This-Class">GitHub</a>.
-    </p>
-
-    <h2>What it doesn't do</h2>
-    <p>
-        Can I Take This Class works well for most classes,
-        but there are a few things it can't do:
-    </p>
-    <ul>
-        <li>
-            Predict classes that haven't been offered before
-            or were last offered before Fall 2015
-        </li>
-        <li>
-            Predict specific sections, like if you really want
-            the 11 AM lecture and not the 8 AM one
-        </li>
-        <li>
-            Figure out restrictions on a section or course.
-            Restricted courses are treated as if they are open.
-        </li>
-        <li>
-            Register for you or tell you when a class opens up
-        </li>
-    </ul>
-    <p>
-        It works best on classes where you need one of every type of section.
-        For other classes, you can use the table provided
-        under the prediction to see what your chances would really be.
-    </p>
-
     <h2>For developers</h2>
     <p>
-        Want to use these predictions in your own project?
+        Want to know more?
+        The source code is available on
+        <a href="https://github.com/ajcord/Can-I-Take-This-Class">GitHub</a>.
         Check out the
         <a href="https://github.com/ajcord/Can-I-Take-This-Class/wiki/API-Docs">API</a>!
     </p>
