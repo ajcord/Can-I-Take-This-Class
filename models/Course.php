@@ -79,7 +79,7 @@ SQL;
 
         $sections = [];
         foreach ($stmt as $row) {
-            $sections[] = new Section($this->dbh, $row["crn"], $semester);
+            $sections[] = new Section($this->dbh, intval($row["crn"]), $semester);
         }
 
         return $sections;
