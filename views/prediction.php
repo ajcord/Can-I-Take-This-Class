@@ -71,11 +71,23 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 <div class="jumbotron text-center" id="prediction-jumbotron">
 
-<? if ($overall >= 0.90): ?>
+<?
+$date_str = strftime("%B %e", $registration_date->getTimestamp());
+?>
+
+<? if ($overall_error >= 0.15): ?>
+
+    <h1>??? <span class="label label-default"><?= $overall_pct ?></span></h1>
+    <p>
+        Unfortunately, this data is all over the place. It's hard to tell.
+        &#x1f914;
+    </p>
+
+<? elseif ($overall >= 0.90): ?>
 
     <h1>Yes! <span class="label label-success"><?= $overall_pct ?></span></h1>
     <p>
-        You have a very good chance of getting into getting into <?= $course ?>.
+        You have a very good chance of getting into getting into <?= $course ?> on <?= $date_str ?>.
         &#x1f60e; &#x1f389;
     </p>
 
@@ -83,7 +95,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
     <h1>Probably <span class="label label-success"><?= $overall_pct ?></span></h1>
     <p>
-        You have a decent chance of getting into <?= $course ?>.
+        You have a decent chance of getting into <?= $course ?> on <?= $date_str ?>.
         &#x1f603; &#x1f44d;
     </p>
 
@@ -91,14 +103,14 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
     <h1>Maybe <span class="label label-warning"><?= $overall_pct ?></span></h1>
     <p>
-        Your odds aren't great, but you might still get into <?= $course ?>.
+        Your odds aren't great, but you might still get into <?= $course ?> on <?= $date_str ?>.
     </p>
 
 <? elseif ($overall >= 0.20): ?>
 
     <h1>Probably not <span class="label label-danger"><?= $overall_pct ?></span></h1>
     <p>
-        Don't count on getting into <?= $course ?>.
+        Don't count on getting into <?= $course ?> on <?= $date_str ?>.
         &#x1f615;
     </p>
 
@@ -106,8 +118,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
     <h1>Nope <span class="label label-danger"><?= $overall_pct ?></span></h1>
     <p>
-        You will almost certainly not get into <?= $course ?> on your
-        registration date.
+        You will almost certainly not get into <?= $course ?> on <?= $date_str ?>.
         &#x1f641;
     </p>
 
@@ -122,7 +133,16 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
     <? endif ?>
 <? endif ?>
 
-<h2>Search for another class:</h2>
+<? if ($course_num % 100 >= 90): ?>
+
+    <p>
+        Note: predictions may be less accurate for classes such as
+        special topics, etc.
+    </p>
+
+<? endif ?>
+
+<h2>Check another class:</h2>
 <form class="form-inline" action="/prediction" method="GET">
     <div class="form-group form-group-lg">
         <label for="course" class="sr-only">Class</label>
@@ -140,7 +160,7 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
         <? endif ?>
         />
     </div>
-    <button type="submit" id="search-button" class="btn btn-info btn-lg">Will I Get In?</button>
+    <button type="submit" id="search-button" class="btn btn-info btn-lg">Predict</button>
 </form>
 
 </div>
@@ -149,10 +169,6 @@ $overall_after_pct = percent_string($overall_after, $overall_after_error);
 
 <div class="container">
 <h2>Breakdown by section</h2>
-<p>
-    This table shows your chances of getting into each type of section,
-    both on your registration date and after it.
-</p>
 
 <?php
 $result = $predictor->getItemizedLikelihood();
@@ -194,11 +210,7 @@ $result = $predictor->getItemizedLikelihood();
 
 
 
-<h2>Historical data</h2>
-<p>
-    These charts show the number of available sections each week.
-    Click a tab to view the data for that semester.
-</p>
+<h2>Historical trends</h2>
 
 <?php
 $result = $course->getAllWeeklyAvailability();
@@ -299,11 +311,17 @@ function isSmallScreen() {
                         },
                         allowDecimals: false,
                         plotBands: [{
+                            from: 0,
+                            to: <?= $instruction_week ?>,
+                            label: {
+                                text: "Registration"
+                            }
+                        }, {
                             from: <?= $instruction_week ?>,
                             to: <?= $last_week ?>,
                             color: "rgba(68, 170, 213, 0.2)",
                             label: {
-                                text: "Classes in session"
+                                text: "Instruction"
                             }
                         }]
                     },

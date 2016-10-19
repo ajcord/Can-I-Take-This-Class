@@ -27,7 +27,7 @@
     <h1>Can I Take This Class?</h1>
 
     <p>
-        Find out whether you'll get into the classes you want at UIUC.
+        Predict your chances of getting the classes you want at UIUC.
     </p>
     
     <form class="form-horizontal" action="/prediction" method="GET">
@@ -62,7 +62,7 @@
         </div>
         <div class="form-group form-group-lg">
             <div class="col-sm-offset-4 col-sm-4">
-                <button type="submit" id="search-button" class="btn btn-info btn-lg">Will I Get In?</button>
+                <button type="submit" id="search-button" class="btn btn-info btn-lg">Predict</button>
             </div>
         </div>
     </form>
