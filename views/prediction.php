@@ -136,7 +136,7 @@ $date_str = strftime("%B %e", $registration_date->getTimestamp());
 <? if ($course_num % 100 >= 90): ?>
 
     <p>
-        Note: predictions may be less accurate for classes such as
+        <b>Note:</b> predictions may be less accurate for classes such as
         special topics, etc.
     </p>
 
@@ -168,7 +168,7 @@ $date_str = strftime("%B %e", $registration_date->getTimestamp());
 
 
 <div class="container">
-<h2>Breakdown by section</h2>
+<h2>Breakdown</h2>
 
 <?php
 $result = $predictor->getItemizedLikelihood();
@@ -210,7 +210,7 @@ $result = $predictor->getItemizedLikelihood();
 
 
 
-<h2>Historical trends</h2>
+<h2>Trends</h2>
 
 <?php
 $result = $course->getAllWeeklyAvailability();
