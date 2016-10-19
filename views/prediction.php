@@ -31,7 +31,7 @@ function handle_error($code) {
 }
 
 // Parse course into subject code and course number
-if (!preg_match("/^([A-Za-z]{2,4})[ ]?(\d{3})$/", $_GET["course"], $matches)) {
+if (!preg_match("/^([A-Za-z]{2,4})[ -_]?(\d{3})$/", $_GET["course"], $matches)) {
     handle_error("invalid_course");
 }
 
