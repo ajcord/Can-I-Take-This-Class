@@ -75,7 +75,9 @@
         to predict whether you'll get the classes you want.
         Kind of like a Magic 8 Ball, except it's smart and
         you don't need to shake it.
-        Works at every four year university in Champaign-Urbana, IL.
+        Works at
+        <a href="http://illinois.edu">every four year university
+            in Champaign-Urbana, IL</a>.
     </p>
     <p>
         It was developed by
