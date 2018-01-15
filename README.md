@@ -7,6 +7,8 @@ Can I Take This Class is a tool for students at the University of Illinois at Ur
 
 It was developed by Alex Cordonnier as the successor to ClassMaster, a CS 411 final project developed with Clarence Elliott, Gaurang Jain, and Sean Mulroe.
 
+This repository is no longer maintained. You're probably looking for [aschmitz/canitakethisclass](https://github.com/aschmitz/canitakethisclass).
+
 ## How it works
 First, it calculates the percentage of sections that were open in previous semesters around the equivalent registration date. More recent semesters are weighted more heavily because classes and demand change over time.
 
